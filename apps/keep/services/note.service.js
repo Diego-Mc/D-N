@@ -60,6 +60,7 @@ function _createNotes() {
           type: 'note-txt',
           isPinned: true,
           info: {
+          title:'wawa',
             txt: 'Fullstack Me Baby!',
           },
         },
@@ -79,6 +80,7 @@ function _createNotes() {
           type: 'note-todos',
           info: {
             label: 'Get my stuff together',
+            title:'hi!',
             todos: [
               { txt: 'Driving liscence', doneAt: null },
               { txt: 'Coding power', doneAt: 187111111 },
@@ -88,7 +90,9 @@ function _createNotes() {
         {
           id: 'n104',
           type: 'note-todos unpinned',
+          isPinned: false,
           info: {
+            title: 'Bobi and Me 2',
             label: 'Get my stuff together',
             todos: [
               { txt: 'Driving liscence', doneAt: null },
@@ -96,6 +100,35 @@ function _createNotes() {
             ],
           },
         },
+        {
+          id: 'n105',
+          type: 'note-todos unpinned',
+          isPinned: true,
+          info: {
+            title: 'Bobi and Me 2',
+            txt: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam perspiciatis autem repellendus id libero, pariatur modi nobis eveniet voluptate mollitia facilis impedit corrupti consectetur rerum labore aspernatur, natus nostrum aperiam!',
+            label: 'Get my stuff together',
+            todos: [
+              { txt: 'Driving liscence', doneAt: null },
+              { txt: 'Coding power', doneAt: 187111111 },
+            ],
+          },
+        },
+        {
+          id: 'n105',
+          type: 'note-todos unpinned',
+          isPinned: true,
+          info: {
+            title: 'Bobi and Me 2',
+            txt: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam perspiciatis autem repellendus id libero, pariatur modi nobis eveniet voluptate mollit',
+            label: 'Get my stuff together',
+            todos: [
+              { txt: 'Driving liscence', doneAt: null },
+              { txt: 'Coding power', doneAt: 187111111 },
+            ],
+          },
+        },
+        
       ]
     utilService.saveToStorage(NOTE_KEY, notes)
   }

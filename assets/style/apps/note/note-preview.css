@@ -1,4 +1,5 @@
 .note-preview {
+<<<<<<< HEAD
   background-color: antiquewhite;
   width: 264px;
   /* height: 264px; */
@@ -7,6 +8,16 @@
   border-radius: 20px;
   background-color: #fff;
   padding: 40px 45px;
+=======
+    background-color: antiquewhite;
+    width: 264px;
+    word-wrap: break-word;
+    margin-bottom: 20px;
+    padding: 40px 45px;
+    break-inside: avoid;
+    border-radius: 20px;
+    background-color: #fff;
+>>>>>>> d99e404e0ef2757732cb06691d1f1f2a51019385
 }
 
 .small {
