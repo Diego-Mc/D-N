@@ -6,7 +6,7 @@ import noteEdit from './apps/keep/cmps/note-edit.cmp.js'
 
 import mailyApp from './apps/mail/pages/email-app.cmp.js'
 import emailCompose from './apps/mail/cmps/email-compose.cmp.js'
-import emailPreview from './apps/mail/cmps/email-preview.cmp.js'
+import emailDetails from './apps/mail/cmps/email-details.cmp.js'
 
 const { createRouter, createWebHashHistory } = VueRouter
 
@@ -31,7 +31,7 @@ const routerOptions = {
         },
         {
           path: ':id',
-          component: emailPreview,
+          component: emailDetails,
         },
       ],
     },

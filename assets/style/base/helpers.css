@@ -1,3 +1,8 @@
+/* random */
+.round {
+  border-radius: 1.25rem;
+}
+
 /* sections */
 .col-full {
   grid-column: 2 / span 10;
@@ -114,6 +119,19 @@
   font-weight: unset;
   font-family: Mulish-Black;
   font-size: 4rem;
+}
+
+.f-clr-main {
+  color: var(--clr-main);
+}
+.f-clr-light {
+  color: var(--clr-main-light);
+}
+.f-clr-dark {
+  color: var(--clr-main-dark);
+}
+.f-clr-darker {
+  color: var(--clr-main-darker);
 }
 
 .logo {

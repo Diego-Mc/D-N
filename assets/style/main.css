@@ -16,3 +16,8 @@
 /* Apps */
 @import 'apps/mail/email-app.css';
 @import 'apps/note/note-app.css';
+
+/* MAILY */
+@import 'apps/mail/cmp/email-preview.cmp.css'; /* KEEPY */
+
+/* BOOKY */

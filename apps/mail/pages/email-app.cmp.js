@@ -4,15 +4,14 @@ import emailCompose from '../cmps/email-compose.cmp.js'
 import emailFilter from '../cmps/email-filter.cmp.js'
 import emailFolderList from '../cmps/email-folder-list.cmp.js'
 import emailList from '../cmps/email-list.cmp.js'
-import emailPreview from '../cmps/email-preview.cmp.js'
+import emailDetails from '../cmps/email-details.cmp.js'
 
 export default {
   template: /* HTML */ `
-    <main className="email-main">
-      <h1>This is mail!</h1>
+    <main class="email-main">
       <email-folder-list />
       <email-list />
-      <email-preview />
+      <email-details />
     </main>
   `,
   data() {
@@ -24,6 +23,6 @@ export default {
   components: {
     emailFolderList,
     emailList,
-    emailPreview,
+    emailDetails,
   },
 }

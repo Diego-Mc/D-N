@@ -1,0 +1,21 @@
+.email-main {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 20px;
+  grid-template-areas: 'folders list list list list details details details details details';
+}
+
+.email-folder-list {
+  grid-area: folders;
+}
+
+.email-list {
+  grid-area: list;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.email-details {
+  grid-area: details;
+  background-color: rgba(255, 255, 255, 0.5);
+}
