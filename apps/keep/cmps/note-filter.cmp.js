@@ -1,4 +1,5 @@
 export default{
-    template:`   
+    template:`
+    <button>filter</button>
     `,
 }

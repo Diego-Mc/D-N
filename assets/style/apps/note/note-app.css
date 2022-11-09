@@ -1,0 +1,8 @@
+/* cmps style */
+@import './note-list.css';
+@import './note-preview.css';
+@import './note-add.css';
+
+body {
+    background-color: #eee;
+}

@@ -1,0 +1,17 @@
+.note-preview{
+    background-color: antiquewhite;
+    width: 264px;
+    /* height: 264px; */
+    margin-bottom: 20px;
+    break-inside: avoid;
+    border-radius: 20px;
+    background-color: #fff;
+}
+
+.small {
+    height: 180px;
+}
+
+.large {
+    height: 310px;
+}

@@ -1,0 +1,6 @@
+.add-note-container{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    margin-inline:auto;
+}
