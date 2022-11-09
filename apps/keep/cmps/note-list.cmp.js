@@ -8,7 +8,13 @@ export default {
             <note-preview v-for="note in notes" :note="note" @note-clicked="noteClicked" @on-delete="onDelete"/>
         </section> 
     `, created() {
-    }, methods: {
+    },
+    emits: {
+        onDelete: null,
+        noteClicked: null,
+
+    },
+    methods: {
         noteClicked(noteId) {
             this.$emit('note-clicked', noteId)
         },
@@ -17,6 +23,6 @@ export default {
         }
     },
     components: {
-        notePreview
+        notePreview,
     }
 }

@@ -12,7 +12,9 @@
     outline: none;
 }
 
-.add-note-container input {
+.add-note-container textarea {
     border: none;
+    resize: none;
     width: 100%;
 }
+

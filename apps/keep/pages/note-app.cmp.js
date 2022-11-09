@@ -17,7 +17,7 @@ export default {
             <note-list :notes="pinnedNotes" type="PINNED" @note-clicked="editNote" @on-delete="deleteNote"/>
             <note-list :notes="unpinnedNotes"  type="OTHERS" @note-clicked="editNote" @on-delete="deleteNote"/>
         </div>
-        <router-view></router-view>
+        <router-view v-if="unpinnedNotes" :notes="{pinnedNotes,unpinnedNotes}"></router-view>
     </main>
     `, data() {
         return {
@@ -35,13 +35,10 @@ export default {
                 else return true
 
             })
-            console.log(notes);
         })
     }, methods: {
         addNote(note) {
-            noteService.create(note).then(note => {
-                // console.log(note);
-                note.isPinned ? this.pinnedNotes.push(note) : this.unpinnedNotes.push(note)})
+            noteService.create(note).then(note => note.isPinned ? this.pinnedNotes.push(note) : this.unpinnedNotes.push(note))
         },
         onClick() {
             this.appClicked = !this.appClicked

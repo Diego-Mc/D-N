@@ -16,9 +16,13 @@ export default {
         return {
             isShowIcons: false,
         }
-    },methods: {
-        onDelete(){
-            this.$emit('on-delete',this.note.id)
+    }, emits: {
+        onDelete: null,
+    },
+     methods: {
+        onDelete() {
+            this.$emit('on-delete', this.note.id)
         }
     },
+   
 }
