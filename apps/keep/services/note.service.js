@@ -9,7 +9,7 @@ export const noteService = {
   get,
   remove,
   save,
-  getEmptyNote,
+  create,
   getNextNoteId
 }
 
@@ -25,12 +25,15 @@ function remove(noteId) {
   return storageService.remove(NOTE_KEY, noteId)
 }
 
+function create(note) {
+  return storageService.post(NOTE_KEY, note)
+}
+
 function save(note) {
-  if (note.id) {
-    return storageService.put(NOTE_KEY, note)
-  } else {
-    return storageService.post(NOTE_KEY, note)
-  }
+  return storageService.put(NOTE_KEY, note)
+  // else {
+  //   return storageService.post(NOTE_KEY, note)
+  // }
 }
 
 function getEmptyNote(vendor = '', maxSpeed = 0) {
@@ -51,8 +54,7 @@ function _createNotes() {
   let notes = utilService.loadFromStorage(NOTE_KEY)
   if (!notes || !notes.length) {
     notes =
-    {
-      pinned: [
+      [
         {
           id: 'n101',
           type: 'note-txt',
@@ -83,9 +85,6 @@ function _createNotes() {
             ],
           },
         },
-      ]
-      ,
-      unpinned: [
         {
           id: 'n104',
           type: 'note-todos unpinned',
@@ -98,7 +97,6 @@ function _createNotes() {
           },
         },
       ]
-    }
     utilService.saveToStorage(NOTE_KEY, notes)
   }
   return notes
