@@ -1,12 +1,13 @@
 export default {
+  props: ['email'],
   template: /*HTML*/ `
-    <section class="email-details selected round">
+    <section v-if="email" class="email-details selected round">
       <header>
         <div className="user-data">
-          <img class="email-img" src="assets/img/diego.jpeg" alt="userImg" />
+          <img class="email-img" :src="email.imgUrl" />
           <span>
-            <small class="f-m f-clr-main">Diego Mc</small>
-            <small class="f-s f-clr-light">diego@example.com</small>
+            <small class="f-m f-clr-main">{{email.from.name}}</small>
+            <small class="f-s f-clr-light">{{email.from.email}}</small>
           </span>
         </div>
         <div class="email-tools">
@@ -18,21 +19,16 @@ export default {
         </div>
       </header>
       <main>
-        <h2>Sign up for my new Website about the VueJS framework</h2>
+        <h2>{{email.subject}}</h2>
         <p>
-          My new website is about the VueJs framework and it's open and ready for you to join. I’ve worked
-          very hard on it and I’m hoping that you will appreciate it and join, I
-          would also really like any feedback you can give me.
+          {{email.body}}
         </p>
-        <p> This means a lot to me.</p>
       </main>
       <footer>
         <p class="signature">
-          Thanks for reading, <br>
-          Diego, <br>
-          Website creator
+          {{email.signature || email.from.name}}
         </p>
-        <small className="email-time f-s f-clr-light">10:43</small>
+        <small className="email-time f-s f-clr-light">{{email.sentAt}}</small>
       </footer>
     </section>
   `,
@@ -45,3 +41,5 @@ export default {
 }
 
 // TODO: use data bool to check if exists email, if not show msg, if exists show email AND render selected class for bg color
+
+//TODO: add util to break up text to multiple paragraphs

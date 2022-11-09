@@ -2,8 +2,10 @@
   padding: 25px 35px;
   display: grid;
   grid-template-columns: 36px 1fr max-content;
-  grid-template-areas: 'img data time';
-  gap: 0.88rem;
+  grid-template-areas:
+    'img data time'
+    '. body body';
+  column-gap: 0.88rem;
   cursor: pointer;
 }
 
@@ -12,7 +14,7 @@
 }
 
 .email-preview:is(.selected, :hover) small,
-.email-preview:is(.selected, :hover) p {
+.email-preview:is(.selected, :hover) .email-body {
   color: var(--clr-main);
 }
 
@@ -43,4 +45,8 @@
 
 .email-time {
   grid-area: time;
+}
+
+.email-body {
+  grid-area: body;
 }

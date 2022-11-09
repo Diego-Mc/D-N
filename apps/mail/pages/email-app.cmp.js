@@ -10,15 +10,25 @@ export default {
   template: /* HTML */ `
     <main class="email-main">
       <email-folder-list />
-      <email-list />
-      <email-details />
+      <email-list @emailSelected="emailSelected" :emails="emails" />
+      <email-details :email="selectedEmail" />
     </main>
   `,
   data() {
-    return {}
+    return {
+      emails: null,
+      selectedEmail: null,
+    }
   },
-  created() {},
-  methods: {},
+  created() {
+    emailService.query().then((emails) => (this.emails = emails))
+  },
+  methods: {
+    emailSelected(email) {
+      console.log(email)
+      this.selectedEmail = email
+    },
+  },
   computed: {},
   components: {
     emailFolderList,
