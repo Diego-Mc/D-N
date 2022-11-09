@@ -15,6 +15,7 @@ function loadFromStorage(key) {
 //TODO: util for params
 
 function makeId(length = 5) {
+  // noteaaejaf af dasdasdaf
   var txt = ''
   var possible =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
