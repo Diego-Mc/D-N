@@ -1,22 +1,10 @@
 .notes-list {
-<<<<<<< HEAD
   /* temporary!!! */
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 70px;
 
   column-width: 264px;
   column-gap: 20px;
   column-count: 3;
   padding-inline: calc((100% - (264px * 3) - 50px) / 2);
 }
-=======
-    /* temporary!!! */
-    width: 100%;
-    margin-bottom: 20px;
-
-    column-width: 264px;
-    column-gap: 20px;
-    column-count: 3; 
-    padding-inline: calc((100% - (264px * 3) - 50px) / 2);
-}
->>>>>>> d99e404e0ef2757732cb06691d1f1f2a51019385

@@ -9,18 +9,16 @@ import noteList from "../cmps/note-list.cmp.js"
 export default {
     template: `
     <main @click="onClick" >
-    <div>
-        <note-filter/>
-        <note-add @add-note="addNote" :appClicked = "appClicked" />
-    </div>
-    <div v-if="unpinnedNotes "> 
-        <note-list :notes="pinnedNotes" @note-clicked="editNote"/>
-        <note-list :notes="unpinnedNotes" @note-clicked="editNote"/>
-    </div>
-    <router-link :to="'/keepy/'+213">ad</router-link>
-       <router-view></router-view>
+        <div>
+            <note-filter/>
+            <note-add @add-note="addNote" :appClicked = "appClicked" />
+        </div>
+        <div v-if="unpinnedNotes "> 
+            <note-list :notes="pinnedNotes" type="PINNED" @note-clicked="editNote" @on-delete="deleteNote"/>
+            <note-list :notes="unpinnedNotes"  type="OTHERS" @note-clicked="editNote" @on-delete="deleteNote"/>
+        </div>
+        <router-view></router-view>
     </main>
-    
     `, data() {
         return {
             pinnedNotes: [],
@@ -37,17 +35,27 @@ export default {
                 else return true
 
             })
+            console.log(notes);
         })
     }, methods: {
-        addNote(info) {
-            noteService.create({ isPinned: false, info }).then(note => note.isPinned ? this.pinnedNotes.push(note) : this.unpinnedNotes.push(note))
+        addNote(note) {
+            noteService.create(note).then(note => {
+                // console.log(note);
+                note.isPinned ? this.pinnedNotes.push(note) : this.unpinnedNotes.push(note)})
         },
-        onClick(){
+        onClick() {
             this.appClicked = !this.appClicked
         },
-        editNote(noteId){
+        editNote(noteId) {
 
-        }
+        },
+        deleteNote(noteId) {
+            noteService.remove(noteId).then(() => {
+                this.pinnedNotes = this.pinnedNotes.filter(note => note.id !== noteId)
+                this.unpinnedNotes = this.unpinnedNotes.filter(note => note.id !== noteId)
+            })
+        },
+
     },
     components: {
         noteAdd,
