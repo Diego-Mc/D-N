@@ -1,17 +1,18 @@
-.add-note-container{
+.add-note-container {
     display: flex;
     flex-direction: column;
     width: 349px;
-    margin-inline:auto;
+    margin-inline: auto;
     margin-bottom: 56px;
     border: 1px solid black;
     border-radius: 5px;
 }
 
-.add-note-container >*:focus-visible{
-   outline: none;
+.add-note-container>*:focus-visible {
+    outline: none;
 }
 
-.add-note-container input{
+.add-note-container input {
     border: none;
+    width: 100%;
 }
