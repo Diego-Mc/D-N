@@ -1,10 +1,10 @@
 .notes-list {
-    /* temporary!!! */
-    width: 1032px;
-     margin-bottom: 20px;
+  /* temporary!!! */
+  width: 100%;
+  margin-bottom: 20px;
 
-    column-width: 264px;
-    column-gap: 20px;
-    column-count: 3; 
-    margin-inline: calc((100% - (264px * 3) - 50px) / 2);
+  column-width: 264px;
+  column-gap: 20px;
+  column-count: 3;
+  padding-inline: calc((100% - (264px * 3) - 50px) / 2);
 }

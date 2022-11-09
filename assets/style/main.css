@@ -19,6 +19,8 @@
 
 /* MAILY */
 @import 'apps/mail/cmp/email-preview.cmp.css';
+@import 'apps/mail/cmp/email-details.cmp.css';
+@import 'apps/mail/cmp/email-folder-list.cmp.css';
 
 /* KEEPY */
 

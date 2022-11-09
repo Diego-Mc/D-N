@@ -1,0 +1,51 @@
+.email-details {
+  padding: 45px 60px;
+  display: flex;
+  flex-direction: column;
+}
+
+.email-details.selected {
+  background-color: #fff;
+}
+
+.email-details header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.email-details .user-data {
+  display: flex;
+  gap: 0.88rem;
+}
+
+.email-details .user-data span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.email-details .email-tools {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.email-details main {
+  flex: 1;
+}
+
+.email-details main h2 {
+  margin-bottom: 20px;
+  font-family: Mulish-Black;
+}
+
+.email-details main p {
+  margin-bottom: 14px;
+}
+
+.email-details footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}

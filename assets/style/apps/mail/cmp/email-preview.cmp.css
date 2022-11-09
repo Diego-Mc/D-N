@@ -4,14 +4,29 @@
   grid-template-columns: 36px 1fr max-content;
   grid-template-areas: 'img data time';
   gap: 0.88rem;
+  cursor: pointer;
+}
+
+.email-preview.selected {
+  background-color: #fff;
+}
+
+.email-preview:is(.selected, :hover) small,
+.email-preview:is(.selected, :hover) p {
+  color: var(--clr-main);
+}
+
+.email-preview:is(.selected, :hover) h3 {
+  color: var(--clr-main-dark);
+}
+
+.email-preview:is(.selected, :hover) .email-img {
+  opacity: 1;
 }
 
 .email-preview .email-img {
   grid-area: img;
-  width: 36px;
-  height: 36px;
-  object-fit: cover;
-  border-radius: 4px;
+  opacity: 0.8;
 }
 
 .email-data {

@@ -4,7 +4,7 @@ export default {
   template: /* HTML */ `
     <section class="email-list round">
       <email-preview />
-      <email-preview />
+      <email-preview class="selected" />
       <email-preview />
       <email-preview />
       <email-preview />
