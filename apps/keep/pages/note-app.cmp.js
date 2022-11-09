@@ -11,21 +11,21 @@ export default {
     <main @click="onClick" >
     <div>
         <note-filter/>
-        <note-add @add-note="addNote"/>
+        <note-add @add-note="addNote" :appClicked = "appClicked" />
     </div>
     <div v-if="unpinnedNotes "> 
-        <note-list :notes="pinnedNotes" :clicked = "outsizeAddClick"/>
-        <note-list :notes="unpinnedNotes"/>
+        <note-list :notes="pinnedNotes" @note-clicked="editNote"/>
+        <note-list :notes="unpinnedNotes" @note-clicked="editNote"/>
     </div>
-       
+    <router-link :to="'/keepy/'+213">ad</router-link>
+       <router-view></router-view>
     </main>
     
     `, data() {
         return {
             pinnedNotes: [],
             unpinnedNotes: null,
-            outsizeAddClick: false,
-
+            appClicked: false,
         }
     }, created() {
         noteService.query().then(notes => {
@@ -41,6 +41,12 @@ export default {
     }, methods: {
         addNote(info) {
             noteService.create({ isPinned: false, info }).then(note => note.isPinned ? this.pinnedNotes.push(note) : this.unpinnedNotes.push(note))
+        },
+        onClick(){
+            this.appClicked = !this.appClicked
+        },
+        editNote(noteId){
+
         }
     },
     components: {
