@@ -1,0 +1,112 @@
+/* list helpers */
+.clean-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+/* NOTES */
+.note-blue {
+  background-color: #bfddff;
+  color: #4a6788;
+}
+.note-blue .note-title {
+  color: #30455d;
+}
+.note-pink {
+  background-color: #f1caff;
+  color: #834a88;
+}
+.note-pink .note-title {
+  color: #57305d;
+}
+.note-red {
+  background-color: #ffced7;
+  color: #884a60;
+}
+.note-red .note-title {
+  color: #5d3038;
+}
+.note-purple {
+  background-color: #c9c5ff;
+  color: #5a4a88;
+}
+.note-purple .note-title {
+  color: #3e305d;
+}
+.note-yellow {
+  background-color: #effec3;
+  color: #83884a;
+}
+.note-yellow .note-title {
+  color: #545d30;
+}
+.note-turquoise {
+  background-color: #9ef8e7;
+  color: #4a8872;
+}
+.note-turquoise .note-title {
+  color: #305d4d;
+}
+.note-green {
+  background-color: #b4ffbf;
+  color: #4a8854;
+}
+.note-green .note-title {
+  color: #305d34;
+}
+
+/* FONTS */
+.f-s {
+  font-weight: unset;
+  font-family: Mulish-Bold;
+  font-size: 0.75rem;
+}
+
+.f-d {
+  font-weight: unset;
+  font-family: Mulish-Bold;
+  font-size: 0.88rem;
+}
+
+.f-m {
+  font-weight: unset;
+  font-family: Mulish-Bold;
+  font-size: 1rem;
+}
+
+.f-l {
+  font-weight: unset;
+  font-family: Mulish-Bold;
+  font-size: 1.5rem;
+}
+
+.f-m-title {
+  font-weight: unset;
+  font-family: Mulish-Black;
+  font-size: 1rem;
+}
+
+.f-l-title {
+  font-weight: unset;
+  font-family: Mulish-Black;
+  font-size: 1.5rem;
+}
+
+.f-m-text {
+  font-weight: unset;
+  font-family: Mulish-Regular;
+  font-size: 1rem;
+}
+
+.f-l-text {
+  font-weight: unset;
+  font-family: Mulish-Regular;
+  font-size: 1.5rem;
+}
+
+.f-headline {
+  font-weight: unset;
+  font-family: Mulish-Black;
+  font-size: 4rem;
+}
