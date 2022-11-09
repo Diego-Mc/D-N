@@ -1,3 +1,8 @@
+/* sections */
+.col-full {
+  grid-column: 2 / span 10;
+}
+
 /* list helpers */
 .clean-list {
   padding: 0;
@@ -109,4 +114,10 @@
   font-weight: unset;
   font-family: Mulish-Black;
   font-size: 4rem;
+}
+
+.logo {
+  font-size: 2.25rem;
+  font-family: Mulish-Bold;
+  font-weight: unset;
 }

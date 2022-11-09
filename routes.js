@@ -4,6 +4,10 @@ import aboutPage from './views/app-about.cmp.js'
 import keepyApp from './apps/keep/pages/note-app.cmp.js'
 import noteEdit from './apps/keep/cmps/note-edit.cmp.js'
 
+import mailyApp from './apps/mail/pages/email-app.cmp.js'
+import emailCompose from './apps/mail/cmps/email-compose.cmp.js'
+import emailPreview from './apps/mail/cmps/email-preview.cmp.js'
+
 const { createRouter, createWebHashHistory } = VueRouter
 
 const routerOptions = {
@@ -17,20 +21,20 @@ const routerOptions = {
       path: '/about',
       component: aboutPage,
     },
-    // {
-    //   path: '/maily',
-    //   component: mailyApp,
-    //   children: [
-    //     {
-    //       path: 'compose/:id?',
-    //       component: emailCompose,
-    //     },
-    //     {
-    //       path: ':id',
-    //       component: emailPreview,
-    //     },
-    //   ],
-    // },
+    {
+      path: '/maily',
+      component: mailyApp,
+      children: [
+        {
+          path: 'compose/:id?',
+          component: emailCompose,
+        },
+        {
+          path: ':id',
+          component: emailPreview,
+        },
+      ],
+    },
     {
       path: '/keepy',
       component: keepyApp,
