@@ -2,11 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 40px;
 }
 
 .logo-wrapper {
   display: flex;
   gap: 0.5rem;
+  min-width: 160px;
 }
 
 .app-header nav {

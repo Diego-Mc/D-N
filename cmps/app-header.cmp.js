@@ -1,9 +1,11 @@
+import { utilService } from '../services/util.service.js'
+
 export default {
   template: `
         <header class="app-header col-full f-m">
             <span class="logo-wrapper">
                 <img src="assets/icons/logo-icon-dn.svg" alt="" />
-                <h1 class="logo-text logo">D&N</h1>
+                <h1 class="logo-text logo">{{appName}}</h1>
             </span>
             <nav>
                 <router-link to="/maily">Maily</router-link>
@@ -14,4 +16,17 @@ export default {
             <i class="bi bi-grid-fill"></i>
         </header>
     `,
+  data() {
+    return {
+      appName: 'D&N',
+    }
+  },
+  watch: {
+    '$route.path': {
+      handler(val) {
+        console.log(val, this.$route)
+        this.appName = utilService.toCapitalCase(val.slice(1)) || 'D&N'
+      },
+    },
+  },
 }

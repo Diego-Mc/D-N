@@ -2,6 +2,7 @@ export const utilService = {
   saveToStorage,
   loadFromStorage,
   makeId,
+  toCapitalCase,
 }
 
 function saveToStorage(key, value) {
@@ -22,4 +23,8 @@ function makeId(length = 5) {
     txt += possible.charAt(Math.floor(Math.random() * possible.length))
   }
   return txt
+}
+
+function toCapitalCase(str) {
+  return str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase()
 }
