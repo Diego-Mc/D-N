@@ -40,7 +40,7 @@ export default {
         })
     }, methods: {
         addNote(info) {
-            noteService.create({isPinned:false,info})
+            noteService.create({ isPinned: false, info }).then(note => note.isPinned ? this.pinnedNotes.push(note) : this.unpinnedNotes.push(note))
         }
     },
     components: {
