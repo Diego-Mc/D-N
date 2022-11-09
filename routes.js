@@ -20,7 +20,7 @@ const routerOptions = {
       children: [
         {
           path: 'compose/:id?',
-          component: emailPreview,
+          component: emailCompose,
         },
         {
           path: ':id',
