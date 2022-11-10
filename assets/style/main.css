@@ -6,12 +6,12 @@
 @import 'base/base.css';
 @import 'base/helpers.css';
 @import 'base/layout.css';
-@import 'base/forms.css';
 
 /* General Components */
 @import 'cmps/home-page.css';
 @import 'cmps/app-header.css';
 @import 'cmps/user-msg.css';
+@import 'cmps/icon.cmp.css';
 
 /* Apps */
 @import 'apps/mail/email-app.css';
@@ -21,6 +21,7 @@
 @import 'apps/mail/cmp/email-preview.cmp.css';
 @import 'apps/mail/cmp/email-details.cmp.css';
 @import 'apps/mail/cmp/email-folder-list.cmp.css';
+@import 'apps/mail/cmp/email-compose.cmp.css';
 
 /* KEEPY */
 

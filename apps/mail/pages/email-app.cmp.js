@@ -11,13 +11,15 @@ export default {
     <main class="email-main">
       <email-folder-list />
       <email-list @emailSelected="emailSelected" :emails="emails" />
-      <email-details :email="selectedEmail" />
+      <email-compose v-if="isCompose" />
+      <email-details v-else :email="selectedEmail" />
     </main>
   `,
   data() {
     return {
       emails: null,
       selectedEmail: null,
+      isCompose: true,
     }
   },
   created() {
@@ -25,7 +27,6 @@ export default {
   },
   methods: {
     emailSelected(email) {
-      console.log(email)
       this.selectedEmail = email
     },
   },
@@ -34,5 +35,6 @@ export default {
     emailFolderList,
     emailList,
     emailDetails,
+    emailCompose,
   },
 }

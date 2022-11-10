@@ -1,7 +1,7 @@
 export default {
   template: /* HTML */ `
     <section class="email-folder-list f-l">
-      <article class="f-clr-dark">
+      <article class="selected">
         <i class="bi bi-inbox-fill"></i>
       </article>
       <article>

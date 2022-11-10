@@ -1,0 +1,24 @@
+.home-page > * {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 80px;
+  align-items: center;
+  margin-bottom: 140px;
+}
+
+.home-page > *:first-of-type {
+  margin-top: 40px;
+}
+
+.home-page > * > * {
+  grid-column: span 5;
+}
+
+.home-page > * h1 {
+  margin-bottom: 25px;
+}
+
+.home-page > * p {
+  line-height: 1.5;
+  margin-bottom: 25px;
+}

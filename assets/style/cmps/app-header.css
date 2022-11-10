@@ -9,6 +9,11 @@
   display: flex;
   gap: 0.5rem;
   min-width: 160px;
+  user-select: none;
+}
+
+.logo-wrapper img {
+  cursor: pointer;
 }
 
 .app-header nav {
