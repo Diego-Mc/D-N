@@ -1,10 +1,8 @@
 import noteAdd from "./note-add.cmp.js"
-
 export default {
     props:['notes'],
     template: `  
         <div class="note-editor" @clicked.stop>
-            {{this.$route.params.id}}
             <note-add :editedNote="note"/>
         </div>
 

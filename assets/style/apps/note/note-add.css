@@ -1,11 +1,14 @@
 .add-note-container {
     display: flex;
     flex-direction: column;
+    background-color: #fff;
     width: 349px;
     margin-inline: auto;
     margin-bottom: 56px;
-    border: 1px solid black;
-    border-radius: 5px;
+    padding: 5px;
+    border: none;
+    border-radius: 20px;
+    
 }
 
 .add-note-container textarea:focus-visible {
