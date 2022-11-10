@@ -54,6 +54,18 @@ export default {
                 })
             };
         },
+        // uploadVideo(e) {
+        //     const image = e.target.files[0];
+        //     const reader = new FileReader();
+        //     reader.readAsDataURL(image);
+        //     reader.onload = e => {
+        //         this.previewImage = e.target.result;
+        //         eventBus.emit(`update-note`, {
+        //             prop: 'imgUrl', val: this.previewImage
+        //             , id: this.noteId
+        //         })
+        //     };
+        // },
         onDelete() {
             eventBus.emit('delete-note', this.noteId)
         }

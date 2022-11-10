@@ -1,15 +1,15 @@
 import noteAdd from "./note-add.cmp.js"
-
+import { eventBus } from "../../../services/event-bus.service.js"
 export default {
     props:['notes'],
     template: `  
         <div class="note-editor" @clicked.stop>
-            <note-add :editedNoteId="$route.params.id"/>
+            <note-add :editedNoteId="$route.params.id" :notes="notes"/>
         </div>
 
-        <router-link to="/keepy"> 
+        <!-- <router-link to="/keepy">  -->
             <div class="screen"></div>
-        </router-link>
+        <!-- </router-link> -->
        
     `,data() {
         return {
@@ -17,10 +17,8 @@ export default {
         }
     }
     ,created() {
+        // eventBus.on('screen-click',)
         let noteId = this.$route.params.id
-        // let currentNote = this.notes.pinnedNotes.find(note => note.id === noteId)
-        // if(!currentNote) currentNote = this.notes.unpinnedNotes.find(note => note.id === noteId)
-        // this.note = currentNote
     },
     components: {
         noteAdd

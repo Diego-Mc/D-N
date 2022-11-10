@@ -97,7 +97,7 @@ function _createNotes() {
         {
           id: 'n105',
           type: 'note-todos unpinned',
-          isPinned: false,
+          isPinned: true,
           info: {
             title: 'Bobi and Me 2',
             label: 'Get my stuff together',

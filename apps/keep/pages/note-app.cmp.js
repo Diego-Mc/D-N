@@ -9,36 +9,32 @@ import noteList from "../cmps/note-list.cmp.js"
 
 export default {
     template: `
-    <main @click="onClick">
+    <main @click="onClick" v-if="notes">
         <div>
             <note-filter @notes-filtered="onFilter"/>
-            <note-add @add-note="addNote" :appClicked = "appClicked" :notes="{pinnedNotes:pinnedNotes,unpinnedNotes:unpinnedNotes}"/>
+            <note-add @add-note="addNote" :notes="notes"/>
         </div>
         <div v-if="notes"> 
             <note-list  :notes="getNotesByPinned(true)" type="PINNED"  @on-delete="deleteNote"/>
             <note-list :notes="getNotesByPinned(false)"  type="OTHERS"  @on-delete="deleteNote"/>
         </div>
-        <router-view :notes="{pinnedNotes,unpinnedNotes}"></router-view>
+        <router-view :notes="notes"></router-view>
     </main>
     `, data() {
         return {
             notes: null,
             pinnedNotes: [],
             unpinnedNotes: null,
-            appClicked: false,
+           
             filterBy: {
                 txt: '',
             }
         }
     }, created() {
         noteService.query().then(notes => this.notes = notes)
-
-        eventBus.on('get-notes', obj => obj.val = { pinnedNotes: this.pinnedNotes, unpinnedNotes: this.unpinnedNotes })
+        eventBus.on('get-notes', obj => ({ notes: this.notes }))
         eventBus.on('delete-note', noteId => this.deleteNote(noteId))
-        eventBus.on('note-changed', (changedNote) => {
-            console.log('wa');
-            noteService.save(changedNote)
-        })
+        eventBus.on('note-changed', (changedNote) => noteService.save(changedNote))
         eventBus.on('todo-clicked', obj => {
             const note = obj.note
             const index = obj.index
@@ -51,7 +47,7 @@ export default {
         eventBus.on('todo-removed', obj => {
             const note = obj.note
             const index = obj.index
-            note.info.todos.splice(index,1)
+            note.info.todos.splice(index, 1)
             noteService.save(note).then(() => {
                 const idx = this.notes.findIndex(note => note.id === note.id)
                 this.notes.splice(idx, note)
@@ -64,7 +60,7 @@ export default {
             noteService.create(note)
         },
         onClick() {
-            this.appClicked = !this.appClicked
+           eventBus.emit('app-clicked')
         },
         deleteNote(noteId) {
             noteService.remove(noteId).then(noteService.query).then(notes => this.notes = notes)
@@ -86,8 +82,8 @@ export default {
                 return false
             })
         },
-        getNotesByPinned(isPinned){
-            if(!this.notes) return
+        getNotesByPinned(isPinned) {
+            if (!this.notes) return
             let ha = this.notes.filter(note => {
                 return note.isPinned === isPinned
             })
@@ -101,8 +97,10 @@ export default {
                 }
                 else return true
             })
-        }
-
+        },
+        saveNote(note){
+            noteService.put(note)
+        },
     },
     computed: {
         getNotes() {
@@ -110,9 +108,7 @@ export default {
         },
     },
     watch: {
-        notes:function(){
-            this.sortNotes()
-        }
+
     },
     components: {
         noteAdd,

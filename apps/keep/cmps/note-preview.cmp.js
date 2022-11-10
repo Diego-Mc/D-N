@@ -4,7 +4,7 @@ import { eventBus } from "../../../services/event-bus.service.js"
 export default {
     props: ['note'],
     template: `  
-    <router-link :to="'/keepy/'+note.id">
+    <router-link :to="'/keepy/'+note.id" @click.stop>
         <div class="note-preview" :class="noteBackgroundColor" @mouseover="isShowIcons = true" @mouseleave="isShowIcons = false" >
             <img :src="note.imgUrl" alt=""/>
             <div class="preview-text">

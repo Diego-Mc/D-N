@@ -1,3 +1,15 @@
+.add-note-section{
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    justify-items: right;
+}
+
+.change-editor{
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+}
+
 .add-note-container {
     position: relative;
     display: flex;
