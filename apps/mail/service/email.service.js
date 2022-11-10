@@ -11,6 +11,7 @@ export const emailService = {
   save,
   getEmptyEmail,
   getNextEmailId,
+  getComposeSurvey,
 }
 
 function query() {
@@ -51,6 +52,43 @@ function getNextEmailId(emailId) {
     if (idx === emails.length - 1) idx = -1
     return emails[idx + 1].id
   })
+}
+
+function getComposeSurvey({ to = '', title = '', body = '', sign = '' } = '') {
+  var survey = {
+    title: 'New Message',
+    cmps: [
+      {
+        type: 'textBox',
+        info: {
+          label: 'to',
+          val: to,
+        },
+      },
+      {
+        type: 'textBox',
+        info: {
+          label: 'title',
+          val: title,
+        },
+      },
+      {
+        type: 'textArea',
+        info: {
+          label: 'body',
+          val: body,
+        },
+      },
+      {
+        type: 'textBox',
+        info: {
+          label: 'sign.',
+          val: sign,
+        },
+      },
+    ],
+  }
+  return Promise.resolve(survey)
 }
 
 function _createEmails() {

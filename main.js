@@ -5,6 +5,7 @@ import { router } from './routes.js'
 import appHeader from './cmps/app-header.cmp.js'
 import appFooter from './cmps/app-footer.cmp.js'
 import userMsg from './cmps/user-msg.cmp.js'
+import iconToggle from './cmps/icon-toggle.cmp.js'
 
 const options = {
   template: `
@@ -21,5 +22,6 @@ const options = {
 }
 
 const app = createApp(options)
+app.component('icon-toggle', iconToggle)
 app.use(router)
 app.mount('#app')

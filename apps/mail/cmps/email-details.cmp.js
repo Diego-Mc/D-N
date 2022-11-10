@@ -14,8 +14,8 @@ export default {
           <i class="bi bi-arrow-90deg-left"></i>
           <i class="bi bi-reply"></i>
           <i class="bi bi-reply-all"></i>
-          <i class="bi bi-star"></i>
-          <i class="bi bi-trash"></i>
+          <icon-toggle icon="star"/>
+          <icon-toggle icon="trash"/>
         </div>
       </header>
       <main>
