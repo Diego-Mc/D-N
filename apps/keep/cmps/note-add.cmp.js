@@ -27,6 +27,7 @@ export default {
     }
   },
   created() {
+    console.log(this.editedNote)
     this.initNote()
     eventBus.on('update-note',(obj)=>{
       this.note[obj.prop] = obj.val
