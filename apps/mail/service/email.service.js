@@ -2,6 +2,12 @@ import { utilService } from '../../../services/util.service.js'
 import { storageService } from '../../../services/async-storage.service.js'
 
 const EMAIL_KEY = 'emailDB'
+
+const loggedinUser = {
+  email: 'diego@appsus.com',
+  fullname: 'Diego Mc',
+}
+
 _createEmails()
 
 export const emailService = {
@@ -12,6 +18,9 @@ export const emailService = {
   getEmptyEmail,
   getNextEmailId,
   getComposeSurvey,
+  saveDraft,
+  sendEmail,
+  checkValidity,
 }
 
 function query() {
@@ -27,6 +36,7 @@ function remove(emailId) {
 }
 
 function save(email) {
+  email.sentAt = Date.now()
   if (email.id) {
     return storageService.put(EMAIL_KEY, email)
   } else {
@@ -41,8 +51,8 @@ function getEmptyEmail(subject = '', body = '') {
     body,
     isRead: false,
     sentAt: null,
-    from: '',
-    to: '',
+    from: { email: '', name: '' },
+    to: { email: '', name: '' },
   }
 }
 
@@ -54,7 +64,23 @@ function getNextEmailId(emailId) {
   })
 }
 
-function getComposeSurvey({ to = '', title = '', body = '', sign = '' } = '') {
+function checkValidity(email) {
+  console.log(
+    'checking',
+    !email.to,
+    !email.to.email,
+    !email.to || !email.to.email
+  )
+  if (!email.to || !email.to.email)
+    return { isValid: false, missing: 'recipient email' }
+  if (!email.subject) return { isValid: false, missing: 'subject' }
+  if (!email.body) return { isValid: false, missing: 'body' }
+  else return { isValid: true }
+}
+
+function getComposeSurvey(
+  { to = '', subject = '', body = '', sign = '' } = ''
+) {
   var survey = {
     title: 'New Message',
     cmps: [
@@ -63,13 +89,15 @@ function getComposeSurvey({ to = '', title = '', body = '', sign = '' } = '') {
         info: {
           label: 'to',
           val: to,
+          key: 'to',
         },
       },
       {
         type: 'textBox',
         info: {
-          label: 'title',
-          val: title,
+          label: 'subj',
+          val: subject,
+          key: 'subject',
         },
       },
       {
@@ -77,18 +105,32 @@ function getComposeSurvey({ to = '', title = '', body = '', sign = '' } = '') {
         info: {
           label: 'body',
           val: body,
+          key: 'body',
         },
       },
       {
         type: 'textBox',
         info: {
-          label: 'sign.',
+          label: 'sign',
           val: sign,
+          key: 'signature',
         },
       },
     ],
   }
   return Promise.resolve(survey)
+}
+
+function saveDraft(email) {
+  email.imgUrl = email.imgUrl || 'assets/img/diego.jpeg'
+  email.from = { ...loggedinUser }
+  email.state = 'draft'
+  return save(email)
+}
+
+function sendEmail(email) {
+  email.state = 'inbox'
+  return save(email)
 }
 
 function _createEmails() {

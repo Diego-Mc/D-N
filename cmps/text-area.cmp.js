@@ -2,7 +2,7 @@ export default {
   template: `
     <section>
       <label> {{info.label}} </label>
-      <textarea v-model="val" @change="reportVal"></textarea>
+      <textarea v-model="val" @input="reportVal"></textarea>
     </section>
   `,
   props: ['info'],
@@ -13,7 +13,7 @@ export default {
   },
   methods: {
     reportVal() {
-      this.$emit('setVal', this.val)
+      this.$emit('setVal', { key: this.info.key, ans: this.val })
     },
   },
 }

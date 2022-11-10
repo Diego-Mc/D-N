@@ -11,7 +11,7 @@ export default {
     <main class="email-main">
       <email-folder-list />
       <email-list @emailSelected="emailSelected" :emails="emails" />
-      <email-compose v-if="isCompose" />
+      <email-compose @sentEmail="emailSent" v-if="isCompose" />
       <email-details v-else :email="selectedEmail" />
     </main>
   `,
@@ -28,6 +28,9 @@ export default {
   methods: {
     emailSelected(email) {
       this.selectedEmail = email
+    },
+    emailSent(email) {
+      this.isCompose = false
     },
   },
   computed: {},

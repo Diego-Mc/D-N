@@ -4,6 +4,7 @@
   gap: 80px;
   align-items: center;
   margin-bottom: 140px;
+  margin-inline: 2rem;
 }
 
 .home-page > *:first-of-type {
@@ -16,9 +17,12 @@
 
 .home-page > * h1 {
   margin-bottom: 25px;
+  font-family: Mulish-Bold;
+  font-size: 2.6rem;
 }
 
 .home-page > * p {
   line-height: 1.5;
   margin-bottom: 25px;
+  font-size: 1.1rem;
 }
