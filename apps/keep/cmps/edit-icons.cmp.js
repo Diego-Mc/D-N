@@ -3,7 +3,7 @@ import { eventBus } from '../../../services/event-bus.service.js'
 export default {
     props: ['note-id','bin'],
     template: `
-        <div class="note-icons-container" style="position:relative;"> 
+        <div class="note-icons-container" > 
             <i v-if="bin" @click="onDelete" class='bi bi-trash'></i>
             <div class="upload-img-container">
                 <input type="file" accept="image/jpeg/png" @change='uploadImage' class="upload-img-input"/>
@@ -23,7 +23,9 @@ export default {
                 </div>
             </div>
             <i class="bi bi-envelope"></i>
+            <i @click="listClicked" class="bi bi-list-task"></i>
             <i class="bi bi-three-dots-vertical"></i>
+
         </div>
     `, data() {
         return {
@@ -33,6 +35,9 @@ export default {
     methods: {
         colorClicked(color) {
             eventBus.emit(`update-note`, { prop: 'color', val: color, id: this.noteId })
+        },
+        listClicked(){
+            eventBus.emit(`list-clicked`, this.noteId)
         },
         toggleColors() {
             this.isShowColors = !this.isShowColors
