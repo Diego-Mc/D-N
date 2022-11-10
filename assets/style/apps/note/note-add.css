@@ -7,17 +7,44 @@
     margin-bottom: 56px;
     border: none;
     border-radius: 20px;
+    box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px, rgb(60 64 67 / 15%) 0px 2px 6px 2px;
 }
+
+.add-note-container textarea:focus-visible {
+    outline: none;
+}
+
+.add-note-container textarea {
+    font-family: Mulish-Regular;
+    border: none;
+    outline: none;
+    resize: none;
+    width: 100%;
+}
+
+/* textarea:last-of-type {
+    padding: 0;
+} */
 
 .add-note-container ul{
     margin: 0 0 10px 0;
     padding: 0;
 }
-/* 
-.add-note-container ul input{
-    width: 80%;
-} */
 
+.add-note-container ul button,.preview-text ul button{
+    background-color: transparent;
+    color: red;
+}
+
+ .add-note-container ul li input{
+    /* width: 80%; */
+    background-color: transparent;
+    border: none;
+    
+} 
+.add-note-container ul li input:focus-visible{
+    outline-style: none;
+}
 .add-note-container li{
    list-style: none;
 }
@@ -31,18 +58,6 @@
     padding-left: 10px;
     padding-right: 30px;
 
-}
-
-.add-note-container textarea:focus-visible {
-    outline: none;
-}
-
-.add-note-container textarea {
-    font-family: Mulish-Regular;
-    border: none;
-    outline: none;
-    resize: none;
-    width: 100%;
 }
 
 .upload-img-container{

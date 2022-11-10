@@ -15,8 +15,10 @@ export default {
                   <div v-if="isExpandAddNote" >
                       <ul>
                         <li v-for="(item,index) in note.info.todos" @click.stop :key="note.id + '-' + index">
-                            <input type="checkbox" :id="note.id + '-' + index"/>
-                            <input v-model="item.txt" @input="checkEmptyTodo(item.txt,index)" @keyup.enter="onAddTodo(editedNoteId)"/>
+                            <input v-if="item.txt" type="checkbox" :id="note.id + '-' + index"/>
+                            <span v-else>+ </span>
+                            <input v-model="item.txt" @input="checkEmptyTodo(item.txt,index)" @keyup.enter="onAddTodo(editedNoteId)" placeholder="List Item...." class="list-input"/>
+                            <button v-if="item.txt" @click.stop.prevent="removeTodo(index)">X</button>
                         </li>
                       </ul>
                   <edit-icons :note-id="editedNoteId || note.id"/>
@@ -28,7 +30,7 @@ export default {
     return {
       note: {
         imgUrl: null,
-        isPinned: null,
+        isPinned: false,
         color: null,
         info: {
           txt: null,
@@ -46,6 +48,7 @@ export default {
     eventBus.on(`update-note`, (obj) => {
       if (obj.id === this.editedNoteId || obj.id === this.note.id)
         this.note[obj.prop] = obj.val
+        this.$emit('note-changed', this.note)
     })
     eventBus.on(`list-clicked`, this.onAddTodo)
 
@@ -114,6 +117,9 @@ export default {
       if (txt) return
       this.note.info.todos.splice(index, 1)
     },
+    removeTodo(index){
+      this.note.info.todos.splice(index,1)
+    }
   }, computed: {
     noteBackgroundColor() {
       let noteBackgroundColor = this.note.color

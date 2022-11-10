@@ -17,7 +17,9 @@ export default {
                     <li v-for="(item,index) in note.info.todos" @click.stop :key="note.id + '-' + index" >
                         <div v-if="item.txt">
                         <input type="checkbox" v-model="item.isChecked" :id="note.id + '-' + index" @change="onCheck(index)">
-                        <label :for="note.id + '-' + index">{{item.txt}}</label><br>
+                        <label :for="note.id + '-' + index">{{item.txt}}</label>
+                        <button v-if="item.txt" @click.prevent="onRemoveTodo(index)">X</button>
+                        <br>
                         </div>
                     </li>
                 </ul>
@@ -38,6 +40,9 @@ export default {
     methods: {
         onCheck(index) {
             eventBus.emit('todo-clicked', { note: this.note, index })
+        },
+        onRemoveTodo(index){
+            eventBus.emit('todo-removed', { note: this.note, index })
         }
     }, computed: {
         noteBackgroundColor() {

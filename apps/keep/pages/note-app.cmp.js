@@ -10,14 +10,13 @@ import noteList from "../cmps/note-list.cmp.js"
 export default {
     template: `
     <main @click="onClick">
-        <div >
+        <div>
             <note-filter @notes-filtered="onFilter"/>
             <note-add @add-note="addNote" :appClicked = "appClicked" :notes="{pinnedNotes:pinnedNotes,unpinnedNotes:unpinnedNotes}"/>
         </div>
-        <div> 
-            <!-- @note-clicked="editNote" -->
-            <note-list v-if="pinnedNotes.length":notes="filterNotes(pinnedNotes)" type="PINNED"  @on-delete="deleteNote"/>
-            <note-list v-if="unpinnedNotes" :notes="filterNotes(unpinnedNotes)"  type="OTHERS"  @on-delete="deleteNote"/>
+        <div v-if="notes"> 
+            <note-list  :notes="getNotesByPinned(true)" type="PINNED"  @on-delete="deleteNote"/>
+            <note-list :notes="getNotesByPinned(false)"  type="OTHERS"  @on-delete="deleteNote"/>
         </div>
         <router-view :notes="{pinnedNotes,unpinnedNotes}"></router-view>
     </main>
@@ -37,18 +36,7 @@ export default {
         eventBus.on('get-notes', obj => obj.val = { pinnedNotes: this.pinnedNotes, unpinnedNotes: this.unpinnedNotes })
         eventBus.on('delete-note', noteId => this.deleteNote(noteId))
         eventBus.on('note-changed', (changedNote) => {
-            noteService.save(changedNote).then(() => {
-                let idx = this.pinnedNotes.findIndex(note => note.id === changedNote.id)
-                if (idx < 0) {
-                    idx = this.unpinnedNotes.findIndex(note => note.id === changedNote.id)
-                    this.unpinnedNotes.splice(idx, 1)
-                    this.pinnedNotes.push(changedNote)
-                } else {
-                    this.pinnedNotes.splice(idx, 1)
-                    this.unpinnedNotes.push(changedNote)
-                }
-            })
-
+            noteService.save(changedNote)
         })
         eventBus.on('todo-clicked', obj => {
             const note = obj.note
@@ -59,10 +47,19 @@ export default {
                 this.notes.splice(idx, note)
             })
         })
+        eventBus.on('todo-removed', obj => {
+            const note = obj.note
+            const index = obj.index
+            note.info.todos.splice(index,1)
+            noteService.save(note).then(() => {
+                const idx = this.notes.findIndex(note => note.id === note.id)
+                this.notes.splice(idx, note)
+            })
+        })
 
     }, methods: {
         addNote(note) {
-            note.isPinned ? this.pinnedNotes.unshift(note) : this.unpinnedNotes.unshift(note)
+            this.notes.push(note)
             noteService.create(note)
         },
         onClick() {
@@ -88,6 +85,15 @@ export default {
                 return false
             })
         },
+        getNotesByPinned(isPinned){
+            if(!this.notes) return
+            console.log(this.notes);
+            let ha = this.notes.filter(note => {
+                return note.isPinned === isPinned
+            })
+            console.log(ha);
+            return ha
+        },
         sortNotes() {
             this.unpinnedNotes = this.notes.filter(note => {
                 if (note.isPinned) {
@@ -102,10 +108,10 @@ export default {
     computed: {
         getNotes() {
             return this.notes
-        }
+        },
     },
     watch: {
-        getNotes() {
+        notes:function(){
             this.sortNotes()
         }
     },

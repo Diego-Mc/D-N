@@ -59,6 +59,7 @@ function _createNotes() {
         {
           id: 'n102',
           type: 'note-img',
+          isPinned:true,
           info: {
             url: 'http://some-img/me',
             title: 'Bobi and Me',
@@ -70,6 +71,7 @@ function _createNotes() {
         {
           id: 'n103',
           type: 'note-todos',
+          isPinned:true,
           info: {
             label: 'Get my stuff together',
             title:'hi!',
