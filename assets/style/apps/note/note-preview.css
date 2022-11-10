@@ -7,6 +7,20 @@
   margin-bottom: 20px;
 
 }
+.note-preview ul{
+  padding-left: 0;
+}
+.note-preview li{
+  list-style: none;
+}
+
+.note-preview li input{
+  margin-left: 0;
+}
+
+.note-preview li input:checked + label {
+  text-decoration: line-through;
+}
 
 .note-preview img{
 border-radius: 10px 10px 0 0 ;
@@ -14,7 +28,7 @@ max-height: 500px;
 }
 
 .preview-text{
-  padding: 40px 45px;
+  padding: 20px 45px 45px 20px;
 }
 
 .small {
@@ -24,3 +38,4 @@ max-height: 500px;
 .large {
   height: 310px;
 }
+

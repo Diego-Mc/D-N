@@ -1,4 +1,5 @@
 import editIcons from "./edit-icons.cmp.js"
+import { eventBus } from "../../../services/event-bus.service.js"
 
 export default {
     props: ['note'],
@@ -12,6 +13,14 @@ export default {
                 <div v-if="isShowIcons" @click.prevent class="note-icons-container" >
                     <edit-icons :note-id="note.id" :bin="true"/>
                 </div>
+                <ul>
+                    <li v-for="(item,index) in note.info.todos" @click.stop :key="note.id + '-' + index" >
+                        <div v-if="item.txt">
+                        <input type="checkbox" v-model="item.isChecked" :id="note.id + '-' + index" @change="onCheck(index)">
+                        <label :for="note.id + '-' + index">{{item.txt}}</label><br>
+                        </div>
+                    </li>
+                </ul>
             </div>
           
         </div> 
@@ -20,11 +29,16 @@ export default {
         return {
             isShowIcons: false,
         }
-    }, emits: {
+    }, created() {
+
+    },
+    emits: {
         onDelete: null,
     },
     methods: {
-       
+        onCheck(index) {
+            eventBus.emit('todo-clicked', { note: this.note, index })
+        }
     }, computed: {
         noteBackgroundColor() {
             let noteBackgroundColor = this.note.color
@@ -32,7 +46,7 @@ export default {
             else return 'note-white'
         }
     },
-    components:{
+    components: {
         editIcons,
     }
 

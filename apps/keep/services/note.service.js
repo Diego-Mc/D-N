@@ -74,7 +74,7 @@ function _createNotes() {
             label: 'Get my stuff together',
             title:'hi!',
             todos: [
-              { txt: 'Driving liscence', doneAt: null },
+              { txt: 'wawa', doneAt: null },
               { txt: 'Coding power', doneAt: 187111111 },
             ],
           },
@@ -95,31 +95,19 @@ function _createNotes() {
         {
           id: 'n105',
           type: 'note-todos unpinned',
-          isPinned: true,
+          isPinned: false,
           info: {
             title: 'Bobi and Me 2',
-            txt: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam perspiciatis autem repellendus id libero, pariatur modi nobis eveniet voluptate mollitia facilis impedit corrupti consectetur rerum labore aspernatur, natus nostrum aperiam!',
             label: 'Get my stuff together',
-            todos: [
-              { txt: 'Driving liscence', doneAt: null },
-              { txt: 'Coding power', doneAt: 187111111 },
-            ],
-          },
-        },
-        {
-          id: 'n106',
-          type: 'note-todos unpinned',
-          isPinned: true,
-          info: {
-            title: 'Bobi and Me 2',
             txt: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam perspiciatis autem repellendus id libero, pariatur modi nobis eveniet voluptate mollit',
-            label: 'Get my stuff together',
             todos: [
               { txt: 'Driving liscence', doneAt: null },
               { txt: 'Coding power', doneAt: 187111111 },
             ],
           },
         },
+     
+       
         
       ]
     utilService.saveToStorage(NOTE_KEY, notes)

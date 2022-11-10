@@ -1,9 +1,18 @@
+.editor-content .note-icons-container {
+  /* bottom: 0;
+  left: 50%;
+  transform: translate(-50%); */
+  position: relative;
+  margin: auto;
+}
+
 .note-icons-container {
     position: absolute;
     display: flex;
     justify-content: space-between;
     width: 170px;
     margin-block: 10px;
+    bottom: 0;
   }
   
   .note-icons-container>* {

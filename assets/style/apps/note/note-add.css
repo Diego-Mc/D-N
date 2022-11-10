@@ -5,12 +5,32 @@
     width: 349px;
     margin-inline: auto;
     margin-bottom: 56px;
+    border: none;
+    border-radius: 20px;
+}
+
+.add-note-container ul{
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+/* 
+.add-note-container ul input{
+    width: 80%;
+} */
+
+.add-note-container li{
+   list-style: none;
+}
+
+.add-note-container img{
+    border-radius: 20px 20px 0 0 ;
+}
+
+.editor-content{
     padding-block: 5px;
     padding-left: 10px;
     padding-right: 30px;
-    border: none;
-    border-radius: 20px;
-    
+
 }
 
 .add-note-container textarea:focus-visible {
@@ -28,7 +48,6 @@
 .upload-img-container{
     position: relative;
 }
-
 
 .upload-img-input {
     top: 0;
