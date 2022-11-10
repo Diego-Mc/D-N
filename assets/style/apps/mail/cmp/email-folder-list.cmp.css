@@ -6,11 +6,11 @@
   cursor: pointer;
 }
 
-.email-folder-list article.selected {
+.email-folder-list article:has(.selected) {
   color: var(--clr-main-dark);
 }
 
-.email-folder-list article.selected {
+.email-folder-list article:has(.selected) {
   border-left-color: var(--clr-main-dark);
 }
 
@@ -18,7 +18,7 @@
   border-left: 2px solid transparent;
 }
 
-.email-folder-list article:hover:not(.selected) {
+.email-folder-list article:hover:not(:has(.selected)) {
   border-left-color: var(--clr-main);
 }
 

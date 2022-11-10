@@ -11,7 +11,7 @@ export default {
     <main class="email-main">
       <email-folder-list />
       <email-list @emailSelected="emailSelected" :emails="emails" />
-      <email-compose v-if="isCompose" />
+      <email-compose @sentEmail="emailSent" v-if="isCompose" />
       <email-details v-else :email="selectedEmail" />
     </main>
   `,
@@ -20,17 +20,47 @@ export default {
       emails: null,
       selectedEmail: null,
       isCompose: true,
+      criteria: {
+        state: '',
+        search: '', // no need to support complex text search
+        isRead: undefined, // (optional property, if missing: show all)
+        isStared: undefined, // (optional property, if missing: show all)
+        lables: [], // has any of the labels
+      },
     }
   },
   created() {
-    emailService.query().then((emails) => (this.emails = emails))
+    this.criteria.state = this.folderName
+    if (!this.folderName) {
+      this.$router.push('/maily/inbox')
+      this.criteria.state = 'inbox'
+    }
+    this.getEmailsToShow()
   },
   methods: {
     emailSelected(email) {
       this.selectedEmail = email
     },
+    emailSent(email) {
+      this.isCompose = false
+    },
+    getEmailsToShow() {
+      emailService.query(this.criteria).then((emails) => (this.emails = emails))
+    },
   },
-  computed: {},
+  computed: {
+    folderName() {
+      const path = this.$route.path
+      if (path === '/maily') return ''
+      return path.replace('/maily/', '')
+    },
+  },
+  watch: {
+    folderName() {
+      this.criteria.state = this.folderName
+      this.getEmailsToShow()
+    },
+  },
   components: {
     emailFolderList,
     emailList,

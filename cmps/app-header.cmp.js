@@ -1,16 +1,5 @@
 import { utilService } from '../services/util.service.js'
 
-const navBar = {
-  template: `
-    <nav>
-      <router-link to="/maily">Maily</router-link>
-      <router-link to="/keepy">Keepy</router-link>
-      <router-link to="/">Booky</router-link>
-      <router-link to="/about">temp</router-link>
-    </nav>
-  `,
-}
-
 export default {
   props: ['cmp'],
   template: `
@@ -19,7 +8,13 @@ export default {
           <img @click="$router.push('/')" src="assets/icons/logo-icon-dn.svg"/>
           <h1 class="logo-text logo">{{appName}}</h1>
       </span>
-      <component :is="component" />
+      <nav v-if="!component">
+        <router-link to="/maily">Maily</router-link>
+        <router-link to="/keepy">Keepy</router-link>
+        <router-link to="/">Booky</router-link>
+        <router-link to="/about">temp</router-link>
+      </nav>
+      <component v-else :is="component" />
 
       <i class="bi bi-grid-fill"></i>
     </header>
@@ -27,7 +22,7 @@ export default {
   data() {
     return {
       appName: 'D&N',
-      component: this.cmp || navBar,
+      component: this.cmp,
     }
   },
   watch: {
@@ -37,7 +32,5 @@ export default {
       },
     },
   },
-  components: {
-    navBar,
-  },
+  components: {},
 }

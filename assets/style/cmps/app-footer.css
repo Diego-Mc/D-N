@@ -1,0 +1,33 @@
+.app-footer {
+  background-color: var(--clr-main-bg);
+  background-color: #eee;
+  grid-column: span 12;
+  position: relative;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.credits {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-block: 4rem 2rem;
+  grid-column: 2 / span 10;
+}
+
+.credits h4:first-of-type {
+  user-select: none;
+}
+
+.credits .mention {
+  display: flex;
+  gap: 10px;
+}
+
+.rights {
+  align-self: center;
+  bottom: 20px;
+  grid-column: span 12;
+  text-align: center;
+}

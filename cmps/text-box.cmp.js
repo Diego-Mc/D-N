@@ -2,7 +2,7 @@ export default {
   template: `
     <section>
       <label> {{info.label}} </label>
-      <input type="text" v-model="val" @change="reportVal" />
+      <input type="text" v-model="val" @input="reportVal" />
     </section>
   `,
   props: ['info'],
@@ -13,7 +13,7 @@ export default {
   },
   methods: {
     reportVal() {
-      this.$emit('setVal', this.val)
+      this.$emit('setVal', { key: this.info.key, ans: this.val })
     },
   },
 }

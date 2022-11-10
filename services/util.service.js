@@ -4,6 +4,7 @@ export const utilService = {
   makeId,
   toCapitalCase,
   toTimeStr,
+  isEmptyObj,
 }
 
 function saveToStorage(key, value) {
@@ -52,4 +53,8 @@ function toTimeStr(previous) {
   } else {
     return Math.round(elapsed / msPerYear) + ' years ago'
   }
+}
+
+function isEmptyObj(obj) {
+  return Object.keys(obj).length === 0
 }

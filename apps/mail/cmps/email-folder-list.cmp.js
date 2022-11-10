@@ -2,16 +2,24 @@ export default {
   template: /* HTML */ `
     <section class="email-folder-list f-l">
       <article class="selected">
-        <i class="bi bi-inbox-fill"></i>
+        <i
+          @click="$router.push('/maily/inbox')"
+          :class="className('inbox','bi bi-inbox')"></i>
       </article>
       <article>
-        <i class="bi bi-send"> </i>
+        <i
+          @click="$router.push('/maily/sent')"
+          :class="className('sent','bi bi-send')"></i>
       </article>
       <article>
-        <i class="bi bi-star"> </i>
+        <i
+          @click="$router.push('/maily/draft')"
+          :class="className('draft','bi bi-folder')"></i>
       </article>
       <article>
-        <i class="bi bi-trash"></i>
+        <i
+          @click="$router.push('/maily/trash')"
+          :class="className('trash','bi bi-trash')"></i>
       </article>
     </section>
   `,
@@ -19,6 +27,17 @@ export default {
     return {}
   },
   created() {},
-  methods: {},
-  computed: {},
+  methods: {
+    className(name, classStr) {
+      const start = `bi bi-${classStr}`
+      return start + (name === this.folderName ? '-fill selected' : '')
+    },
+  },
+  computed: {
+    folderName() {
+      const path = this.$route.path
+      if (path === '/maily') return ''
+      return path.replace('/maily/', '')
+    },
+  },
 }

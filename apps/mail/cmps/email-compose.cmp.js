@@ -12,10 +12,11 @@ export default {
           v-for="(cmp, idx) in composeForm.cmps"
           :is="cmp.type"
           :info="cmp.info"
-          @setVal="setAns($event, idx)">
+          @setVal="setAns">
         </component>
         <footer>
           <i class="delete-icon bi bi-trash f-m"></i>
+          <small class="f-clr-light">auto save is on</small>
           <button>Send</button>
         </footer>
       </form>
@@ -24,7 +25,8 @@ export default {
   data() {
     return {
       composeForm: null,
-      answers: [],
+      draft: {},
+      autoSaveInterval: 0,
     }
   },
   created() {
@@ -32,18 +34,28 @@ export default {
     emailService.getComposeSurvey().then((composeForm) => {
       console.log(composeForm)
       this.composeForm = composeForm
-
-      this.answers = new Array(this.composeForm.cmps.length)
     })
+    this.draft = emailService.getEmptyEmail()
+    this.autoSaveInterval = setInterval(
+      () => emailService.saveDraft(this.draft),
+      5000
+    )
+  },
+  unmounted() {
+    clearInterval(this.autoSaveInterval)
+    const validity = emailService.checkValidity(this.draft)
+    if (!validity.isValid) emailService.remove(this.draft.id)
   },
   methods: {
-    setAns(ans, idx) {
-      console.log('Setting the answer: ', ans, 'idx:', idx)
-      // this.answers[idx] = ans
-      this.answers.splice(idx, 1, ans)
+    setAns({ key, ans }) {
+      this.draft[key] = ans
     },
     save() {
       console.log('Saving..')
+      clearInterval(this.autoSaveInterval)
+      emailService
+        .sendEmail(this.draft)
+        .then((email) => this.$emit('sentEmail', email))
     },
   },
   computed: {},

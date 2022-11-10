@@ -6,7 +6,9 @@ export default {
     <article @click="emailSelect" class="email-preview round">
       <img class="email-img" :src="email.imgUrl" />
       <section class="email-data">
-        <small class="f-s f-clr-light">{{email.from.name}}</small>
+        <small class="f-s f-clr-light"
+          >{{email.from.name || email.from.email}}</small
+        >
         <h3 class="f-d f-clr-light">{{email.subject}}</h3>
       </section>
       <p class="f-s f-clr-light email-body">{{email.body}}</p>

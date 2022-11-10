@@ -26,12 +26,60 @@ const routerOptions = {
       component: mailyApp,
       children: [
         {
-          path: 'compose/:id?',
-          component: emailCompose,
+          path: 'inbox',
+          component: emailDetails,
+          children: [
+            {
+              path: 'compose/:id?',
+              component: emailCompose,
+            },
+            {
+              path: ':id',
+              component: emailDetails,
+            },
+          ],
         },
         {
-          path: ':id',
+          path: 'sent',
           component: emailDetails,
+          children: [
+            {
+              path: 'compose/:id?',
+              component: emailCompose,
+            },
+            {
+              path: ':id',
+              component: emailDetails,
+            },
+          ],
+        },
+        {
+          path: 'draft',
+          component: emailDetails,
+          children: [
+            {
+              path: 'compose/:id?',
+              component: emailCompose,
+            },
+            {
+              path: ':id',
+              component: emailDetails,
+            },
+          ],
+        },
+        {
+          path: 'trash',
+          component: emailDetails,
+          children: [
+            {
+              path: 'compose/:id?',
+              component: emailCompose,
+            },
+            {
+              path: ':id',
+              component: emailDetails,
+            },
+          ],
         },
       ],
     },

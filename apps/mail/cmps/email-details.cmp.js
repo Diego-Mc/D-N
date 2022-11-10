@@ -6,7 +6,7 @@ export default {
         <div className="user-data">
           <img class="email-img" :src="email.imgUrl" />
           <span>
-            <small class="f-m f-clr-main">{{email.from.name}}</small>
+            <small class="f-m f-clr-main">{{email.from.name || 'Unknown'}}</small>
             <small class="f-s f-clr-light">{{email.from.email}}</small>
           </span>
         </div>
