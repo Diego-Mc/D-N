@@ -14,7 +14,6 @@ export default {
   `,
   data() {
     return {
-      emails: this.emails,
       selectedEmail: null,
     }
   },

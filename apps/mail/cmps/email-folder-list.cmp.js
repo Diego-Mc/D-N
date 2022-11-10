@@ -1,6 +1,10 @@
 export default {
   template: /* HTML */ `
     <section class="email-folder-list f-l">
+      <i
+        @click="$router.push({query:{isCompose: true}})"
+        class="compose-btn bi bi-plus-square-fill"></i>
+      <hr />
       <article class="selected">
         <i
           @click="$router.push('/maily/inbox')"
@@ -35,9 +39,10 @@ export default {
   },
   computed: {
     folderName() {
-      const path = this.$route.path
-      if (path === '/maily') return ''
-      return path.replace('/maily/', '')
+      const route = this.$route.matched[1]
+      console.log(route)
+      if (!route) return ''
+      return route.name
     },
   },
 }

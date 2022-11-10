@@ -90,6 +90,7 @@ function getEmptyEmail(subject = '', body = '') {
     from: { email: '', name: '' },
     to: { email: '', name: '' },
     labels: [],
+    signature: '',
   }
 }
 
@@ -166,7 +167,7 @@ function saveDraft(email) {
 }
 
 function sendEmail(email) {
-  email.state = 'inbox'
+  email.state = 'sent'
   return save(email)
 }
 

@@ -5,10 +5,13 @@ export default {
       <input type="text" v-model="val" @input="reportVal" />
     </section>
   `,
-  props: ['info'],
+  props: ['info', 'initialValue'],
+  created() {
+    console.log('HEY', this.initialValue)
+  },
   data() {
     return {
-      val: '',
+      val: this.initialValue || '',
     }
   },
   methods: {

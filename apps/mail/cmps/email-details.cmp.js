@@ -6,7 +6,7 @@ export default {
         <div className="user-data">
           <img class="email-img" :src="email.imgUrl" />
           <span>
-            <small class="f-m f-clr-main">{{email.from.name || 'Unknown'}}</small>
+            <small class="f-m f-clr-main">{{recipient}}</small>
             <small class="f-s f-clr-light">{{email.from.email}}</small>
           </span>
         </div>
@@ -37,7 +37,13 @@ export default {
   },
   created() {},
   methods: {},
-  computed: {},
+  computed: {
+    recipient() {
+      if (this.$route.path.includes('sent'))
+        return this.email.to.name || this.email.to.email
+      return this.email.from.name || this.email.from.email
+    },
+  },
 }
 
 // TODO: use data bool to check if exists email, if not show msg, if exists show email AND render selected class for bg color

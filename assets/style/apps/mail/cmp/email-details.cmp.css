@@ -42,6 +42,7 @@
 
 .email-details main p {
   margin-bottom: 14px;
+  white-space: pre-line;
 }
 
 .email-details footer {

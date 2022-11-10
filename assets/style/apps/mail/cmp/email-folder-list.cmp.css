@@ -16,6 +16,7 @@
 
 .email-folder-list article {
   border-left: 2px solid transparent;
+  display: flex;
 }
 
 .email-folder-list article:hover:not(:has(.selected)) {
@@ -24,4 +25,20 @@
 
 .email-folder-list article i {
   margin-left: 10px;
+  flex: 1;
+}
+
+.compose-btn {
+  font-size: 2rem;
+  width: fit-content;
+  margin-left: 8px;
+  margin-top: 24px;
+}
+
+.compose-btn:hover {
+  color: var(--clr-main-dark);
+}
+
+.email-folder-list hr {
+  opacity: 0;
 }

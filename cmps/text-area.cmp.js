@@ -5,10 +5,10 @@ export default {
       <textarea v-model="val" @input="reportVal"></textarea>
     </section>
   `,
-  props: ['info'],
+  props: ['info', 'initialValue'],
   data() {
     return {
-      val: '',
+      val: this.initialValue || '',
     }
   },
   methods: {

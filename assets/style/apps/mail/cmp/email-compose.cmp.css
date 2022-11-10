@@ -11,6 +11,10 @@
   right: 2rem;
 }
 
+.email-compose .trash-btn:hover::before {
+  content: '\F5DD';
+}
+
 .email-compose h2 {
   margin-inline: 60px;
   margin-bottom: 20px;

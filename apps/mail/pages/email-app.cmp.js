@@ -10,8 +10,11 @@ export default {
   template: /* HTML */ `
     <main class="email-main">
       <email-folder-list />
-      <email-list @emailSelected="emailSelected" :emails="emails" />
-      <email-compose @sentEmail="emailSent" v-if="isCompose" />
+      <email-list
+        v-if="emails"
+        @emailSelected="emailSelected"
+        :emails="emails" />
+      <email-compose @closeCompose="composeClose" v-if="isCompose" />
       <email-details v-else :email="selectedEmail" />
     </main>
   `,
@@ -19,7 +22,7 @@ export default {
     return {
       emails: null,
       selectedEmail: null,
-      isCompose: true,
+      isCompose: false,
       criteria: {
         state: '',
         search: '', // no need to support complex text search
@@ -35,30 +38,44 @@ export default {
       this.$router.push('/maily/inbox')
       this.criteria.state = 'inbox'
     }
-    this.getEmailsToShow()
+    this.getEmailsToShow().then(() => this.setIsCompose())
   },
   methods: {
     emailSelected(email) {
       this.selectedEmail = email
     },
-    emailSent(email) {
+    composeClose() {
+      this.$router.push({ query: {} })
       this.isCompose = false
     },
     getEmailsToShow() {
-      emailService.query(this.criteria).then((emails) => (this.emails = emails))
+      console.log(this.criteria, this.folderName)
+      return emailService
+        .query(this.criteria)
+        .then((emails) => (this.emails = emails))
+    },
+    setIsCompose() {
+      const isComposing = this.$route.query.isCompose
+      if (isComposing === 'true') this.isCompose = true
     },
   },
   computed: {
     folderName() {
-      const path = this.$route.path
-      if (path === '/maily') return ''
-      return path.replace('/maily/', '')
+      const route = this.$route.matched[1]
+      if (!route) return ''
+      return route.name
     },
   },
   watch: {
     folderName() {
       this.criteria.state = this.folderName
       this.getEmailsToShow()
+    },
+    '$route.query': {
+      handler() {
+        this.setIsCompose()
+      },
+      deep: true,
     },
   },
   components: {

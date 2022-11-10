@@ -24,62 +24,27 @@ const routerOptions = {
     {
       path: '/maily',
       component: mailyApp,
+      name: 'maily',
       children: [
         {
           path: 'inbox',
           component: emailDetails,
-          children: [
-            {
-              path: 'compose/:id?',
-              component: emailCompose,
-            },
-            {
-              path: ':id',
-              component: emailDetails,
-            },
-          ],
+          name: 'inbox',
         },
         {
           path: 'sent',
           component: emailDetails,
-          children: [
-            {
-              path: 'compose/:id?',
-              component: emailCompose,
-            },
-            {
-              path: ':id',
-              component: emailDetails,
-            },
-          ],
+          name: 'sent',
         },
         {
           path: 'draft',
           component: emailDetails,
-          children: [
-            {
-              path: 'compose/:id?',
-              component: emailCompose,
-            },
-            {
-              path: ':id',
-              component: emailDetails,
-            },
-          ],
+          name: 'draft',
         },
         {
           path: 'trash',
           component: emailDetails,
-          children: [
-            {
-              path: 'compose/:id?',
-              component: emailCompose,
-            },
-            {
-              path: ':id',
-              component: emailDetails,
-            },
-          ],
+          name: 'trash',
         },
       ],
     },
