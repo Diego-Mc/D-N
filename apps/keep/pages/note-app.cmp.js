@@ -36,6 +36,7 @@ export default {
         eventBus.on('get-notes', obj => obj.val = { pinnedNotes: this.pinnedNotes, unpinnedNotes: this.unpinnedNotes })
         eventBus.on('delete-note', noteId => this.deleteNote(noteId))
         eventBus.on('note-changed', (changedNote) => {
+            console.log('wa');
             noteService.save(changedNote)
         })
         eventBus.on('todo-clicked', obj => {
@@ -87,11 +88,9 @@ export default {
         },
         getNotesByPinned(isPinned){
             if(!this.notes) return
-            console.log(this.notes);
             let ha = this.notes.filter(note => {
                 return note.isPinned === isPinned
             })
-            console.log(ha);
             return ha
         },
         sortNotes() {

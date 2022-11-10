@@ -48,7 +48,7 @@ export default {
     eventBus.on(`update-note`, (obj) => {
       if (obj.id === this.editedNoteId || obj.id === this.note.id)
         this.note[obj.prop] = obj.val
-        this.$emit('note-changed', this.note)
+        eventBus.emit('note-changed', this.note)
     })
     eventBus.on(`list-clicked`, this.onAddTodo)
 
