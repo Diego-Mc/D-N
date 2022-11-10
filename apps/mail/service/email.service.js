@@ -23,8 +23,43 @@ export const emailService = {
   checkValidity,
 }
 
-function query() {
-  return storageService.query(EMAIL_KEY)
+function query({
+  state = '',
+  search = '',
+  isRead = undefined,
+  isStarred = undefined,
+  labels = [],
+} = {}) {
+  return storageService.query(EMAIL_KEY).then((emails) =>
+    emails
+      .filter(({ state: eState }) => {
+        return eState === state
+      })
+      .filter(({ subject, body, signature }) => {
+        return (
+          subject.includes(search) ||
+          body.includes(search) ||
+          signature.includes(search)
+        )
+      })
+      .filter(({ isStarred: eIsStarred }) => {
+        return isStarred === undefined ? 'true' : eIsStarred === isStarred
+      })
+      .filter(({ isRead: eIsRead }) => {
+        return isRead === undefined ? 'true' : eIsRead === isRead
+      })
+      .filter(({ labels: eLabels }) => {
+        return eLabels.every((label) => labels.has(label))
+      })
+  )
+}
+
+const criteria = {
+  state: 'inbox/sent/trash/draft',
+  search: 'puki', // no need to support complex text search
+  isRead: true, // (optional property, if missing: show all)
+  isStared: true, // (optional property, if missing: show all)
+  lables: ['important', 'romantic'], // has any of the labels
 }
 
 function get(emailId) {
@@ -50,9 +85,11 @@ function getEmptyEmail(subject = '', body = '') {
     subject,
     body,
     isRead: false,
+    isStarred: false,
     sentAt: null,
     from: { email: '', name: '' },
     to: { email: '', name: '' },
+    labels: [],
   }
 }
 
@@ -139,53 +176,68 @@ function _createEmails() {
     emails = [
       {
         id: '12345',
+        state: 'inbox',
         subject: 'A new email',
         body: 'This is a new email that was sent for you to read.',
         imgUrl: 'assets/img/diego.jpeg',
         isRead: false,
+        isStarred: false,
         sentAt: Date.now(),
         from: { email: 'puki@gmail.com', name: 'Puki Ben David' },
         to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
+        labels: [],
       },
       {
         id: '12346',
+        state: 'inbox',
         subject: 'A new thing to read',
         body: 'This is a new thing sent for you to read.',
         imgUrl: 'assets/img/diego.jpeg',
         isRead: false,
+        isStarred: false,
         sentAt: Date.now(),
         from: { email: 'puki@gmail.com', name: 'Puki Ben David' },
         to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
+        labels: [],
       },
       {
         id: '12385',
+        state: 'inbox',
         subject: 'A cool email',
         body: 'This for you to read.',
         imgUrl: 'assets/img/diego.jpeg',
         isRead: false,
+        isStarred: false,
         sentAt: Date.now(),
         from: { email: 'puki@gmail.com', name: 'Puki Ben David' },
         to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
+        labels: [],
       },
       {
         id: '19345',
+        state: 'inbox',
         subject: 'A old email',
         body: 'This is a new email that was sent for you to read. lorem lorem!!',
         imgUrl: 'assets/img/diego.jpeg',
         isRead: false,
+        isStarred: false,
         sentAt: Date.now(),
         from: { email: 'puki@gmail.com', name: 'Puki Ben David' },
         to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
+        labels: [],
       },
       {
         id: '12305',
+        state: 'inbox',
         subject: 'An email',
         body: 'This is a something.',
         imgUrl: 'assets/img/diego.jpeg',
         isRead: false,
+        isStarred: false,
         sentAt: Date.now(),
         from: { email: 'puki@gmail.com', name: 'Puki Ben David' },
         to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
+        labels: [],
       },
     ]
     utilService.saveToStorage(EMAIL_KEY, emails)

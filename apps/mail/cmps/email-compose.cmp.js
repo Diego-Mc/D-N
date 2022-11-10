@@ -36,7 +36,6 @@ export default {
       this.composeForm = composeForm
     })
     this.draft = emailService.getEmptyEmail()
-    emailService.saveDraft(this.draft)
     this.autoSaveInterval = setInterval(
       () => emailService.saveDraft(this.draft),
       5000
