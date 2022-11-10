@@ -1,11 +1,20 @@
 .note-preview {
   width: 264px;
   word-wrap: break-word;
-  margin-bottom: 20px;
-  padding: 40px 45px;
-  break-inside: avoid;
   border-radius: 20px;
   position: relative;
+  break-inside: avoid;
+  margin-bottom: 20px;
+
+}
+
+.note-preview img{
+border-radius: 10px 10px 0 0 ;
+max-height: 500px;
+}
+
+.preview-text{
+  padding: 40px 45px;
 }
 
 .small {

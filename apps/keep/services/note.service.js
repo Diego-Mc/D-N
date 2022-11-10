@@ -107,7 +107,7 @@ function _createNotes() {
           },
         },
         {
-          id: 'n105',
+          id: 'n106',
           type: 'note-todos unpinned',
           isPinned: true,
           info: {

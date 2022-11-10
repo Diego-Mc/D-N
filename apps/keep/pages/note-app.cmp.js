@@ -1,4 +1,5 @@
 import { noteService } from '../services/note.service.js'
+import { eventBus } from '../../../services/event-bus.service.js'
 
 import noteAdd from "../cmps/note-add.cmp.js"
 // move to router?
@@ -8,16 +9,16 @@ import noteList from "../cmps/note-list.cmp.js"
 
 export default {
     template: `
-    <main @click="onClick" >
-        <div>
+    <main @click="onClick">
+        <div >
             <note-filter @notes-filtered="onFilter"/>
-            <note-add @add-note="addNote" :appClicked = "appClicked" />
+            <note-add @add-note="addNote" :appClicked = "appClicked" :notes="{pinnedNotes:pinnedNotes,unpinnedNotes:unpinnedNotes}"/>
         </div>
-        <div v-if="unpinnedNotes "> 
+        <div> 
             <note-list :notes="filterNotes(pinnedNotes)" type="PINNED" @note-clicked="editNote" @on-delete="deleteNote"/>
             <note-list :notes="filterNotes(unpinnedNotes)"  type="OTHERS" @note-clicked="editNote" @on-delete="deleteNote"/>
         </div>
-        <router-view v-if="unpinnedNotes" :notes="{pinnedNotes,unpinnedNotes}"></router-view>
+        <router-view :notes="{pinnedNotes,unpinnedNotes}"></router-view>
     </main>
     `, data() {
         return {
@@ -36,18 +37,18 @@ export default {
                     return false
                 }
                 else return true
-
             })
         })
+        eventBus.on('get-notes', obj => obj.val = { pinnedNotes: this.pinnedNotes, unpinnedNotes: this.unpinnedNotes})
+        eventBus.on('delete-note',noteId => this.deleteNote(noteId))
+        eventBus.on('note-changed',noteService.save)
+
     }, methods: {
         addNote(note) {
             noteService.create(note).then(note => note.isPinned ? this.pinnedNotes.push(note) : this.unpinnedNotes.push(note))
         },
         onClick() {
             this.appClicked = !this.appClicked
-        },
-        editNote(noteId) {
-
         },
         deleteNote(noteId) {
             noteService.remove(noteId).then(() => {
@@ -59,14 +60,15 @@ export default {
             this.filterBy = filters
         },
         filterNotes(notes) {
+            if(!notes) return
             return notes.filter(note => {
                 if (note.info.title) {
                     if (note.info.title.toLowerCase().includes(this.filterBy.txt)) return true
                 }
                 if (note.info.txt) {
-                    if (note.info.txt.toLowerCase().includes(this.filterBy.txt)){
-                         return true
-                        }
+                    if (note.info.txt.toLowerCase().includes(this.filterBy.txt)) {
+                        return true
+                    }
                 }
                 return false
             })

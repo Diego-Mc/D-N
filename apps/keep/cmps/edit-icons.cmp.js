@@ -1,8 +1,10 @@
-import {eventBus} from '../../../services/event-bus.service.js'
+import { eventBus } from '../../../services/event-bus.service.js'
 
 export default {
+    props: ['note-id','bin'],
     template: `
-        <div class="note-icons-container" style="position:relative;">  
+        <div class="note-icons-container" style="position:relative;"> 
+            <i v-if="bin" @click="onDelete" class='bi bi-trash'></i>
             <div class="upload-img-container">
                 <input type="file" accept="image/jpeg/png" @change='uploadImage' class="upload-img-input"/>
                 <i class="bi bi-image"></i>
@@ -23,17 +25,32 @@ export default {
             <i class="bi bi-envelope"></i>
             <i class="bi bi-three-dots-vertical"></i>
         </div>
-    `,data() {
+    `, data() {
         return {
-            isShowColors:false,
+            isShowColors: false,
         }
     },
     methods: {
-        colorClicked(color){
-            eventBus.emit('update-note',{prop:'color',val: color})
+        colorClicked(color) {
+            eventBus.emit(`update-note`, { prop: 'color', val: color, id: this.noteId })
         },
-        toggleColors(){
+        toggleColors() {
             this.isShowColors = !this.isShowColors
+        },
+        uploadImage(e) {
+            const image = e.target.files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(image);
+            reader.onload = e => {
+                this.previewImage = e.target.result;
+                eventBus.emit(`update-note`, {
+                    prop: 'imgUrl', val: this.previewImage
+                    , id: this.noteId
+                })
+            };
+        },
+        onDelete() {
+            eventBus.emit('delete-note', this.noteId)
         }
     }
 }

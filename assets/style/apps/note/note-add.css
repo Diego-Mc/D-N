@@ -1,11 +1,13 @@
 .add-note-container {
+    position: relative;
     display: flex;
     flex-direction: column;
-    background-color: #fff;
     width: 349px;
     margin-inline: auto;
     margin-bottom: 56px;
-    padding: 5px;
+    padding-block: 5px;
+    padding-left: 10px;
+    padding-right: 30px;
     border: none;
     border-radius: 20px;
     
