@@ -3,6 +3,7 @@
 @import './note-preview.css';
 @import './note-add.css';
 @import './note-edit.css';
+@import './edit-icons.css';
 
 body {
     background-color: #eee;

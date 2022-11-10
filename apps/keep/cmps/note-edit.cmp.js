@@ -1,5 +1,4 @@
 import noteAdd from "./note-add.cmp.js"
-
 export default {
     props:['notes'],
     template: `  

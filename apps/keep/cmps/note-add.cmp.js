@@ -1,3 +1,6 @@
+import editIcons from './edit-icons.cmp.js'
+import { eventBus } from '../../../services/event-bus.service.js'
+
 export default {
   props: ['appClicked', 'editedNote'],
   template: `
@@ -7,23 +10,7 @@ export default {
                     <textarea v-model="note.info.title" type="textarea" placeholder="Title"></textarea>
                 </div>
                 <textarea v-model="note.info.txt" @click="expandInputs" type="textarea" placeholder="Take a note..."></textarea>
-                <!-- use as a compenent tommorow. -->
-                <div v-if="isExpandAddNote" class="note-icons-container" style="position:relative;"> 
-                    <div class="upload-img-container">
-                        <input type="file" accept="image/jpeg" @change='uploadImage' class="upload-img-input"/>
-                        <i class="bi bi-image"></i>
-                    </div> 
-                    <div class="change-color-container">
-                        <i class="bi bi-palette" @click=""></i> 
-                        <div class="colors-container">
-                            <button @click="note.color = 'red'" style="background-color:red;"></button>
-                            <button @click="note.color = 'blue'" style="background-color:blue;"></button>
-                            <button @click="note.color = 'green'" style="background-color:green;"></button>
-                        </div>
-                    </div>
-                    <i class="bi bi-envelope"></i>
-                    <i class="bi bi-three-dots-vertical"></i>
-                </div>
+                <edit-icons v-if="isExpandAddNote"/>
             </div>
     `,
   data() {
@@ -41,6 +28,9 @@ export default {
   },
   created() {
     this.initNote()
+    eventBus.on('update-note',(obj)=>{
+      this.note[obj.prop] = obj.val
+  })
   },
   methods: {
     expandInputs() {
@@ -79,4 +69,7 @@ export default {
       this.onAdd()
     },
   },
+  components: {
+    editIcons,
+  }
 }

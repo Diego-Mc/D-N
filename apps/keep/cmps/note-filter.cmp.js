@@ -10,8 +10,8 @@ export default {
         }
     },methods: {
         filter(){
-            this.filterBy.txt = this.filterBy.txt.toLowerCase()
-            this.$emit('notes-filtered',this.filterBy)
+            this.filterBy.txt = this.filterBy.txt
+            this.$emit('notes-filtered',{txt:this.filterBy.txt.toLowerCase()})
         }
     },
 }

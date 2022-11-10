@@ -16,6 +16,11 @@
 }
 
 /* NOTES */
+.note-white{
+  background-color: #fff;
+  
+}
+
 .note-blue {
   background-color: #bfddff;
   color: #4a6788;
