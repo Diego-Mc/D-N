@@ -23,7 +23,7 @@ export default {
     </main>
     `, data() {
         return {
-            notes:null,
+            notes: null,
             pinnedNotes: [],
             unpinnedNotes: null,
             appClicked: false,
@@ -32,44 +32,31 @@ export default {
             }
         }
     }, created() {
-        noteService.query().then(notes => {
-            this.unpinnedNotes = notes.filter(note => {
-                if (note.isPinned) {
-                    this.pinnedNotes.push(note)
-                    return false
-                }
-                else return true
-            })
-        })
-        eventBus.on('get-notes', obj => obj.val = { pinnedNotes: this.pinnedNotes, unpinnedNotes: this.unpinnedNotes})
-        eventBus.on('delete-note',noteId => this.deleteNote(noteId))
-        eventBus.on('note-changed',(changedNote)=> {
-            noteService.save(changedNote).then(()=>{
-                let idx = this.pinnedNotes.findIndex(note=>note.id === changedNote.id)
-                if(idx < 0) {
-                    idx = this.unpinnedNotes.findIndex(note=>note.id === changedNote.id)
-                    this.unpinnedNotes.splice(idx,1)
+        noteService.query().then(notes => this.notes = notes)
+
+        eventBus.on('get-notes', obj => obj.val = { pinnedNotes: this.pinnedNotes, unpinnedNotes: this.unpinnedNotes })
+        eventBus.on('delete-note', noteId => this.deleteNote(noteId))
+        eventBus.on('note-changed', (changedNote) => {
+            noteService.save(changedNote).then(() => {
+                let idx = this.pinnedNotes.findIndex(note => note.id === changedNote.id)
+                if (idx < 0) {
+                    idx = this.unpinnedNotes.findIndex(note => note.id === changedNote.id)
+                    this.unpinnedNotes.splice(idx, 1)
                     this.pinnedNotes.push(changedNote)
-                }else{
-                    this.pinnedNotes.splice(idx,1)
+                } else {
+                    this.pinnedNotes.splice(idx, 1)
                     this.unpinnedNotes.push(changedNote)
                 }
             })
-          
+
         })
-        eventBus.on('todo-clicked',obj=> {
+        eventBus.on('todo-clicked', obj => {
             const note = obj.note
             const index = obj.index
             note.info.todos[index].checked = !note.info.todos[index].checked
-            console.log(  note.info.todos[index]);
-            noteService.save(note).then(()=>{
-                if(note.isPinned) {
-                    const idx = this.pinnedNotes.findIndex(note=>note.id === note.id)
-                    this.pinnedNotes.splice(idx,note)
-                }else{
-                    const idx = this.unpinnedNotes.findIndex(note=>note.id === note.id)
-                    this.unpinnedNotes.splice(idx,note)
-                }
+            noteService.save(note).then(() => {
+                const idx = this.notes.findIndex(note => note.id === note.id)
+                this.notes.splice(idx, note)
             })
         })
 
@@ -82,18 +69,13 @@ export default {
             this.appClicked = !this.appClicked
         },
         deleteNote(noteId) {
-            noteService.remove(noteId).then(() => {
-                this.pinnedNotes = this.pinnedNotes.filter(note => note.id !== noteId)
-                this.unpinnedNotes = this.unpinnedNotes.filter(note => note.id !== noteId)
-            })
-        },updateNote(noteId){
-
+            noteService.remove(noteId).then(noteService.query).then(notes => this.notes = notes)
         },
         onFilter(filters) {
             this.filterBy = filters
         },
         filterNotes(notes) {
-            if(!notes) return
+            if (!notes) return
             return notes.filter(note => {
                 if (note.info.title) {
                     if (note.info.title.toLowerCase().includes(this.filterBy.txt)) return true
@@ -105,8 +87,27 @@ export default {
                 }
                 return false
             })
+        },
+        sortNotes() {
+            this.unpinnedNotes = this.notes.filter(note => {
+                if (note.isPinned) {
+                    this.pinnedNotes.push(note)
+                    return false
+                }
+                else return true
+            })
         }
 
+    },
+    computed: {
+        getNotes() {
+            return this.notes
+        }
+    },
+    watch: {
+        getNotes() {
+            this.sortNotes()
+        }
     },
     components: {
         noteAdd,

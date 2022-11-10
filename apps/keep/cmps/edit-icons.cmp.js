@@ -37,6 +37,7 @@ export default {
             eventBus.emit(`update-note`, { prop: 'color', val: color, id: this.noteId })
         },
         listClicked(){
+            console.log('wa');
             eventBus.emit(`list-clicked`, this.noteId)
         },
         toggleColors() {

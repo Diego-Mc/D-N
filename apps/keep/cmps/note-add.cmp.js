@@ -16,7 +16,7 @@ export default {
                       <ul>
                         <li v-for="(item,index) in note.info.todos" @click.stop :key="note.id + '-' + index">
                             <input type="checkbox" :id="note.id + '-' + index"/>
-                            <input v-model="item.txt" @input="wa"/>
+                            <input v-model="item.txt" @input="checkEmptyTodo(item.txt,index)" @keyup.enter="onAddTodo(editedNoteId)"/>
                         </li>
                       </ul>
                   <edit-icons :note-id="editedNoteId || note.id"/>
@@ -33,7 +33,7 @@ export default {
         info: {
           txt: null,
           title: null,
-          todos: [{ txt: 'wawawa' }]
+          todos: []
         },
       },
       // weird name.
@@ -47,15 +47,8 @@ export default {
       if (obj.id === this.editedNoteId || obj.id === this.note.id)
         this.note[obj.prop] = obj.val
     })
-    eventBus.on(`list-clicked`, id => {
-      if (id === this.editedNoteId || id === this.note.id) {
-        let todos = this.note.info.todos
-        if (todos.length && !todos[todos.length - 1].txt) {
-          return
-        }
-        this.note.info.todos.push({ txt: '' ,isChecked:false})
-      }
-    })
+    eventBus.on(`list-clicked`, this.onAddTodo)
+
     this.pinClass = this.note.isPinned ? '-fill' : ''
   },
   methods: {
@@ -65,7 +58,7 @@ export default {
     onAdd() {
       const info = this.note.info
       if (info.txt || info.title || info.todos.length || this.note.imgUrl) {
-        if(info.todos.length && !info.todos[info.todos.length - 1].txt) info.todos.pop() 
+        if (info.todos.length && !info.todos[info.todos.length - 1].txt) info.todos.pop()
         this.$emit('add-note', { ...this.note })
       }
       this.note = {
@@ -105,6 +98,21 @@ export default {
     },
     setPinClass() {
       this.pinClass = this.note.isPinned ? '-fill' : ''
+    },
+    onAddTodo(id) {
+      if (id === this.editedNoteId || id === this.note.id) {
+        let todos = this.note.info.todos
+        if (todos.length && !todos[todos.length - 1].txt) {
+          return
+        }
+        this.note.info.todos.push({ txt: '', isChecked: false })
+        const idx = this.note.info.todos.length - 1
+        // [`${this.note.id}-${idx}`].focus()
+      }
+    },
+    checkEmptyTodo(txt, index) {
+      if (txt) return
+      this.note.info.todos.splice(index, 1)
     },
   }, computed: {
     noteBackgroundColor() {
