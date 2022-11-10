@@ -8,13 +8,31 @@
     border-radius: 5px;
 }
 
-.add-note-container>*:focus-visible {
+.add-note-container textarea:focus-visible {
     outline: none;
 }
 
 .add-note-container textarea {
+    font-family: Mulish-Regular;
     border: none;
+    outline: none;
     resize: none;
     width: 100%;
 }
 
+.upload-img-container{
+    position: relative;
+}
+
+
+.upload-img-input {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    border: none;
+    opacity: 0;
+    position: absolute;
+    z-index: 10;
+}

@@ -55,15 +55,7 @@ function _createNotes() {
   if (!notes || !notes.length) {
     notes =
       [
-        {
-          id: 'n101',
-          type: 'note-txt',
-          isPinned: true,
-          info: {
-          title:'wawa',
-            txt: 'Fullstack Me Baby!',
-          },
-        },
+      
         {
           id: 'n102',
           type: 'note-img',

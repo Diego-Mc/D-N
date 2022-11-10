@@ -10,12 +10,12 @@ export default {
     template: `
     <main @click="onClick" >
         <div>
-            <note-filter/>
+            <note-filter @notes-filtered="onFilter"/>
             <note-add @add-note="addNote" :appClicked = "appClicked" />
         </div>
         <div v-if="unpinnedNotes "> 
-            <note-list :notes="pinnedNotes" type="PINNED" @note-clicked="editNote" @on-delete="deleteNote"/>
-            <note-list :notes="unpinnedNotes"  type="OTHERS" @note-clicked="editNote" @on-delete="deleteNote"/>
+            <note-list :notes="filterNotes(pinnedNotes)" type="PINNED" @note-clicked="editNote" @on-delete="deleteNote"/>
+            <note-list :notes="filterNotes(unpinnedNotes)"  type="OTHERS" @note-clicked="editNote" @on-delete="deleteNote"/>
         </div>
         <router-view v-if="unpinnedNotes" :notes="{pinnedNotes,unpinnedNotes}"></router-view>
     </main>
@@ -24,6 +24,9 @@ export default {
             pinnedNotes: [],
             unpinnedNotes: null,
             appClicked: false,
+            filterBy: {
+                txt: '',
+            }
         }
     }, created() {
         noteService.query().then(notes => {
@@ -52,6 +55,22 @@ export default {
                 this.unpinnedNotes = this.unpinnedNotes.filter(note => note.id !== noteId)
             })
         },
+        onFilter(filters) {
+            this.filterBy = filters
+        },
+        filterNotes(notes) {
+            return notes.filter(note => {
+                if (note.info.title) {
+                    if (note.info.title.toLowerCase().includes(this.filterBy.txt)) return true
+                }
+                if (note.info.txt) {
+                    if (note.info.txt.toLowerCase().includes(this.filterBy.txt)){
+                         return true
+                        }
+                }
+                return false
+            })
+        }
 
     },
     components: {
