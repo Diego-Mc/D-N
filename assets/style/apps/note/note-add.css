@@ -87,3 +87,9 @@
     position: absolute;
     z-index: 10;
 }
+
+.remove-media-icon{
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
