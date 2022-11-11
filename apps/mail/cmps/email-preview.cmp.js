@@ -1,3 +1,4 @@
+import { eventBus } from '../../../services/event-bus.service.js'
 import { utilService } from '../../../services/util.service.js'
 
 export default {
@@ -5,14 +6,26 @@ export default {
   template: /* HTML */ `
     <article
       @click="emailSelect"
-      :class="{reply: isReply}"
-      class="email-preview round">
+      :class="{reply: isReply, unread: !email.isRead}"
+      class="email-preview">
+      <i v-if="email.isStarred" class="starState bi bi-star-fill"></i>
       <img class="email-img" :src="email.imgUrl" />
-      <section class="email-data">
-        <small class="f-s f-clr-light">{{recipient}}</small>
-        <h3 class="f-d f-clr-light">{{email.subject}}</h3>
+      <small class="email-recipient f-s f-clr-light">{{recipient}}</small>
+      <h3 class="email-subject f-d f-clr-light">{{email.subject}}</h3>
+      <section class="f-s f-clr-light email-body">
+        <p>{{email.body}}</p>
+        <section class="tools">
+          <i
+            @click.stop="doRead"
+            :class="toggleClass(email.isRead,'bi bi-envelope')"></i>
+          <i
+            @click.stop="doTrash"
+            :class="toggleClass(email.isRemoved,'bi bi-trash')"></i>
+          <i
+            @click.stop="doStar"
+            :class="toggleClass(email.isStarred,'bi bi-star')"></i>
+        </section>
       </section>
-      <p class="f-s f-clr-light email-body">{{email.body}}</p>
       <small class="email-time f-s f-clr-light">{{timeStr}}</small>
     </article>
   `,
@@ -26,6 +39,7 @@ export default {
   },
   methods: {
     emailSelect() {
+      eventBus.emit('readEmail', this.email, true)
       if (this.folderName !== 'draft') this.$emit('emailSelected', this.email)
       else {
         this.$router.push({
@@ -36,6 +50,18 @@ export default {
     setReply() {
       if (this.$route.query.replyId === this.email.id) this.isReply = true
       else this.isReply = false
+    },
+    doStar() {
+      eventBus.emit('starEmail', this.email)
+    },
+    doTrash() {
+      eventBus.emit('removeEmail', this.email)
+    },
+    doRead() {
+      eventBus.emit('readEmail', this.email)
+    },
+    toggleClass(bool, classStr) {
+      return classStr + (bool ? '-fill' : '')
     },
   },
   computed: {

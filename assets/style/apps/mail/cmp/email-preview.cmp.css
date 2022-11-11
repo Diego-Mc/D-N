@@ -3,24 +3,90 @@
   display: grid;
   grid-template-columns: 36px 1fr max-content;
   grid-template-areas:
-    'img data time'
-    '. body body';
+    'img recipient time'
+    'img subject subject'
+    'body body body';
   column-gap: 0.88rem;
   cursor: pointer;
+  position: relative;
 }
 
-.email-preview.reply {
-  background-color: var(--clr-main-lightest) !important;
+.email-preview .starState {
+  color: var(--clr-main);
+  grid-area: img;
+  position: absolute;
+  margin-left: -23px;
+  font-size: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-.email-preview.reply .email-body {
+.email-preview:last-child {
+  border-bottom-left-radius: 1.25rem;
+  border-bottom-right-radius: 1.25rem;
+}
+
+.email-preview:hover .email-body {
+  display: flex;
+  align-items: flex-end;
+}
+
+.email-preview:hover .email-body p {
+  flex: 2;
+}
+
+.email-preview:hover .email-body .tools {
+  opacity: 1;
+  flex: 1;
+  font-size: 1rem;
+
+  justify-content: space-between;
+  margin-inline-start: 1rem;
+  grid-row: span 2;
+  max-width: unset;
+}
+
+.email-preview .email-body {
+  display: flex;
+  align-items: flex-end;
+}
+
+.email-preview .email-body p {
+  flex: 2;
+}
+
+.email-preview .email-body .tools {
+  /* display: none; */
+  opacity: 0;
+  font-size: 1rem;
+  display: flex;
+  flex: 0;
+  max-width: 0;
+}
+
+.email-preview .email-body p {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.email-preview.reply .email-body p,
+.email-preview.reply .email-subject {
   white-space: pre-line;
   text-overflow: unset;
   overflow: unset;
 }
 
+.email-preview.unread {
+  background: #fff;
+}
+
 .email-preview.selected {
-  background-color: #fff;
+  background-color: var(--clr-email-select);
+}
+
+.email-preview.reply {
+  background-color: var(--clr-main-lightest) !important;
 }
 
 .email-preview:is(.selected, .reply, :hover) small,
@@ -28,7 +94,7 @@
   color: var(--clr-main);
 }
 
-.email-preview:is(.selected, .reply, :hover) h3 {
+.email-preview:is(.selected, .reply, :hover) .email-subject {
   color: var(--clr-main-dark);
 }
 
@@ -41,16 +107,17 @@
   opacity: 0.8;
 }
 
-.email-data {
-  display: flex;
-  flex-direction: column;
-  grid-area: data;
+.email-recipient {
+  grid-area: recipient;
 }
 
-.email-data h3 {
-  line-clamp: 1;
+.email-subject {
+  grid-area: subject;
   margin-top: 3px;
   margin-bottom: 7px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .email-time {
@@ -59,7 +126,4 @@
 
 .email-body {
   grid-area: body;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 }

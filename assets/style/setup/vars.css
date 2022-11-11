@@ -8,6 +8,9 @@
   --clr-main-dark: #30485d;
   --clr-main-darker: #010c1e;
 
+  /* email */
+  --clr-email-select: #dce3ea;
+
   --s: 480px;
   --m: 960px;
   --l: 1360px;

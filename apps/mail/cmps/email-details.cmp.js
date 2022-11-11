@@ -1,3 +1,4 @@
+import { eventBus } from '../../../services/event-bus.service.js'
 import emailReply from '../cmps/email-reply.cmp.js'
 
 export default {
@@ -15,8 +16,8 @@ export default {
         <div class="email-tools">
           <i @click="doForward" class="bi bi-arrow-90deg-left"></i>
           <i @click="doReply" class="bi bi-reply"></i>
-          <icon-toggle icon="star"/>
-          <icon-toggle icon="trash"/>
+          <i @click="doStar" :class="toggleClass(email.isStarred,'bi bi-star')"></i>
+          <i @click="doTrash" :class="toggleClass(email.isRemoved,'bi bi-trash')"></i>
         </div>
       </header>
       <main class="email-content">
@@ -50,6 +51,15 @@ export default {
       this.$router.push({
         query: { forwardId: this.email.id, isCompose: true },
       })
+    },
+    doStar() {
+      eventBus.emit('starEmail', this.email)
+    },
+    doTrash() {
+      eventBus.emit('removeEmail', this.email)
+    },
+    toggleClass(bool, classStr) {
+      return classStr + (bool ? '-fill' : '')
     },
   },
   computed: {

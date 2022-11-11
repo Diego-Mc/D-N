@@ -118,6 +118,7 @@ export default {
       const validity = emailService.checkValidity(this.draft)
 
       if (validity.isValid) {
+        this.draft.sentAt = Date.now()
         emailService.sendEmail(this.draft).then(() => this.closeCompose())
       } else {
         eventBus.emit('show-msg', { txt: 'Please add ' + validity.missing })

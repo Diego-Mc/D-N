@@ -65,7 +65,6 @@ function remove(emailId) {
 }
 
 function save(email) {
-  email.sentAt = Date.now()
   if (email.id) {
     return storageService.put(EMAIL_KEY, email)
   } else {
@@ -168,7 +167,7 @@ function getAdvancedSearchOptions() {
         info: {
           label: 'starred status',
           opts: ['starred', 'unstarred'],
-          key: 'starredStatus',
+          key: 'isStarred',
         },
       },
       {
@@ -176,7 +175,7 @@ function getAdvancedSearchOptions() {
         info: {
           label: 'read status',
           opts: ['read', 'unread'],
-          key: 'readStatus',
+          key: 'isRead',
         },
       },
       {
@@ -184,18 +183,19 @@ function getAdvancedSearchOptions() {
         info: {
           label: 'labels',
           opts: ['love', 'work', 'school', 'project'],
-          key: 'status',
+          key: 'labels',
         },
       },
     ],
   }
 }
 
-function saveDraft(email) {
-  email.imgUrl = email.imgUrl || 'assets/img/diego.jpeg'
-  email.from = { ...loggedinUser }
-  email.state = 'draft'
-  return save(email)
+function saveDraft(draft) {
+  draft.imgUrl = draft.imgUrl || 'assets/img/diego.jpeg'
+  draft.from = { ...loggedinUser }
+  draft.state = 'draft'
+  draft.sentAt = Date.now()
+  return save(draft)
 }
 
 function sendEmail(email) {

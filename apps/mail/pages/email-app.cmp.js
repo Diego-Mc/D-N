@@ -5,17 +5,24 @@ import emailFilter from '../cmps/email-filter.cmp.js'
 import emailFolderList from '../cmps/email-folder-list.cmp.js'
 import emailList from '../cmps/email-list.cmp.js'
 import emailDetails from '../cmps/email-details.cmp.js'
+import { eventBus } from '../../../services/event-bus.service.js'
 
 export default {
   template: /* HTML */ `
     <main class="email-main">
       <email-folder-list />
       <email-list
+        @star="starEmail"
+        @trash="removeEmail"
         v-if="emails"
         @emailSelected="emailSelected"
         :emails="emails" />
       <email-compose @closeCompose="composeClose" v-if="isCompose" />
-      <email-details v-else :email="selectedEmail" />
+      <email-details
+        @star="starEmail"
+        @trash="removeEmail"
+        v-else
+        :email="selectedEmail" />
     </main>
   `,
   data() {
@@ -27,7 +34,7 @@ export default {
         state: '',
         search: '', // no need to support complex text search
         isRead: undefined, // (optional property, if missing: show all)
-        isStared: undefined, // (optional property, if missing: show all)
+        isStarred: undefined, // (optional property, if missing: show all)
         lables: [], // has any of the labels
       },
     }
@@ -39,6 +46,10 @@ export default {
       this.criteria.state = 'inbox'
     }
     this.getEmailsToShow().then(() => this.setIsCompose())
+    eventBus.on('advancedSearch', this.getEmailsToShow)
+    eventBus.on('starEmail', this.starEmail)
+    eventBus.on('removeEmail', this.removeEmail)
+    eventBus.on('readEmail', this.readEmail)
   },
   methods: {
     emailSelected(email) {
@@ -49,15 +60,27 @@ export default {
       this.$router.push({ query: {} })
       this.isCompose = false
     },
-    getEmailsToShow() {
+    getEmailsToShow(criteria = this.criteria) {
       console.log(this.criteria, this.folderName)
       return emailService
-        .query(this.criteria)
+        .query(criteria)
         .then((emails) => (this.emails = emails))
     },
     setIsCompose() {
       const isComposing = this.$route.query.isCompose
       if (isComposing === 'true') this.isCompose = true
+    },
+    starEmail(email) {
+      email.isStarred = !email.isStarred
+      emailService.save(email)
+    },
+    removeEmail(email) {
+      email.isRemoved = !email.isRemoved
+      emailService.save(email)
+    },
+    readEmail(email, force) {
+      email.isRead = force ?? !email.isRead
+      emailService.save(email)
     },
   },
   computed: {
