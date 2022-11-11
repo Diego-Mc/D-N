@@ -1,7 +1,13 @@
 export default {
     props: ['media'],
     template: `
-        <canvas ref="canvas" id="canvas" @mousemove="onMove"></canvas>
+        <div class="canvas-container">
+            <canvas ref="canvas" id="canvas" @mousemove="onMove">
+            </canvas>
+            <input v-model="strokeColor" class="stroke-color-input" type="color" />
+            
+        </div>
+            
              `
     , data() {
         return {
@@ -10,7 +16,8 @@ export default {
             gX: null,
             gY: null,
             state: null,
-            color: 'black',
+            strokeColor: 'black',
+            fillColor: 'black',
         }
     }, mounted() {
         this.canvas = this.$refs.canvas
@@ -25,11 +32,15 @@ export default {
 
     },
     methods: {
+        showColorPicker(){
+        this.$refs['stroke-color-input'].click()
+        },
         drawLine(x, y, xEnd = 250, yEnd = 250) {
             this.ctx.beginPath();
             this.ctx.moveTo(x, y);
             this.ctx.lineTo(xEnd, yEnd);
-            this.ctx.strokeStyle = 'black';
+            this.ctx.strokeStyle = this.strokeColor;
+            console.log(this.strokeColor);
             this.ctx.stroke();
             this.ctx.closePath();
         },

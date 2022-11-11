@@ -4,6 +4,8 @@
 @import './note-add.css';
 @import './note-edit.css';
 @import './edit-icons.css';
+@import './note-map.css';
+@import './note-canvas.css';
 
 .note-pin {
   position: absolute;
