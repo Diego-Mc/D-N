@@ -21,6 +21,7 @@ export const emailService = {
   saveDraft,
   sendEmail,
   checkValidity,
+  getAdvancedSearchOptions,
 }
 
 function query({
@@ -30,8 +31,9 @@ function query({
   isStarred = undefined,
   labels = [],
 } = {}) {
-  return storageService.query(EMAIL_KEY).then((emails) =>
-    emails
+  return storageService.query(EMAIL_KEY).then((emails) => {
+    console.log(emails)
+    return emails
       .filter(({ state: eState }) => {
         return eState === state
       })
@@ -51,15 +53,7 @@ function query({
       .filter(({ labels: eLabels }) => {
         return eLabels.every((label) => labels.has(label))
       })
-  )
-}
-
-const criteria = {
-  state: 'inbox/sent/trash/draft',
-  search: 'puki', // no need to support complex text search
-  isRead: true, // (optional property, if missing: show all)
-  isStared: true, // (optional property, if missing: show all)
-  lables: ['important', 'romantic'], // has any of the labels
+  })
 }
 
 function get(emailId) {
@@ -157,6 +151,45 @@ function getComposeSurvey(
     ],
   }
   return Promise.resolve(survey)
+}
+
+function getAdvancedSearchOptions() {
+  return {
+    cmps: [
+      {
+        type: 'checkBox',
+        info: {
+          label: 'only search in',
+          opts: ['subject', 'body', 'signature'],
+          key: 'searchArea',
+        },
+      },
+      {
+        type: 'radioCheck',
+        info: {
+          label: 'starred status',
+          opts: ['starred', 'unstarred'],
+          key: 'starredStatus',
+        },
+      },
+      {
+        type: 'radioCheck',
+        info: {
+          label: 'read status',
+          opts: ['read', 'unread'],
+          key: 'readStatus',
+        },
+      },
+      {
+        type: 'checkBox',
+        info: {
+          label: 'labels',
+          opts: ['love', 'work', 'school', 'project'],
+          key: 'status',
+        },
+      },
+    ],
+  }
 }
 
 function saveDraft(email) {

@@ -13,6 +13,7 @@
 @import 'cmps/app-footer.css';
 @import 'cmps/user-msg.css';
 @import 'cmps/icon.cmp.css';
+@import 'cmps/advanced-search.cmp.css';
 
 /* Apps */
 @import 'apps/mail/email-app.css';

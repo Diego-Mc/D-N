@@ -21,9 +21,8 @@ export default {
     emailSelect() {
       if (this.folderName !== 'draft') this.$emit('emailSelected', this.email)
       else {
-        const { to, subject, body, signature } = this.email
         this.$router.push({
-          query: { isCompose: true, to: to.email, subject, body, signature },
+          query: { isCompose: true, id: this.email.id },
         })
       }
     },

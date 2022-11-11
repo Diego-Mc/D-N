@@ -8,7 +8,7 @@ export default {
     <section v-if="composeForm" class="email-compose round">
       <i @click="closeCompose" class="close-btn f-m bi bi-x-lg"></i>
       <h2>{{composeForm.title}}</h2>
-      <form @submit.prevent="save">
+      <form @submit.prevent="save" v-if="draft" :key="JSON.stringify(draft.id)">
         <component
           v-for="(cmp, idx) in composeForm.cmps"
           :is="cmp.type"
@@ -28,28 +28,17 @@ export default {
   data() {
     return {
       composeForm: null,
-      draft: {},
+      draft: null,
       autoSaveInterval: 0,
     }
   },
   created() {
-    console.log('FORCEDDDD!!!!')
     emailService.getComposeSurvey().then((composeForm) => {
       console.log(composeForm)
       this.composeForm = composeForm
     })
-    const draft = emailService.getEmptyEmail()
 
-    const params = this.$route.query
-    console.log(params, this.draft)
-    if (params) {
-      draft.to.email = draft.to.email || params.to
-      draft.subject = draft.subject || params.subject
-      draft.body = draft.body || params.body
-      draft.signature = draft.signature || params.signature
-    }
-
-    this.draft = draft
+    this.setDraft()
 
     this.autoSaveInterval = setInterval(
       () => emailService.saveDraft(this.draft),
@@ -57,6 +46,8 @@ export default {
     )
   },
   unmounted() {
+    //TODO: distinguish if already sent and not a draft anymore, maybe using state?
+    emailService.saveDraft(this.draft)
     clearInterval(this.autoSaveInterval)
     const validity = emailService.checkValidity(this.draft)
     if (!validity.isValid) emailService.remove(this.draft.id)
@@ -65,6 +56,19 @@ export default {
     setAns({ key, ans }) {
       if (key === 'to') this.draft.to.email = ans
       else this.draft[key] = ans
+    },
+    setDraft() {
+      const emptyDraft = emailService.getEmptyEmail()
+      const params = this.$route.query
+      if (params.id) {
+        emailService
+          .get(params.id)
+          .then((draft) => (this.draft = draft))
+          .catch(() => {
+            delete params.id
+            this.draft = emptyDraft
+          })
+      } else this.draft = emptyDraft
     },
     save() {
       const validity = emailService.checkValidity(this.draft)
@@ -88,6 +92,8 @@ export default {
     '$route.query': {
       handler() {
         console.log('WATCHING!')
+        this.draft = null
+        this.setDraft()
       },
       deep: true,
     },
