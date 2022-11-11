@@ -2,16 +2,14 @@ export default {
   template: `
     <section>
       <label> {{info.label}} </label>
-      <input type="text" v-model="val" @input="reportVal" />
+      <input :type="inputType" v-model="val" @input="reportVal" />
     </section>
   `,
-  props: ['info', 'initialValue'],
-  created() {
-    console.log('HEY', this.initialValue)
-  },
+  props: ['info', 'initialValue', 'type'],
   data() {
     return {
       val: this.initialValue || '',
+      inputType: this.type || 'text',
     }
   },
   methods: {

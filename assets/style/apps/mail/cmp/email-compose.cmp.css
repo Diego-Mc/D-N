@@ -30,6 +30,7 @@
   display: grid;
   grid-template-columns: 60px 1fr;
   align-items: center;
+  margin-inline-end: 60px;
 }
 
 .email-compose form section:first-of-type {

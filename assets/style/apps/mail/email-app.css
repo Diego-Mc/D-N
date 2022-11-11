@@ -4,25 +4,30 @@
   grid-template-columns: repeat(10, minmax(0, 1fr));
   gap: 20px;
   grid-template-areas: 'folders list list list list details details details details details';
+  overflow: hidden;
 }
 
 .email-folder-list {
   grid-area: folders;
+  overflow: hidden;
 }
 
 .email-list {
   grid-area: list;
   background-color: rgba(255, 255, 255, 0.5);
+  overflow: scroll;
 }
 
 .email-details {
   grid-area: details;
   background-color: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
 }
 
 .email-compose {
   grid-area: details;
   background-color: #fff;
+  overflow: hidden;
 }
 
 /* REUSE */

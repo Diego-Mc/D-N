@@ -3,7 +3,10 @@ import { utilService } from '../../../services/util.service.js'
 export default {
   props: ['email'],
   template: /* HTML */ `
-    <article @click="emailSelect" class="email-preview round">
+    <article
+      @click="emailSelect"
+      :class="{reply: isReply}"
+      class="email-preview round">
       <img class="email-img" :src="email.imgUrl" />
       <section class="email-data">
         <small class="f-s f-clr-light">{{recipient}}</small>
@@ -14,18 +17,25 @@ export default {
     </article>
   `,
   data() {
-    return {}
+    return {
+      isReply: false,
+    }
   },
-  created() {},
+  created() {
+    this.setReply()
+  },
   methods: {
     emailSelect() {
       if (this.folderName !== 'draft') this.$emit('emailSelected', this.email)
       else {
-        const { to, subject, body, signature } = this.email
         this.$router.push({
-          query: { isCompose: true, to: to.email, subject, body, signature },
+          query: { isCompose: true, id: this.email.id },
         })
       }
+    },
+    setReply() {
+      if (this.$route.query.replyId === this.email.id) this.isReply = true
+      else this.isReply = false
     },
   },
   computed: {
@@ -41,6 +51,14 @@ export default {
       if (this.$route.path.includes('sent'))
         return this.email.to.name || this.email.to.email
       return this.email.from.name || this.email.from.email
+    },
+  },
+  watch: {
+    '$route.query': {
+      handler() {
+        this.setReply()
+      },
+      deep: true,
     },
   },
 }

@@ -9,20 +9,30 @@
   cursor: pointer;
 }
 
+.email-preview.reply {
+  background-color: var(--clr-main-lightest) !important;
+}
+
+.email-preview.reply .email-body {
+  white-space: pre-line;
+  text-overflow: unset;
+  overflow: unset;
+}
+
 .email-preview.selected {
   background-color: #fff;
 }
 
-.email-preview:is(.selected, :hover) small,
-.email-preview:is(.selected, :hover) .email-body {
+.email-preview:is(.selected, .reply, :hover) small,
+.email-preview:is(.selected, .reply, :hover) .email-body {
   color: var(--clr-main);
 }
 
-.email-preview:is(.selected, :hover) h3 {
+.email-preview:is(.selected, .reply, :hover) h3 {
   color: var(--clr-main-dark);
 }
 
-.email-preview:is(.selected, :hover) .email-img {
+.email-preview:is(.selected, .reply, :hover) .email-img {
   opacity: 1;
 }
 
@@ -49,4 +59,7 @@
 
 .email-body {
   grid-area: body;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }

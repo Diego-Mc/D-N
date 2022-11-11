@@ -31,16 +31,17 @@
   gap: 1.5rem;
 }
 
-.email-details main {
-  flex: 1;
+.email-details .email-content {
+  flex: 2;
+  overflow: scroll;
 }
 
-.email-details main h2 {
+.email-details .email-content h2 {
   margin-bottom: 20px;
   font-family: Mulish-Black;
 }
 
-.email-details main p {
+.email-details .email-content p {
   margin-bottom: 14px;
   white-space: pre-line;
 }
@@ -49,4 +50,10 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+}
+
+.email-details .reply-threads {
+  flex: 1;
+  opacity: 0.6;
+  overflow: scroll;
 }

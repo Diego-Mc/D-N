@@ -5,9 +5,10 @@
 @import './note-edit.css';
 @import './edit-icons.css';
 
-body {
-    background-color: #eee;
-    
+.note-pin {
+  position: absolute;
+  right: 15px;
+  top: 15px;
 }
 
 .note-pin{

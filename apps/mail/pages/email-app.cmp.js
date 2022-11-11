@@ -42,6 +42,7 @@ export default {
   },
   methods: {
     emailSelected(email) {
+      this.composeClose()
       this.selectedEmail = email
     },
     composeClose() {

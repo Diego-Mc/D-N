@@ -1,6 +1,8 @@
+import { eventBus } from '../services/event-bus.service.js'
+
 export default {
   template: `
-    <section class="home-page f-l-text">
+    <section @click.stop="closeAdvancedSearch" class="home-page f-l-text">
       <section class="maily-section">
         <img src="assets/img/maily-img.png" alt="" />
         <section>
@@ -39,9 +41,14 @@ export default {
             Bookey is a online book review place for all users to share their
             views and thoughts about their favorite books.
           </p>
-          <router-link class="btn f-m" to="/booky">Check it out</router-link>\
+          <router-link class="btn f-m" to="/booky">Check it out</router-link>
         </section>
       </section>
     </section>
   `,
+  methods: {
+    closeAdvancedSearch(ev) {
+      eventBus.emit('closeAdvancedSearch', ev)
+    },
+  },
 }
