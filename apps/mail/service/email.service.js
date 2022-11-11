@@ -113,7 +113,7 @@ function checkValidity(email) {
 function getComposeSurvey(
   { to = '', subject = '', body = '', sign = '' } = ''
 ) {
-  var survey = {
+  return {
     title: 'New Message',
     cmps: [
       {
@@ -150,7 +150,6 @@ function getComposeSurvey(
       },
     ],
   }
-  return Promise.resolve(survey)
 }
 
 function getAdvancedSearchOptions() {

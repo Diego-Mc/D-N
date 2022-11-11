@@ -5,10 +5,13 @@ import { eventBus } from '../../../services/event-bus.service.js'
 
 export default {
   template: /* HTML */ `
-    <section v-if="composeForm" class="email-compose round">
+    <section class="email-compose round">
       <i @click="closeCompose" class="close-btn f-m bi bi-x-lg"></i>
-      <h2>{{composeForm.title}}</h2>
-      <form @submit.prevent="save" v-if="draft" :key="JSON.stringify(draft.id)">
+      <h2 v-if="composeForm">{{formTitle}}</h2>
+      <form
+        @submit.prevent="save"
+        v-if="composeForm"
+        :key="JSON.stringify(draft.id)">
         <component
           v-for="(cmp, idx) in composeForm.cmps"
           :is="cmp.type"
@@ -17,6 +20,7 @@ export default {
           :key="cmp.info.key"
           @setVal="setAns">
         </component>
+        <section v-if="replyId"></section>
         <footer>
           <i class="trash-btn bi bi-trash f-m"></i>
           <small class="f-clr-light">auto save is on</small>
@@ -30,29 +34,65 @@ export default {
       composeForm: null,
       draft: null,
       autoSaveInterval: 0,
+      replyId: null,
+      forwardId: null,
     }
   },
   created() {
-    emailService.getComposeSurvey().then((composeForm) => {
-      console.log(composeForm)
-      this.composeForm = composeForm
-    })
-
-    this.setDraft()
-
-    this.autoSaveInterval = setInterval(
-      () => emailService.saveDraft(this.draft),
-      5000
-    )
+    this.composeForm = null
+    this.draft = null
+    this.autoSaveInterval = 0
+    this.replyId = null
+    this.forwardId = null
+    this.initializeDraft()
   },
   unmounted() {
     //TODO: distinguish if already sent and not a draft anymore, maybe using state?
-    emailService.saveDraft(this.draft)
     clearInterval(this.autoSaveInterval)
-    const validity = emailService.checkValidity(this.draft)
-    if (!validity.isValid) emailService.remove(this.draft.id)
   },
   methods: {
+    initializeDraft() {
+      const query = this.$route.query
+      console.log('DSFDSGD', query)
+      if (query.replyId) this.replyId = query.replyId
+      if (query.forwardId) this.forwardId = query.forwardId
+
+      this.setDraft()
+        .then(() => {
+          if (!this.forwardId) return Promise.resolve()
+          return emailService.get(this.forwardId).then(({ subject, body }) => {
+            this.draft.subject = 'FW: ' + subject
+            this.draft.body = body
+          })
+        })
+        .then(() => {
+          if (!this.replyId) return Promise.resolve()
+          return emailService
+            .get(this.replyId)
+            .then(({ from: { email }, subject }) => {
+              this.draft.to.email = email
+              this.draft.subject = 'RE: ' + subject
+
+              const replies = this.draft.replies
+              if (replies) {
+                if (!replies.includes(this.replyId)) replies.push(this.replyId)
+              } else this.draft.replies = [this.replyId]
+            })
+        })
+        .then(() => {
+          console.log('COMPOSEEEEEE')
+          return Promise.resolve(
+            (this.composeForm = emailService.getComposeSurvey())
+          )
+        })
+        .then(() => {
+          emailService.saveDraft(this.draft)
+          this.autoSaveInterval = setInterval(
+            () => emailService.saveDraft(this.draft),
+            5000
+          )
+        })
+    },
     setAns({ key, ans }) {
       if (key === 'to') this.draft.to.email = ans
       else this.draft[key] = ans
@@ -60,15 +100,19 @@ export default {
     setDraft() {
       const emptyDraft = emailService.getEmptyEmail()
       const params = this.$route.query
-      if (params.id) {
-        emailService
-          .get(params.id)
-          .then((draft) => (this.draft = draft))
-          .catch(() => {
-            delete params.id
-            this.draft = emptyDraft
-          })
-      } else this.draft = emptyDraft
+
+      if (!params.id) {
+        this.draft = emptyDraft
+        return Promise.resolve()
+      }
+
+      return emailService
+        .get(params.id)
+        .then((draft) => (this.draft = draft))
+        .catch(() => {
+          delete params.id
+          this.draft = emptyDraft
+        })
     },
     save() {
       const validity = emailService.checkValidity(this.draft)
@@ -79,23 +123,31 @@ export default {
         eventBus.emit('show-msg', { txt: 'Please add ' + validity.missing })
       }
     },
+    close() {
+      emailService.saveDraft(this.draft)
+      this.closeCompose()
+    },
     closeCompose() {
       this.$emit('closeCompose')
     },
     formInitialValue(key) {
+      console.log('HEYYYY', key, this.draft[key])
       if (key === 'to') return this.draft.to.email
       return this.draft[key]
     },
   },
-  computed: {},
+  computed: {
+    formTitle() {
+      if (this.replyId) return 'New Reply'
+      else if (this.forwardId) return 'Forward'
+      else return 'New Message'
+    },
+  },
   watch: {
     '$route.query': {
       handler() {
-        console.log('WATCHING!')
-        this.draft = null
-        this.setDraft()
+        this.initializeDraft()
       },
-      deep: true,
     },
   },
   components: {

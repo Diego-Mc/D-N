@@ -14,7 +14,7 @@ export default {
       :class="{open:isOpen}">
       <input
         v-model="criteria.search"
-        @click="isOpen=true"
+        @click="onClick"
         class="advancedSearchInput f-m f-clr-dark"
         type="search"
         placeholder="Search..." />
@@ -67,6 +67,10 @@ export default {
       console.log(this.criteria)
       eventBus.emit('advancedSearch', this.criteria)
       this.isOpen = false
+    },
+    onClick() {
+      this.isOpen = true
+      document.body.scrollIntoView(true)
     },
   },
   computed: {},

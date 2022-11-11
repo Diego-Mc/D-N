@@ -3,7 +3,7 @@ export default {
     <section class="filter-section">
       <label>{{info.label}}</label>
       <section class="cards">
-        <label v-for="opt in info.opts">
+        <label v-for="opt in info.opts" :key="opt">
           {{opt}}
           <input :name="info.key" :value="opt" type="radio" v-model="val" @change="reportVal" />
         </label>
