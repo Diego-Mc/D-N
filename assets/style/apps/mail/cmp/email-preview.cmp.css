@@ -9,6 +9,7 @@
   column-gap: 0.88rem;
   cursor: pointer;
   position: relative;
+  user-select: none;
 }
 
 .email-preview .starState {
