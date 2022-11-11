@@ -6,6 +6,7 @@ import noteAdd from "../cmps/note-add.cmp.js"
 import noteEdit from "../cmps/note-edit.cmp.js"
 import noteFilter from "../cmps/note-filter.cmp.js"
 import noteList from "../cmps/note-list.cmp.js"
+import addSection from '../cmps/add-section.cmp.js'
 
 export default {
     template: `
@@ -36,9 +37,11 @@ export default {
         eventBus.on('delete-note', noteId => this.deleteNote(noteId))
         eventBus.on('note-changed', (changedNote) => noteService.save(changedNote))
         eventBus.on('todo-clicked', obj => {
+            
             const note = obj.note
             const index = obj.index
-            note.info.todos[index].checked = !note.info.todos[index].checked
+            
+            note.info.todos[index].isChecked = !note.info.todos[index].isChecked
             noteService.save(note).then(() => {
                 const idx = this.notes.findIndex(note => note.id === note.id)
                 this.notes.splice(idx, note)
@@ -101,6 +104,20 @@ export default {
         saveNote(note){
             noteService.put(note)
         },
+        connectGoogleApi() {
+            if (window.google) return Promise.resolve()
+            const API_KEY = 'AIzaSyCTfr4C-a7XNuHjCajMSI4f_QkH5GNDSj4'
+            var elGoogleApi = document.createElement('script')
+            elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`
+            elGoogleApi.async = true
+            document.body.append(elGoogleApi)
+
+            return new Promise((resolve, reject) => {
+                elGoogleApi.onload = resolve
+
+                elGoogleApi.onerror = () => reject('Google script failed to load')
+            })
+        }
     },
     computed: {
         getNotes() {
@@ -115,5 +132,6 @@ export default {
         noteEdit,
         noteFilter,
         noteList,
+        addSection
     }
 }

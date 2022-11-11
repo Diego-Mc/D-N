@@ -24,6 +24,8 @@ export default {
             </div>
             <i class="bi bi-envelope"></i>
             <i @click="listClicked" class="bi bi-list-task"></i>
+            <i @click="canvasClicked" class="bi bi-pencil"></i>
+            <i @click="mapIconClicked" class="bi bi-geo-alt"></i>
             <i class="bi bi-three-dots-vertical"></i>
 
         </div>
@@ -34,10 +36,23 @@ export default {
     },
     methods: {
         colorClicked(color) {
-            eventBus.emit(`update-note`, { prop: 'color', val: color, id: this.noteId })
+            const id = this.noteId || ''
+            eventBus.emit(`update-note-${id}`, { prop: 'color', val: color, id: this.noteId })
         },
         listClicked(){
             eventBus.emit(`list-clicked`, this.noteId)
+        },
+       canvasClicked(){
+            const id = this.noteId || ''
+            eventBus.emit(`canvas-clicked-${id}`, 'noteCanvas')
+        },
+        mapIconClicked(){
+            this.getPosition()
+                .then((pos)=>{
+                    const id = this.noteId || ''
+                    eventBus.emit(`map-icon-clicked-${id}`, {mediaType:'noteMap',pos:pos})
+                })
+            
         },
         toggleColors() {
             this.isShowColors = !this.isShowColors
@@ -48,26 +63,20 @@ export default {
             reader.readAsDataURL(image);
             reader.onload = e => {
                 this.previewImage = e.target.result;
-                eventBus.emit(`update-note`, {
-                    prop: 'imgUrl', val: this.previewImage
+                const id = this.noteId || ''
+                eventBus.emit(`update-note-${id}`, {
+                    prop: 'mediaUrl', val: this.previewImage
                     , id: this.noteId
                 })
             };
         },
-        // uploadVideo(e) {
-        //     const image = e.target.files[0];
-        //     const reader = new FileReader();
-        //     reader.readAsDataURL(image);
-        //     reader.onload = e => {
-        //         this.previewImage = e.target.result;
-        //         eventBus.emit(`update-note`, {
-        //             prop: 'imgUrl', val: this.previewImage
-        //             , id: this.noteId
-        //         })
-        //     };
-        // },
         onDelete() {
             eventBus.emit('delete-note', this.noteId)
-        }
+        },
+        getPosition() {
+            return new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject)
+            })
+        },
     }
 }

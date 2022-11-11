@@ -10,3 +10,13 @@
   right: 15px;
   top: 15px;
 }
+
+.note-pin{
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}
+
+audio{
+    max-width: 100%;
+}
