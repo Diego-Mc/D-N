@@ -12,29 +12,21 @@ export default {
             >
             <note-preview v-for="note in notes" :note="note" :notes="notes" @note-clicked="noteClicked" @on-delete="onDelete"/>
         </section>
-    `, created() {
+    `,
+  created() {},
+  emits: {
+    onDelete: null,
+    noteClicked: null,
+  },
+  methods: {
+    onDrop(event) {},
+    noteClicked(noteId) {
+      this.$emit('note-clicked', noteId)
     },
-    emits: {
-        onDelete: null,
-        noteClicked: null,
-
-    },
-    methods: {
-        onDrop(event){
-
-        },
-        noteClicked(noteId) {
-            this.$emit('note-clicked', noteId)
-        },
-        onDelete(noteId) {
-            this.$emit('on-delete', noteId)
-        }
-    },watch:{
-
+    onDelete(noteId) {
+      this.$emit('on-delete', noteId)
     },
   },
-  watch: {},
-
   components: {
     notePreview,
   },

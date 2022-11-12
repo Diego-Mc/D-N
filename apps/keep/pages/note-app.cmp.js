@@ -60,83 +60,83 @@ export default {
       const changedNote = obj.note
       const index = obj.index
 
-            changedNote.info.todos[index].isChecked = !changedNote.info.todos[index].isChecked
-            noteService.save(changedNote).then(() => {
-                const idx = this.notes.findIndex(note => note.id === changedNote.id)
-                this.notes.splice(idx, 1, changedNote)
-            })
-        })
-        eventBus.on('todo-removed', obj => {
-            const changedNote = obj.note
-            const index = obj.index
-            changedNote.info.todos.splice(index, 1)
-            noteService.save(changedNote).then(() => {
-                const idx = this.notes.findIndex(note => note.id === changedNote.id)
-                this.notes.splice(idx, 1, changedNote)
-            })
-        }),
-            eventBus.on('on-duplicate', noteId => {
-                const idx = this.notes.findIndex(note => note.id === noteId)
-                const clone = JSON.parse(JSON.stringify(this.notes[idx]))
-                noteService.create(clone).then(note => this.notes.push(note))
-
-            })
-
-    }, methods: {
-        addNote(note) {
-            this.notes.push(note)
-            noteService.create(note)
-        },
-        onClick() {
-            eventBus.emit('app-clicked')
-        },
-        deleteNote(noteId) {
-            noteService.remove(noteId)
-            const idx = this.notes.findIndex(note => note.id === noteId)
-            this.notes.splice(idx, 1)
-        },
-        onFilter(filters) {
-            this.filterBy = filters
-        },
-        filterNotes(notes) {
-            if (!notes) return
-            return notes.filter(note => {
-                if (note.info.title) {
-                    if (note.info.title.toLowerCase().includes(this.filterBy.txt)) return true
-                }
-                if (note.info.txt) {
-                    if (note.info.txt.toLowerCase().includes(this.filterBy.txt)) {
-                        return true
-                    }
-                }
-                return false
-            })
-        },
-        getNotesByPinned(isPinned) {
-            let ha = this.notes.filter(note => {
-                return note.isPinned === isPinned
-            })
-            return ha
-        },
-        sortNotes() {
-            this.unpinnedNotes = this.notes.filter(note => {
-                if (note.isPinned) {
-                    this.pinnedNotes.push(note)
-                    return false
-                }
-                else return true
-            })
-        },
-        saveNote(note) {
-            noteService.put(note)
-        },
-        connectGoogleApi() {
-            if (window.google) return Promise.resolve()
-            const API_KEY = 'AIzaSyCTfr4C-a7XNuHjCajMSI4f_QkH5GNDSj4'
-            var elGoogleApi = document.createElement('script')
-            elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`
-            elGoogleApi.async = true
-            document.body.append(elGoogleApi)
+      changedNote.info.todos[index].isChecked =
+        !changedNote.info.todos[index].isChecked
+      noteService.save(changedNote).then(() => {
+        const idx = this.notes.findIndex((note) => note.id === changedNote.id)
+        this.notes.splice(idx, 1, changedNote)
+      })
+    })
+    eventBus.on('todo-removed', (obj) => {
+      const changedNote = obj.note
+      const index = obj.index
+      changedNote.info.todos.splice(index, 1)
+      noteService.save(changedNote).then(() => {
+        const idx = this.notes.findIndex((note) => note.id === changedNote.id)
+        this.notes.splice(idx, 1, changedNote)
+      })
+    }),
+      eventBus.on('on-duplicate', (noteId) => {
+        const idx = this.notes.findIndex((note) => note.id === noteId)
+        const clone = JSON.parse(JSON.stringify(this.notes[idx]))
+        noteService.create(clone).then((note) => this.notes.push(note))
+      })
+  },
+  methods: {
+    addNote(note) {
+      this.notes.push(note)
+      noteService.create(note)
+    },
+    onClick() {
+      eventBus.emit('app-clicked')
+    },
+    deleteNote(noteId) {
+      noteService.remove(noteId)
+      const idx = this.notes.findIndex((note) => note.id === noteId)
+      this.notes.splice(idx, 1)
+    },
+    onFilter(filters) {
+      this.filterBy = filters
+    },
+    filterNotes(notes) {
+      if (!notes) return
+      return notes.filter((note) => {
+        if (note.info.title) {
+          if (note.info.title.toLowerCase().includes(this.filterBy.txt))
+            return true
+        }
+        if (note.info.txt) {
+          if (note.info.txt.toLowerCase().includes(this.filterBy.txt)) {
+            return true
+          }
+        }
+        return false
+      })
+    },
+    getNotesByPinned(isPinned) {
+      let ha = this.notes.filter((note) => {
+        return note.isPinned === isPinned
+      })
+      return ha
+    },
+    sortNotes() {
+      this.unpinnedNotes = this.notes.filter((note) => {
+        if (note.isPinned) {
+          this.pinnedNotes.push(note)
+          return false
+        } else return true
+      })
+    },
+    saveNote(note) {
+      noteService.put(note)
+    },
+    connectGoogleApi() {
+      if (window.google) return Promise.resolve()
+      const API_KEY = 'AIzaSyCTfr4C-a7XNuHjCajMSI4f_QkH5GNDSj4'
+      var elGoogleApi = document.createElement('script')
+      elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`
+      elGoogleApi.async = true
+      document.body.append(elGoogleApi)
 
       return new Promise((resolve, reject) => {
         elGoogleApi.onload = resolve
@@ -149,14 +149,13 @@ export default {
     getNotes() {
       return this.notes
     },
-    watch: {
-
-    },
+    watch: {},
     components: {
-        noteAdd,
-        noteEdit,
-        noteFilter,
-        noteList,
-        addSection
-    }
+      noteAdd,
+      noteEdit,
+      noteFilter,
+      noteList,
+      addSection,
+    },
+  },
 }
