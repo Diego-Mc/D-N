@@ -6,7 +6,7 @@ import { emailService } from '../apps/mail/service/email.service.js'
 import { eventBus } from '../services/event-bus.service.js'
 
 export default {
-  props: ['service'],
+  props: ['service', 'emitName'],
   template: /* HTML */ `
     <div className="search-bg" v-if="isOpen" @click="closeSearch"></div>
     <form
@@ -59,7 +59,7 @@ export default {
     },
     doSearch() {
       console.log(this.criteria)
-      eventBus.emit('advancedSearch', this.criteria)
+      eventBus.emit(this.emitName, this.criteria)
       this.closeSearch()
     },
     onClick() {

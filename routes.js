@@ -69,19 +69,14 @@ const routerOptions = {
       path: '/booky',
       component: bookApp,
       name: 'booky',
-
-    }, {
-
-      path: '/booky/:id',
-      component: bookDetails,
       children: [
         {
-          path: 'review/:id',
-          component: reviewPreview,
+          path: ':id',
+          component: bookDetails,
+          name: 'details',
         },
       ],
-
-    }
+    },
   ],
 }
 

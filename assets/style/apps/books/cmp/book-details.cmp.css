@@ -1,0 +1,44 @@
+.book-details {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 296px 1fr 1fr;
+  gap: 20px;
+  grid-template-areas: 'book review-list review';
+  overflow: hidden;
+}
+
+.book-details .book-data {
+  grid-area: book;
+}
+
+.book-details .book-data .book-cover {
+  width: 225px;
+  height: 300px;
+  border-radius: 20px;
+}
+
+.book-details .book-data .book-title {
+  font-size: 18px;
+  color: var(--clr-main-dark);
+}
+
+.book-details .book-data .book-extras {
+  color: var(--clr-main-light);
+  font-size: 12px;
+}
+
+.long-text {
+  max-height: 200px;
+  overflow: scroll;
+}
+
+.long-text-btn {
+  display: inline;
+  cursor: pointer;
+}
+
+.long-text,
+.long-text-btn {
+  font-family: Mulish-Regular;
+  font-size: 16px;
+}

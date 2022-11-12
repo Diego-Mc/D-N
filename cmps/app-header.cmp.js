@@ -22,7 +22,7 @@ export default {
         <router-link to="/booky">Booky</router-link>
         <router-link to="/about">temp</router-link>
       </nav>
-      <advanced-search :service="services[appName]" v-else/>
+      <advanced-search :service="services[appName]" :emitName="appName + 'advancedSearch'" v-else/>
 
       <i class="bi bi-grid-fill"></i>
     </header>

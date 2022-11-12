@@ -1,0 +1,27 @@
+.book-preview {
+  max-width: 135px;
+  height: fit-content;
+}
+
+.book-preview img {
+  background-color: var(--clr-main-light);
+  width: 135px;
+  height: 180px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.book-preview .book-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.book-preview .book-author,
+.book-preview .book-title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
