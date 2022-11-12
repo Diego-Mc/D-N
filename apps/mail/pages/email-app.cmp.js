@@ -63,7 +63,7 @@ export default {
     eventBus.on('markAsRead', this.markAsRead)
     eventBus.on('unselectEmail', this.unselectEmail)
     eventBus.on('updateLabels', this.updateLabels)
-    eventBus.on('advancedSearch', (criteria) => {
+    eventBus.on('maily-advancedSearch', (criteria) => {
       this.updateCriteria(criteria)
       this.getEmailsToShow()
     })
@@ -164,7 +164,6 @@ export default {
   },
   computed: {
     folderName() {
-      console.log(this.$route.matched)
       const route = this.$route.matched[1]
       return route?.name
     },

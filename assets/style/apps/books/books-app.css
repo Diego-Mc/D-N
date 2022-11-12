@@ -1,0 +1,13 @@
+.books-main {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 20px;
+  grid-template-areas: 'books books books books books books books books books books';
+  overflow: hidden;
+}
+
+.books-list,
+.book-details {
+  grid-area: books;
+}

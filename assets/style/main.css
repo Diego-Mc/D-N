@@ -21,6 +21,7 @@
 /* Apps */
 @import 'apps/mail/email-app.css';
 @import 'apps/note/note-app.css';
+@import 'apps/books/books-app.css';
 
 /* MAILY */
 @import 'apps/mail/cmp/email-preview.cmp.css';
@@ -33,3 +34,6 @@
 /* KEEPY */
 
 /* BOOKY */
+@import 'apps/books/cmp/books-list.cmp.css';
+@import 'apps/books/cmp/book-preview.cmp.css';
+@import 'apps/books/cmp/book-details.cmp.css';

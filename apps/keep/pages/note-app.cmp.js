@@ -81,7 +81,7 @@ export default {
       const clone = JSON.parse(JSON.stringify(this.notes[idx]))
       noteService.create(clone).then((note) => this.notes.push(note))
     })
-    eventBus.on('advancedSearch', (criteria) => {
+    eventBus.on('keepy-advancedSearch', (criteria) => {
       this.queryNotes(criteria)
     })
   },

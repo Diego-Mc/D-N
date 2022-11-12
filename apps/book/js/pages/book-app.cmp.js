@@ -1,39 +1,38 @@
 import { booksService } from '../services/books.service.js'
 import { eventBus } from '../../../../services/event-bus.service.js'
 import bookList from '../cmps/book-list.cmp.js'
-// import bookDetails from './book-details.cmp.js'
+import bookDetails from './book-details.cmp.js'
 import bookFilter from '../cmps/book-filter.cmp.js'
 import bookAdd from '../cmps/book-add.cmp.js'
 
 export default {
   template: `
-        <section v-if="books">
-            <book-add @add-google-book="addBook"/>
-            <book-filter v-if="!selectedBook" @filtered="setFilter"></book-filter>
-            <book-list v-if="!selectedBook" :books="this.books" @selected="selectBook" />
-            <!-- <book-details v-else :book="selectedBook" @show-books="resetSelectedBook"/> -->
+        <section class="books-main" v-if="books">
+            <!-- <book-add @add-google-book="addBook"/> -->
+            <book-list v-if="!isBookSelected" :books="this.books" @selected="selectBook" />
+            <book-details v-else @show-books="resetSelectedBook"/>
         </section>
     `,
   data() {
     return {
       books: null,
       filterBy: { name: '', fromPrice: 0, toPrice: 1000 },
-      selectedBook: null,
+      isBookSelected: false,
     }
   },
   created() {
     this.queryBooks()
-    booksService.query().then((books) => {
-      this.books = books
-    })
+    booksService
+      .query()
+      .then((books) => {
+        this.books = books
+      })
     eventBus.on('advancedSearch', (criteria) => {
       this.queryBooks(criteria)
     })
+      .then(() => this.checkSelectedBook())
   },
   methods: {
-    queryBooks(criteria) {
-      booksService.query(criteria).then((books) => (this.books = books))
-    },
     selectBook(id) {
       this.selectedBook = this.books.find((book) => book.id === id)
     },
@@ -49,6 +48,10 @@ export default {
         this.books.push(book)
       })
     },
+    checkSelectedBook() {
+      this.isBookSelected =
+        this.$route.matched[1] && this.$route.matched[1].name === 'details'
+    },
   },
   booksToShow() {
     const regex = new RegExp(this.filterBy.name, 'i')
@@ -62,9 +65,16 @@ export default {
     })
   },
   computed: {},
+  watch: {
+    '$route.matched': {
+      handler(val) {
+        this.checkSelectedBook()
+      },
+    },
+  },
   components: {
     bookList,
-    // bookDetails,
+    bookDetails,
     bookFilter,
     bookAdd,
   },
