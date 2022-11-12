@@ -10,7 +10,7 @@ export default {
       <div class="book-data">
 
         <router-link to="/booky" class="prev-btn">
-          <- Library
+          &lt;- Library
         </router-link>
 
         <div class="book-nav">
@@ -28,18 +28,19 @@ export default {
             <p>{{ book.readingLength }}</p>
         </div>
 
-        <long-text v-bind:txt="book.description" />
+        <long-text :txt="book.description" />
 
         <p>{{ price }}</p>
         <p>{{ book.listPrice.isOnSale }}</p>
+        <button>BUY NOW</button>
+
+
+      </div>
 
         <book-reviews :book="book" />
 
-      </div>
 
-      <div>
         <review-add :book="book" />
-      </div>
     </section>
   `,
   data() {

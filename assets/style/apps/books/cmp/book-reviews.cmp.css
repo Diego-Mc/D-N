@@ -1,0 +1,46 @@
+.review-list {
+  grid-area: review-list;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 1.25rem;
+  /* padding: 45px 60px;
+  display: flex;
+  flex-direction: column;
+  position: relative; */
+}
+
+.review-preview {
+  padding: 25px 35px;
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  grid-template-areas:
+    'reviewer stars'
+    'subject .'
+    'text text';
+  column-gap: 0.88rem;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+.review-preview .reviewer-name {
+  grid-area: reviewer;
+}
+.review-preview .review-title {
+  grid-area: subject;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.review-preview .review-rating {
+  grid-area: stars;
+  color: var(--clr-main);
+}
+.review-preview .review-text {
+  grid-area: text;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.review-preview .review-delete-btn {
+  position: absolute;
+}

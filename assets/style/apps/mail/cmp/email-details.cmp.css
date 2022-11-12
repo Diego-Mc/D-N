@@ -5,10 +5,6 @@
   position: relative;
 }
 
-.email-details .email-details.selected {
-  background-color: #fff;
-}
-
 .email-details header {
   display: flex;
   justify-content: space-between;
