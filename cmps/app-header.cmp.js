@@ -13,7 +13,7 @@ export default {
       <nav v-if="appName === 'D&N'">
         <router-link to="/maily">Maily</router-link>
         <router-link to="/keepy">Keepy</router-link>
-        <router-link to="/">Booky</router-link>
+        <router-link to="/booky">Booky</router-link>
         <router-link to="/about">temp</router-link>
       </nav>
       <advanced-search v-else/>

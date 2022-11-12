@@ -1,6 +1,10 @@
 import homePage from './views/app-home.cmp.js'
 import aboutPage from './views/app-about.cmp.js'
 
+import bookApp from './apps/book/js/pages/book-app.cmp.js'
+import bookDetails from './apps/book/js/pages/book-details.cmp.js'
+import reviewPreview from './apps/book/js/pages/review-preview.cmp.js'
+
 import keepyApp from './apps/keep/pages/note-app.cmp.js'
 import noteEdit from './apps/keep/cmps/note-edit.cmp.js'
 
@@ -61,23 +65,23 @@ const routerOptions = {
         },
       ],
     },
-    // {
-    //   path: '/booky',
-    //   component: bookyApp,
-    //   name: 'booky',
-    //   children: [
-    //     {
-    //       path: ':id',
-    //       component: bookDetails,
-    //       children: [
-    //         {
-    //           path: 'review/:id',
-    //           component: reviewPreview,
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
+    {
+      path: '/booky',
+      component: bookApp,
+      name: 'booky',
+
+    }, {
+
+      path: '/booky/:id',
+      component: bookDetails,
+      children: [
+        {
+          path: 'review/:id',
+          component: reviewPreview,
+        },
+      ],
+
+    }
   ],
 }
 

@@ -1,0 +1,22 @@
+.book-add-container{
+    position: relative;
+}
+
+.book-add-container ul{
+    position: absolute;
+    margin-top: 50px;
+    left:45%;
+    background-color: white;
+    padding: 10px;
+    width: 300px;
+    z-index: 1;
+}
+
+.book-add-container li{
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.book-add-container button{
+    box-shadow: none;
+}

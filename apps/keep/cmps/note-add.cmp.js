@@ -13,12 +13,12 @@ export default {
   template: `
             <div class="add-note-container" @click.stop :class="noteBackgroundColor">
                     <div v-if="note.mediaType">
-                    <i @click="removeMedia" class='bi bi-trash remove-media-icon'></i>    
+                    <i v-if="!editedNoteId" @click="removeMedia" class='bi bi-trash remove-media-icon'></i>    
                       <component :is="note.mediaType" :media="note.mediaUrl" @canvas-changed="saveCanvas"/>
                     </div>
                 <div class="editor-content">
                   <div v-if="isExpandAddNote" >
-                      <i class="note-pin bi" :class="'bi-pin' + pinClass" @click="togglePin"></i>
+                      <i  class="note-pin bi" :class="'bi-pin' + pinClass" @click="togglePin"></i>
                       <textarea v-model="note.info.title" type="textarea" :class="noteBackgroundColor" placeholder="Title" ></textarea>
                   </div>
                   <textarea v-model="note.info.txt" @click="expandInputs" type="textarea" :class="noteBackgroundColor" placeholder="Take a note or enter Youtube URL..."></textarea>

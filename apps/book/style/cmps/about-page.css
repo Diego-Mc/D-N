@@ -1,0 +1,13 @@
+
+.about-page {
+    gap: 20px;
+    margin-block:40px;
+}
+
+.about-page img {
+    width: 500px;
+}
+
+.about-page p {
+    margin-inline: 300px;
+}
