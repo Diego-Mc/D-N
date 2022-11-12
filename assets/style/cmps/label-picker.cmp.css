@@ -20,6 +20,7 @@
   cursor: pointer;
 }
 
-.label-picker .user-label:hover {
+.label-picker .user-label:hover,
+.label-picker .user-label.selected {
   background-color: var(--clr-main-dark);
 }

@@ -57,7 +57,7 @@ function query({
         return isRead === undefined ? 'true' : e.isRead === isRead
       })
       .filter((e) => {
-        return e.labels.every((label) => labels.has(label))
+        return e.labels.every((label) => labels.includes(label))
       })
   })
 }

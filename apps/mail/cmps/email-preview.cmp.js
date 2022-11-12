@@ -41,7 +41,11 @@ export default {
             @click.stop="doRestore()"
             class="bi bi-arrow-counterclockwise"
             title="Restore"></i>
-          <label-picker v-if="isLabelPicking" :labels="labels" />
+          <label-picker
+            @updateLabels="updateLabels"
+            v-if="isLabelPicking"
+            :emailLabels="email.labels"
+            :labels="labels" />
         </section>
       </section>
       <small class="email-time f-s f-clr-light">{{timeStr}}</small>
@@ -51,7 +55,14 @@ export default {
     return {
       isReply: false,
       isLabelPicking: false,
-      labels: this.email.labels,
+      labels: [
+        { txt: 'heelo' },
+        { txt: 'relationship' },
+        { txt: 'work' },
+        { txt: 'love' },
+        { txt: 'park' },
+        { txt: 'school' },
+      ],
     }
   },
   created() {
@@ -88,6 +99,9 @@ export default {
     },
     doLabel() {
       this.isLabelPicking = !this.isLabelPicking
+    },
+    updateLabels(labels) {
+      eventBus.emit('updateLabels', this.email, labels)
     },
   },
   computed: {

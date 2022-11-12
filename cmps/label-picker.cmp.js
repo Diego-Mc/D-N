@@ -1,12 +1,13 @@
 import userLabel from './user-label.cmp.js'
 
 export default {
-  props: ['labels'],
+  props: ['labels', 'emailLabels'],
   template: /* HTML */ `
     <section class="label-picker" v-if="opts">
       <user-label
-        @click="addAns(label.txt)"
+        @click.stop="addAns(label.txt)"
         v-for="label in opts"
+        :class="{selected: emailLabels.includes(label.txt)}"
         :key="label.txt"
         :label="label.txt" />
     </section>
@@ -14,27 +15,18 @@ export default {
   data() {
     return {
       opts: this.labels,
-      ans: [],
+      ans: this.emailLabels || [],
     }
   },
   created() {
-    this.opts = [
-      { txt: 'heelo' },
-      { txt: 'relationship' },
-      { txt: 'heelo' },
-      { txt: 'relationship' },
-      { txt: 'heelo' },
-      { txt: 'relationship' },
-    ]
+    console.log(this.emailLabels)
   },
   methods: {
     addAns(labelText) {
-      const idx = ans.indexOf(labelText)
-      if (idx >= 0) ans.splice(idx, 1)
-      else ans.push(labelText)
-    },
-    closeModal() {
-      this.opts = null
+      const idx = this.ans.indexOf(labelText)
+      if (idx >= 0) this.ans.splice(idx, 1)
+      else this.ans.push(labelText)
+      this.$emit('updateLabels', this.ans)
     },
   },
   computed: {},

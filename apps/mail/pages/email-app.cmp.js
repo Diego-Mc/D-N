@@ -62,6 +62,7 @@ export default {
     eventBus.on('restoreEmail', this.restoreEmail)
     eventBus.on('markAsRead', this.markAsRead)
     eventBus.on('unselectEmail', this.unselectEmail)
+    eventBus.on('updateLabels', this.updateLabels)
     eventBus.on('advancedSearch', (criteria) => {
       this.updateCriteria(criteria)
       this.getEmailsToShow()
@@ -83,6 +84,12 @@ export default {
     updateCriteria(criteria) {
       criteria.state = this.criteria.state
       this.criteria = criteria
+    },
+    updateLabels(email, labels) {
+      email.labels = labels
+      emailService.save(email).then(() => {
+        console.log('saved!', email.labels)
+      })
     },
     doEmailSelect(email) {
       this.composeClose()
