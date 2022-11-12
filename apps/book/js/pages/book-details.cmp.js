@@ -9,7 +9,7 @@ export default {
     <section v-if="book" class="book-details">
       <div class="book-data">
 
-        <router-link to="/booky" class="prev-btn">
+        <router-link to="/booky" class="back-btn">
           &lt;- Library
         </router-link>
 
@@ -30,9 +30,7 @@ export default {
 
         <long-text :txt="book.description" />
 
-        <p>{{ price }}</p>
-        <p>{{ book.listPrice.isOnSale }}</p>
-        <button>BUY NOW</button>
+        <p>{{ book.listPrice.isOnSale }}{{ price }}</p>
 
 
       </div>
@@ -40,7 +38,9 @@ export default {
         <book-reviews :book="book" />
 
 
-        <review-add :book="book" />
+        <review-details v-if="selectedReview" :review="selectedReview"/>
+        <review-add v-else :book="book" />
+
     </section>
   `,
   data() {
@@ -48,6 +48,7 @@ export default {
       book: null,
       nextId: null,
       prevId: null,
+      selectedReview: null,
     }
   },
   created() {

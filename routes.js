@@ -3,7 +3,6 @@ import aboutPage from './views/app-about.cmp.js'
 
 import bookApp from './apps/book/js/pages/book-app.cmp.js'
 import bookDetails from './apps/book/js/pages/book-details.cmp.js'
-import reviewPreview from './apps/book/js/pages/review-preview.cmp.js'
 
 import keepyApp from './apps/keep/pages/note-app.cmp.js'
 import noteEdit from './apps/keep/cmps/note-edit.cmp.js'

@@ -21,6 +21,10 @@ export default {
             <textarea v-model="review.reviewTxt" name="" id="" cols="30" rows="10"></textarea>
             <button>Add Review</button>
         </form> -->
+        <section class="review-add round" >
+      <i @click="close" class="close-btn f-m bi bi-x-lg" title="Close"></i>
+      <h2 v-if="composeForm">New Review</h2>
+      <p class="book-title f-s f-clr-light">{{book.title}}</p>
         <form
         @submit.prevent="save"
         v-if="composeForm">
@@ -32,11 +36,11 @@ export default {
           @setVal="setAns">
         </component>
         <footer>
-          <i @click="removeDraft" class="trash-btn bi bi-trash f-m"></i>
-          <small class="f-clr-light">auto save is on</small>
+          <input v-model="review.date" ref="datepicker" v-model="review.date" type="date" name="date"/>
           <button>Send</button>
         </footer>
       </form>
+</section>
     `,
   data() {
     return {

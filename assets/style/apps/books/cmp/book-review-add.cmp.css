@@ -1,0 +1,84 @@
+.review-add {
+  padding-block: 45px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: white;
+}
+
+.book-details .close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1rem;
+  margin: 24px;
+  color: var(--clr-main-lighter);
+}
+
+.book-details .close-btn:hover {
+  color: var(--clr-main);
+}
+
+.review-add .trash-btn:hover::before {
+  content: '\F5DD';
+}
+
+.review-add h2,
+.review-add .book-title {
+  margin-inline: 60px;
+  margin-bottom: 5px;
+}
+.review-add h2 {
+  font-family: Mulish-Black;
+}
+
+.review-add .book-title {
+  margin-bottom: 20px;
+}
+
+.review-add form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.review-add form section {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  align-items: center;
+  margin-inline-end: 60px;
+}
+
+.review-add form section:first-of-type {
+  border-top: 1px solid rgba(140, 154, 168, 0.08);
+}
+
+.review-add form > section {
+  border-bottom: 1px solid rgba(140, 154, 168, 0.08);
+}
+
+.review-add section:has(textarea) {
+  align-items: stretch;
+  flex-grow: 1;
+}
+
+.review-add form label {
+  display: flex;
+  flex: 1;
+  justify-self: end;
+  margin-right: 10px;
+  margin-top: 14px;
+  align-self: start;
+}
+
+.review-add label > * {
+  flex: 1;
+}
+
+.review-add form footer {
+  margin-top: 20px;
+  margin-inline: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
