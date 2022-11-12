@@ -1,8 +1,8 @@
 import { booksService } from '../services/books.service.js'
 
 export default {
-    template: `
-    <div class="book-add-container flex flex-d-column align-center">
+  template: `
+    <div class="book-add-container">
         <div class="flex flex-d-column align-center">
             <label>Search Book</label>
             <div>
@@ -18,24 +18,27 @@ export default {
         </ul>
     </div>
     `,
-    data() {
-        return {
-            results: [],
-            searchTxt: null,
-            isShowResults: false,
-        }
-    },
-    methods: {
-        showResults() {
-            const modifiedSearchTxt = this.searchTxt.split(' ').join('%20')
-            booksService.getGoogleBook(modifiedSearchTxt).then(books => this.results = books)
-            this.isShowResults = true
-        },
-        add(book) {
-            this.$emit('add-google-book', book)
-        },
-        hideResults() {
-            // this.isShowResults = false
-        }
+
+  data() {
+    return {
+      results: [],
+      searchTxt: null,
+      isShowResults: false,
     }
+  },
+  methods: {
+    showResults() {
+      const modifiedSearchTxt = this.searchTxt.split(' ').join('%20')
+      booksService
+        .getGoogleBook(modifiedSearchTxt)
+        .then((books) => (this.results = books))
+      this.isShowResults = true
+    },
+    add(book) {
+      this.$emit('add-google-book', book)
+    },
+    hideResults() {
+      // this.isShowResults = false
+    },
+  },
 }

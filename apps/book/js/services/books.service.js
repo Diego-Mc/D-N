@@ -21,6 +21,7 @@ export const booksService = {
   addGoogleBook,
   getPrevNextBookIds,
   getAdvancedSearchOptions,
+  getComposeSurvey,
 }
 
 function query({
@@ -30,86 +31,133 @@ function query({
   sale = false,
   categories = [],
 } = {}) {
-    return storageService.query(BOOKS_KEY).then((books) => {
-        return books
-            .filter((b) => {
-                return b.title.toLowerCase().includes(search.toLowerCase()) || b.authors.some((a) => a.toLowerCase().includes(search.toLowerCase()))
-            })
-            // .filter((b) => {
-            //     if (!categories.length) return true
-            //     if (!b.categories) return false
-            //     return b.categories.every(c => categories.includes(c))
-            // })
-            .filter(b => {
-                if (!readingLength) return true
-                return b.readingLength === setReadingLength(readingLength)
-            })
-        .filter(b => {
-            if (!sale || b.listPrice.amout < 130) return true
-            else return false
+  return storageService.query(BOOKS_KEY).then((books) => {
+    return (
+      books
+        .filter((b) => {
+          return (
+            b.title.toLowerCase().includes(search.toLowerCase()) ||
+            b.authors.some((a) =>
+              a.toLowerCase().includes(search.toLowerCase())
+            )
+          )
         })
-        .filter(b => {
-            if (!recency) return true
-            const date = new Date()
-            console.log(parseInt(b.publishedDate.slice(0, 4)));
-            const diff = date.getFullYear() - parseInt(b.publishedDate.slice(0, 4))
-            if (diff > 10) return false
-            else return true
+        // .filter((b) => {
+        //     if (!categories.length) return true
+        //     if (!b.categories) return false
+        //     return b.categories.every(c => categories.includes(c))
+        // })
+        .filter((b) => {
+          if (!readingLength) return true
+          return b.readingLength === setReadingLength(readingLength)
         })
-    })
+        .filter((b) => {
+          if (!sale || b.listPrice.amout < 130) return true
+          else return false
+        })
+        .filter((b) => {
+          if (!recency) return true
+          const date = new Date()
+          console.log(parseInt(b.publishedDate.slice(0, 4)))
+          const diff =
+            date.getFullYear() - parseInt(b.publishedDate.slice(0, 4))
+          if (diff > 10) return false
+          else return true
+        })
+    )
+  })
+}
+
+function getComposeSurvey(
+  { rating = '', title = '', text = '', name = '' } = ''
+) {
+  return {
+    title: 'New Review',
+    cmps: [
+      {
+        type: 'textBox',
+        info: {
+          label: 'rating',
+          val: rating,
+          key: 'rating',
+        },
+      },
+      {
+        type: 'textBox',
+        info: {
+          label: 'title',
+          val: title,
+          key: 'title',
+        },
+      },
+      {
+        type: 'textArea',
+        info: {
+          label: 'text',
+          val: text,
+          key: 'text',
+        },
+      },
+      {
+        type: 'textBox',
+        info: {
+          label: 'name',
+          val: name,
+          key: 'name',
+        },
+      },
+    ],
+  }
 }
 
 function getAdvancedSearchOptions() {
-    return {
-        cmps: [
+  return {
+    cmps: [
+      {
+        type: 'radioCheck',
+        info: {
+          label: 'On Sale',
+          opts: [
+            { txt: 'products on sale', val: true },
+            { txt: 'all products', val: false },
+          ],
+          key: 'sale',
+        },
+      },
+      {
+        type: 'radioCheck',
+        info: {
+          label: 'Reading Length',
+          opts: [
+            { txt: 'short reading', val: 100 },
+            { txt: 'decent reading', val: 200 },
+            { txt: 'long reading', val: 500 },
+          ],
+          key: 'readingLength',
+        },
+      },
+      {
+        type: 'radioCheck',
+        info: {
+          label: 'Recency',
+          opts: [
+            { txt: 'new', val: false },
+            { txt: 'old', val: true },
+          ],
+          key: 'recency',
+        },
+      },
+      {
+        type: 'checkBox',
 
-            {
-                type: 'radioCheck',
-                info: {
-                    label: 'On Sale',
-                    opts: [
-                        { txt: 'products on sale', val: true },
-                        { txt: 'all products', val: false },
-                    ],
-                    key: 'sale',
-                },
-            },
-            {
-                type: 'radioCheck',
-                info: {
-                    label: 'Reading Length',
-                    opts: [
-                        { txt: 'short reading', val: 100 },
-                        { txt: 'decent reading', val: 200 },
-                        { txt: 'long reading', val: 500 },
-                    ],
-                    key: 'readingLength',
-                },
-            },
-            {
-                type: 'radioCheck',
-                info: {
-                    label: 'Recency',
-                    opts: [
-                        { txt: 'new', val: false },
-                        { txt: 'old', val: true },
-                    ],
-                    key: 'recency',
-                },
-            },
-            {
-                type: 'checkBox',
-
-                info: {
-                    label: 'Categories',
-                    opts: ['biography', 'computers', 'electronic', 'trademarks'],
-                    key: 'categories',
-                },
-            },
-
-
-        ],
-    }
+        info: {
+          label: 'Categories',
+          opts: ['biography', 'computers', 'electronic', 'trademarks'],
+          key: 'categories',
+        },
+      },
+    ],
+  }
 }
 
 function _createBooks() {

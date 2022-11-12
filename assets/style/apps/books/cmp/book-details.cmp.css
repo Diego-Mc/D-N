@@ -35,6 +35,8 @@
 .long-text-btn {
   display: inline;
   cursor: pointer;
+  font-family: Mulish-Bold;
+  color: var(--clr-main-dark);
 }
 
 .long-text,
