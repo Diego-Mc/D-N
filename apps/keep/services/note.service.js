@@ -23,13 +23,7 @@ function query({
   isPinned = undefined,
 } = {}) {
   return storageService.query(NOTE_KEY).then((notes) => {
-    // noteType.map(type =>{
-    //   if(type === 'image') return 'noteImg'
-    //   if(type === 'map') return 'noteMap'
-    //   if(type === 'audio') return 'noteAudio'
-    //   if(type === 'canvas') return 'noteCanvas'
-    //   if(type === 'video') return 'noteVideo'
-    // })
+ 
     return notes
       .filter((n) => {
         if (search) {
