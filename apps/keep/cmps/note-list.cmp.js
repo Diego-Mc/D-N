@@ -10,7 +10,7 @@ export default {
             @dragover.prevent
             @dragenter.prevent
             >
-            <note-preview v-for="note in notes" :note="note" @note-clicked="noteClicked" @on-delete="onDelete"/>
+            <note-preview v-for="note in notes" :note="note" :notes="notes" @note-clicked="noteClicked" @on-delete="onDelete"/>
         </section> 
     `, created() {
     },
@@ -29,7 +29,10 @@ export default {
         onDelete(noteId) {
             this.$emit('on-delete', noteId)
         }
+    },watch:{
+      
     },
+
     components: {
         notePreview,
     }

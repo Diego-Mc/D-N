@@ -4,20 +4,22 @@ export default {
     props: ['note-id','bin'],
     template: `
         <div class="note-icons-container" > 
-            <i v-if="bin" @click="onDelete" class='bi bi-trash'></i>
-            <div class="upload-img-container">
+            <i @click="onDelete" class='bi bi-trash'></i>
+            <div v-if="!noteId" class="upload-img-container">
                 <input type="file" accept="image/jpeg/png" @change='uploadImage' class="upload-img-input"/>
                 <i class="bi bi-image"></i>
             </div> 
             <note-colors :note-id="noteId"/>
             <i class="bi bi-envelope"></i>
             <i @click="listClicked" class="bi bi-list-task"></i>
-            <i @click="canvasClicked" class="bi bi-pencil"></i>
-            <i @click="mapIconClicked" class="bi bi-geo-alt"></i>
-            <i class="bi bi-three-dots-vertical"></i>
-            <i @click="recordClicked" class="bi bi-volume-up"></i>
+            <i v-if="!noteId" @click="canvasClicked" class="bi bi-pencil"></i>
+            <i v-if="!noteId" @click="mapIconClicked" class="bi bi-geo-alt"></i>
+            <!-- <i class="bi bi-three-dots-vertical"></i> -->
+            <i @click="audioClicked" class="bi bi-volume-up"></i>
         </div>
     `, 
+    created() {
+    },
     methods: {
        
         listClicked(){
@@ -36,8 +38,9 @@ export default {
                 })
             
         },
-        recordClicked() {
-            eventBus.emit(`record-clicked`, this.noteId)
+        audioClicked() {
+            const id = this.noteId || ''
+            eventBus.emit(`audio-clicked-${id}`, this.noteId)
         },
 
         uploadImage(e) {
