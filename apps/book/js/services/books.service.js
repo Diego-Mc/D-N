@@ -9,7 +9,6 @@ const CACHE_KEY = 'cahce'
 let cache = {}
 storageService.query(CACHE_KEY).then(res => {
     cache = res
-
 })
 
 _createBooks()
@@ -32,13 +31,28 @@ function query() {
 function _createBooks() {
     let books = utilService.loadFromStorage(BOOKS_KEY)
     if (!books || !books.length) {
-        books = booksList
+        books = booksList.items.map(book => ({
+            id: book.id,
+            title: book.volumeInfo.title,
+            subtitle: book.volumeInfo.subtitle,
+            authors: book.volumeInfo.authors,
+            description: book.volumeInfo.description,
+            pageCount: book.volumeInfo.pageCount,
+            publishedDate: book.volumeInfo.publishedDate,
+            thumbnail: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : '../../assets/BooksImages/2.jpg',
+            listPrice: {
+                amount: parseInt(Math.random() * 100),
+                currencyCode: "EUR",
+            },
+        }))
         utilService.saveToStorage(BOOKS_KEY, books)
     }
+    console.log(books);
     return books
 }
 
 function get(bookId) {
+
     return storageService.get(BOOKS_KEY, bookId)
 }
 
@@ -80,17 +94,17 @@ function getPrevNextBookIds(bookId) {
         })
 }
 
-function _save(CACHE_KEY, cache){
-    utilService.saveToStorage(CACHE_KEY,cache)
+function _save(CACHE_KEY, cache) {
+    utilService.saveToStorage(CACHE_KEY, cache)
 }
 
 function getGoogleBook(searchTxt) {
     if (cache[searchTxt]) return Promise.resolve(cache[searchTxt])
-    else if (!searchTxt) return null
+    else if (!searchTxt) return Promise.resolve(null)
     return fetch(`https://www.googleapis.com/books/v1/volumes?printType=books&q=${searchTxt}`)
         .then((response) => response.json())
         .then(booksList => {
-            
+
             const books = booksList.items.map(book => ({
                 id: book.id,
                 title: book.volumeInfo.title,
@@ -99,14 +113,14 @@ function getGoogleBook(searchTxt) {
                 description: book.volumeInfo.description,
                 pageCount: book.volumeInfo.pageCount,
                 publishedDate: book.volumeInfo.publishedDate,
-                thumbnail: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : '../../assets/BooksImages/2.jpg',
+                thumbnail: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : '../BooksImages/2.jpg',
                 listPrice: {
                     amount: parseInt(Math.random() * 100),
                     currencyCode: "EUR",
                 },
             }))
             cache[searchTxt] = books
-           _save(CACHE_KEY, cache)
+            _save(CACHE_KEY, cache)
             return books
         })
 

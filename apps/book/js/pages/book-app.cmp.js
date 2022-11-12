@@ -23,7 +23,7 @@ export default {
     },
     created() {
         booksService.query().then((books) => {
-            this.books = books
+           this.books = books
         })
     },
     methods: {
@@ -38,7 +38,7 @@ export default {
         },
         addBook(book) {
             booksService.addGoogleBook(book).then(book => {
-                eventBus.emit('user-msg',{txt:'book added!',type:'success'})
+                eventBus.emit('user-msg', { txt: 'book added!', type: 'success' })
                 this.books.push(book)
             })
 
@@ -46,7 +46,9 @@ export default {
     },
     computed: {
         booksToShow() {
+
             const regex = new RegExp(this.filterBy.name, 'i')
+            console.log(this.books);
             return this.books.filter(book => {
                 return regex.test(book.title) && book.listPrice.amount > this.filterBy.fromPrice && book.listPrice.amount < this.filterBy.toPrice
             })
