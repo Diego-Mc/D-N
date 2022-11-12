@@ -1,0 +1,13 @@
+.canvas-container {
+    position: relative;
+}
+
+.stroke-color-input {
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+    background-color: transparent;
+    border: none;
+    width: 25px;
+    height: 25px;
+}

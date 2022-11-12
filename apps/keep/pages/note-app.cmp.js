@@ -10,7 +10,7 @@ import addSection from '../cmps/add-section.cmp.js'
 
 export default {
     template: `
-    <main @click="onClick" v-if="notes">
+    <main @click="onClick" v-if="notes" class="note-app">
         <div>
             <note-filter @notes-filtered="onFilter"/>
             <note-add @add-note="addNote" :notes="notes"/>
