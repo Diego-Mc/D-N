@@ -16,10 +16,12 @@ const routerOptions = {
     {
       path: '/',
       component: homePage,
+      name: 'D&N',
     },
     {
       path: '/about',
       component: aboutPage,
+      name: 'about',
     },
     {
       path: '/maily',
@@ -51,6 +53,7 @@ const routerOptions = {
     {
       path: '/keepy',
       component: keepyApp,
+      name: 'keepy',
       children: [
         {
           path: ':id',
@@ -61,6 +64,7 @@ const routerOptions = {
     // {
     //   path: '/booky',
     //   component: bookyApp,
+    //   name: 'booky',
     //   children: [
     //     {
     //       path: ':id',

@@ -5,10 +5,13 @@
   position: relative;
 }
 
-.email-compose .close-btn {
+.email-main .close-btn {
   position: absolute;
-  top: 2rem;
-  right: 2rem;
+  top: 0;
+  right: 0;
+  font-size: 1rem;
+  margin: 24px;
+  color: var(--clr-main-lighter);
 }
 
 .email-compose .trash-btn:hover::before {

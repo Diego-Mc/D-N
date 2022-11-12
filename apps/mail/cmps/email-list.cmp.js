@@ -1,7 +1,7 @@
 import emailPreview from '../cmps/email-preview.cmp.js'
 
 export default {
-  props: ['emails'],
+  props: ['emails', 'selectedEmail'],
   template: /* HTML */ `
     <section v-if="emails" class="email-list round">
       <email-preview
@@ -12,15 +12,9 @@ export default {
         :email="email" />
     </section>
   `,
-  data() {
-    return {
-      selectedEmail: null,
-    }
-  },
   created() {},
   methods: {
     emailSelected(email) {
-      this.selectedEmail = email
       this.$emit('emailSelected', email)
     },
     selectedClass(email) {

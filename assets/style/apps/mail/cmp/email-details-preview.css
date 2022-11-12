@@ -1,0 +1,12 @@
+.email-details.preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.email-details.preview p {
+  color: var(--clr-main-light);
+  font-family: Mulish-Regular;
+}

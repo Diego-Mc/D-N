@@ -1,8 +1,6 @@
-import { eventBus } from '../services/event-bus.service.js'
-
 export default {
   template: `
-    <section @click.stop="closeAdvancedSearch" class="home-page f-l-text">
+    <section class="home-page f-l-text">
       <section class="maily-section">
         <img src="assets/img/maily-img.png" alt="" />
         <section>
@@ -46,9 +44,4 @@ export default {
       </section>
     </section>
   `,
-  methods: {
-    closeAdvancedSearch(ev) {
-      eventBus.emit('closeAdvancedSearch', ev)
-    },
-  },
 }

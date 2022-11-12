@@ -2,9 +2,10 @@
   padding: 45px 60px;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
-.email-details.selected {
+.email-details .email-details.selected {
   background-color: #fff;
 }
 
@@ -13,6 +14,7 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 30px;
+  gap: 20px;
 }
 
 .email-details .user-data {
@@ -24,11 +26,19 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  overflow: hidden;
+}
+
+.email-details .user-data span > * {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .email-details .email-tools {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.2rem;
+  font-size: 1rem;
 }
 
 .email-details .email-content {

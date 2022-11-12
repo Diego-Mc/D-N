@@ -12,6 +12,7 @@
 @import 'cmps/app-header.css';
 @import 'cmps/app-footer.css';
 @import 'cmps/user-msg.css';
+@import 'cmps/user-modal.css';
 @import 'cmps/icon.cmp.css';
 @import 'cmps/advanced-search.cmp.css';
 
@@ -22,6 +23,7 @@
 /* MAILY */
 @import 'apps/mail/cmp/email-preview.cmp.css';
 @import 'apps/mail/cmp/email-details.cmp.css';
+@import 'apps/mail/cmp/email-details-preview.css';
 @import 'apps/mail/cmp/email-folder-list.cmp.css';
 @import 'apps/mail/cmp/email-compose.cmp.css';
 @import 'apps/mail/cmp/email-list.css';

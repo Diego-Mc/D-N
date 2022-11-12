@@ -5,7 +5,11 @@ import emailFilter from '../cmps/email-filter.cmp.js'
 import emailFolderList from '../cmps/email-folder-list.cmp.js'
 import emailList from '../cmps/email-list.cmp.js'
 import emailDetails from '../cmps/email-details.cmp.js'
-import { eventBus } from '../../../services/event-bus.service.js'
+import {
+  eventBus,
+  showSuccessMsg,
+} from '../../../services/event-bus.service.js'
+import { userModal } from '../../../cmps/user-modal.cmp.js'
 
 export default {
   template: /* HTML */ `
@@ -16,13 +20,18 @@ export default {
         @trash="removeEmail"
         v-if="emails"
         @emailSelected="emailSelected"
+        :selectedEmail="selectedEmail"
         :emails="emails" />
       <email-compose @closeCompose="composeClose" v-if="isCompose" />
       <email-details
         @star="starEmail"
         @trash="removeEmail"
-        v-else
+        v-else-if="selectedEmail"
         :email="selectedEmail" />
+      <section v-else class="email-details preview selected round">
+        <h1>No email selected</h1>
+        <p>select a message to view</p>
+      </section>
     </main>
   `,
   data() {
@@ -35,23 +44,40 @@ export default {
         search: '', // no need to support complex text search
         isRead: undefined, // (optional property, if missing: show all)
         isStarred: undefined, // (optional property, if missing: show all)
+        isRemoved: false,
         lables: [], // has any of the labels
+        searchAreas: [],
       },
     }
   },
   created() {
-    this.criteria.state = this.folderName
-    if (!this.folderName) {
-      this.$router.push('/maily/inbox')
-      this.criteria.state = 'inbox'
-    }
+    if (!this.folderName) this.$router.push('/maily/inbox')
+
+    this.setCriteriaState()
     this.getEmailsToShow().then(() => this.setIsCompose())
-    eventBus.on('advancedSearch', this.getEmailsToShow)
+
     eventBus.on('starEmail', this.starEmail)
     eventBus.on('removeEmail', this.removeEmail)
-    eventBus.on('readEmail', this.readEmail)
+    eventBus.on('restoreEmail', this.restoreEmail)
+    eventBus.on('markAsRead', this.markAsRead)
+    eventBus.on('unselectEmail', this.unselectEmail)
+    eventBus.on('advancedSearch', (criteria) => {
+      this.updateCriteria(criteria)
+      this.getEmailsToShow()
+    })
   },
   methods: {
+    setCriteriaState() {
+      if (this.folderName === 'trash') this.criteria.isRemoved = true
+      else {
+        this.criteria.isRemoved = false
+        this.criteria.state = this.folderName
+      }
+    },
+    updateCriteria(criteria) {
+      criteria.state = this.criteria.state
+      this.criteria = criteria
+    },
     emailSelected(email) {
       this.composeClose()
       this.selectedEmail = email
@@ -61,7 +87,7 @@ export default {
       this.isCompose = false
     },
     getEmailsToShow(criteria = this.criteria) {
-      console.log(this.criteria, this.folderName)
+      console.log(criteria, this.folderName)
       return emailService
         .query(criteria)
         .then((emails) => (this.emails = emails))
@@ -75,24 +101,63 @@ export default {
       emailService.save(email)
     },
     removeEmail(email) {
-      email.isRemoved = !email.isRemoved
-      emailService.save(email)
+      const updateSelectedRemovedUser = () => {
+        if (this.selectedEmail && this.selectedEmail.id === email.id) {
+          this.unselectEmail()
+        }
+      }
+
+      const modalOpts = {
+        question: 'Are you sure?',
+        warning: 'If you proceed your email will be removed completely.',
+        opt1: 'I am sure',
+        opt2: 'Cancel',
+      }
+
+      if (email.removedAt) {
+        userModal.showModal(modalOpts).then((ans) => {
+          if (!ans) return
+          emailService.remove(email.id).then(() => {
+            this.getEmailsToShow().then(() => {
+              updateSelectedRemovedUser()
+              showSuccessMsg('Your email was successfully removed.')
+            })
+          })
+        })
+      } else {
+        const e = { ...email, removedAt: Date.now() }
+        emailService.save(e).then(() => {
+          this.getEmailsToShow().then(() => {
+            updateSelectedRemovedUser()
+            showSuccessMsg('Your email was moved to the trash folder.')
+          })
+        })
+      }
     },
-    readEmail(email, force) {
+    restoreEmail(email) {
+      const e = { ...email, removedAt: undefined }
+      emailService.save(e).then(() => {
+        this.getEmailsToShow()
+      })
+    },
+    markAsRead(email, force) {
       email.isRead = force ?? !email.isRead
       emailService.save(email)
+    },
+    unselectEmail() {
+      this.selectedEmail = null
     },
   },
   computed: {
     folderName() {
+      console.log(this.$route.matched)
       const route = this.$route.matched[1]
-      if (!route) return ''
-      return route.name
+      return route?.name
     },
   },
   watch: {
     folderName() {
-      this.criteria.state = this.folderName
+      this.setCriteriaState()
       this.getEmailsToShow()
     },
     '$route.query': {

@@ -3,21 +3,20 @@ import advancedSearch from '../cmps/advanced-search.cmp.js'
 import { eventBus } from '../services/event-bus.service.js'
 
 export default {
-  props: ['cmp'],
+  props: [],
   template: `
-    <header @click.stop="onCloseAdvancedSearch" class="app-header col-full f-m">
+    <header class="app-header col-full f-m">
       <span class="logo-wrapper">
           <img @click="$router.push('/')" src="assets/icons/logo-icon-dn.svg"/>
           <h1 class="logo-text logo">{{appName}}</h1>
       </span>
-      <nav v-if="component">
+      <nav v-if="appName === 'D&N'">
         <router-link to="/maily">Maily</router-link>
         <router-link to="/keepy">Keepy</router-link>
         <router-link to="/">Booky</router-link>
         <router-link to="/about">temp</router-link>
       </nav>
-      <advanced-search/>
-      <component v-if="component" :is="component" />
+      <advanced-search v-else/>
 
       <i class="bi bi-grid-fill"></i>
     </header>
@@ -25,18 +24,13 @@ export default {
   data() {
     return {
       appName: 'D&N',
-      component: this.cmp,
     }
   },
-  methods: {
-    onCloseAdvancedSearch(ev) {
-      eventBus.emit('closeAdvancedSearch', ev)
-    },
-  },
+  methods: {},
   watch: {
-    '$route.path': {
+    '$route.matched': {
       handler(val) {
-        this.appName = utilService.toCapitalCase(val.slice(1)) || 'D&N'
+        this.appName = val[0].name
       },
     },
   },

@@ -29,29 +29,35 @@ function query({
   search = '',
   isRead = undefined,
   isStarred = undefined,
+  isRemoved = undefined,
   labels = [],
+  searchAreas = [],
 } = {}) {
   return storageService.query(EMAIL_KEY).then((emails) => {
-    console.log(emails)
     return emails
-      .filter(({ state: eState }) => {
-        return eState === state
+      .filter((e) => {
+        if (isRemoved) return !!e.removedAt
+        return !!!e.removedAt && e.state === state
       })
-      .filter(({ subject, body, signature }) => {
-        return (
-          subject.includes(search) ||
-          body.includes(search) ||
-          signature.includes(search)
-        )
+      .filter((e) => {
+        if (searchAreas.length === 0) {
+          return (
+            e.subject.includes(search) &&
+            e.body.includes(search) &&
+            e.signature.includes(search)
+          )
+        }
+        console.log(e, searchAreas)
+        return searchAreas.some((area) => e[area].includes(search))
       })
-      .filter(({ isStarred: eIsStarred }) => {
-        return isStarred === undefined ? 'true' : eIsStarred === isStarred
+      .filter((e) => {
+        return isStarred === undefined ? 'true' : e.isStarred === isStarred
       })
-      .filter(({ isRead: eIsRead }) => {
-        return isRead === undefined ? 'true' : eIsRead === isRead
+      .filter((e) => {
+        return isRead === undefined ? 'true' : e.isRead === isRead
       })
-      .filter(({ labels: eLabels }) => {
-        return eLabels.every((label) => labels.has(label))
+      .filter((e) => {
+        return e.labels.every((label) => labels.has(label))
       })
   })
 }
@@ -159,14 +165,17 @@ function getAdvancedSearchOptions() {
         info: {
           label: 'only search in',
           opts: ['subject', 'body', 'signature'],
-          key: 'searchArea',
+          key: 'searchAreas',
         },
       },
       {
         type: 'radioCheck',
         info: {
           label: 'starred status',
-          opts: ['starred', 'unstarred'],
+          opts: [
+            { txt: 'starred', val: true },
+            { txt: 'unstarred', val: false },
+          ],
           key: 'isStarred',
         },
       },
@@ -174,7 +183,10 @@ function getAdvancedSearchOptions() {
         type: 'radioCheck',
         info: {
           label: 'read status',
-          opts: ['read', 'unread'],
+          opts: [
+            { txt: 'read', val: true },
+            { txt: 'unread', val: false },
+          ],
           key: 'isRead',
         },
       },
@@ -191,11 +203,17 @@ function getAdvancedSearchOptions() {
 }
 
 function saveDraft(draft) {
+  if (!draft.id && isEmailEmpty(draft))
+    return Promise.reject("Draft is empty. Didn't save.")
   draft.imgUrl = draft.imgUrl || 'assets/img/diego.jpeg'
   draft.from = { ...loggedinUser }
   draft.state = 'draft'
   draft.sentAt = Date.now()
   return save(draft)
+}
+
+function isEmailEmpty(email) {
+  return !email.subject && !email.to.email && !email.body && !email.signature
 }
 
 function sendEmail(email) {
@@ -219,6 +237,7 @@ function _createEmails() {
         from: { email: 'puki@gmail.com', name: 'Puki Ben David' },
         to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
         labels: [],
+        signature: 'Puki',
       },
       {
         id: '12346',
@@ -232,6 +251,7 @@ function _createEmails() {
         from: { email: 'puki@gmail.com', name: 'Puki Ben David' },
         to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
         labels: [],
+        signature: 'Puki',
       },
       {
         id: '12385',
@@ -245,6 +265,7 @@ function _createEmails() {
         from: { email: 'puki@gmail.com', name: 'Puki Ben David' },
         to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
         labels: [],
+        signature: 'Puki',
       },
       {
         id: '19345',
@@ -258,6 +279,7 @@ function _createEmails() {
         from: { email: 'puki@gmail.com', name: 'Puki Ben David' },
         to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
         labels: [],
+        signature: 'Puki',
       },
       {
         id: '12305',
@@ -271,6 +293,7 @@ function _createEmails() {
         from: { email: 'puki@gmail.com', name: 'Puki Ben David' },
         to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
         labels: [],
+        signature: 'Puki',
       },
     ]
     utilService.saveToStorage(EMAIL_KEY, emails)

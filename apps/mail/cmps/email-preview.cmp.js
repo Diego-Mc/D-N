@@ -17,13 +17,22 @@ export default {
         <section class="tools">
           <i
             @click.stop="doRead"
-            :class="toggleClass(email.isRead,'bi bi-envelope')"></i>
+            :class="toggleClass(email.isRead,'bi bi-envelope')"
+            :title="email.isRead ? 'Mark as unread': 'Mark as read'"></i>
           <i
             @click.stop="doTrash"
-            :class="toggleClass(email.isRemoved,'bi bi-trash')"></i>
+            :class="toggleClass(email.removedAt,'bi bi-trash')"
+            :title="email.removedAt ? 'Fully remove': 'Move to trash'"></i>
           <i
+            v-if="!email.removedAt"
             @click.stop="doStar"
-            :class="toggleClass(email.isStarred,'bi bi-star')"></i>
+            :class="toggleClass(email.isStarred,'bi bi-star')"
+            :title="email.isStarred ? 'Unstar': 'Star'"></i>
+          <i
+            v-else
+            @click.stop="doRestore"
+            class="bi bi-arrow-counterclockwise"
+            title="Restore"></i>
         </section>
       </section>
       <small class="email-time f-s f-clr-light">{{timeStr}}</small>
@@ -39,7 +48,7 @@ export default {
   },
   methods: {
     emailSelect() {
-      eventBus.emit('readEmail', this.email, true)
+      eventBus.emit('markAsRead', this.email, true)
       if (this.folderName !== 'draft') this.$emit('emailSelected', this.email)
       else {
         this.$router.push({
@@ -58,7 +67,10 @@ export default {
       eventBus.emit('removeEmail', this.email)
     },
     doRead() {
-      eventBus.emit('readEmail', this.email)
+      eventBus.emit('markAsRead', this.email)
+    },
+    doRestore() {
+      eventBus.emit('restoreEmail', this.email)
     },
     toggleClass(bool, classStr) {
       return classStr + (bool ? '-fill' : '')

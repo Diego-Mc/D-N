@@ -37,3 +37,77 @@
   object-fit: cover;
   border-radius: 4px;
 }
+
+/* MEDIA QUERIES */
+.email-main .expend-icon,
+.email-main .back-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 1rem;
+  margin: 24px;
+  color: var(--clr-main-lighter);
+}
+
+.email-main .back-icon {
+  display: none;
+}
+
+.email-main .expend-icon:hover {
+  color: unset;
+}
+
+.email-main:has(.expended) {
+  grid-template-areas: 'folders details details details details details details details details details';
+}
+
+.email-main:has(.expended) .email-list {
+  display: none;
+}
+
+@media screen and (max-width: 1000px) {
+  .email-main .expend-icon {
+    display: none;
+  }
+
+  .email-main .back-icon {
+    display: block;
+  }
+
+  .email-main {
+    grid-template-areas: 'folders main main main main main main main main main';
+  }
+
+  .email-details {
+    display: none;
+  }
+
+  .email-details.preview {
+    display: none !important;
+  }
+
+  .email-compose {
+    display: none;
+  }
+
+  .email-list {
+    grid-area: main;
+  }
+
+  .email-main:has(.email-preview:is(.selected, .reply)) .email-details,
+  .email-main .email-compose {
+    display: flex;
+    grid-area: main;
+  }
+  .email-main:has(.email-preview:is(.selected, .reply)) .email-list,
+  .email-main:has(.email-compose) .email-list {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 770px) {
+  .email-main {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-areas: 'folders folders main main main main main main main main main main';
+  }
+}
