@@ -10,7 +10,7 @@ export default {
                 <i class="bi bi-image"></i>
             </div> 
             <note-colors :note-id="noteId"/>
-            <i @click="noteToMail" class="bi bi-envelope"></i>
+            <i v-if="noteId" @click="noteToMail" class="bi bi-envelope"></i>
             <i @click="listClicked" class="bi bi-list-task"></i>
             <i v-if="!noteId" @click="canvasClicked" class="bi bi-pencil"></i>
             <i v-if="!noteId" @click="mapIconClicked" class="bi bi-geo-alt"></i>
@@ -56,8 +56,7 @@ export default {
             };
         },
         noteToMail() {
-            this.$route.push({ isComposed: true, noteId: this.noteId })
-            eventBus.emit('note-to-mail')
+            eventBus.emit('onNoteMailed',this.noteId)
         },
         onDelete() {
             eventBus.emit('delete-note', this.noteId)

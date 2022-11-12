@@ -61,12 +61,11 @@ export default {
     }
   },
   created() {
-    eventBus.on('mailed-note', () => {
-      this.info.title = this.$route.title
-      this.info.txt = this.$route.title
-      this.addNote
-    })
-
+    const query = this.$route.query
+    if (query.title) {
+      this.note.info.title = query.title
+      this.note.info.txt = query.title
+    }
     this.initNote()
     if (!this.renderedEditors) {
       eventBus.on(`app-clicked`, this.onAdd)
@@ -103,8 +102,12 @@ export default {
     this.pinClass = this.note.isPinned ? '-fill' : ''
   },
   methods: {
-    noteChanged(){
-      if(this.editedNoteId){
+    noteToMail() {
+      const query = this.$route.query
+      this.$router.push({ query: { isCompose: true, isNote: true, title: 'Hello', body: 'hey' } })
+    },
+    noteChanged() {
+      if (this.editedNoteId) {
         eventBus.emit('note-changed', this.note)
       }
     },
