@@ -5,10 +5,13 @@ export default {
     template: `
         <section>
           <ul class="books-list">
-            <li v-for="book in books" :src="book.thumbnail"><book-preview :book="book"/></li>
+            <li v-for="book in books" :src="book.thumbnail"><book-preview :book="book" :key="book.id"/></li>
           </ul>
         </section>
     `,
+    created() {
+        console.log(this.books)
+    },
     methods:{
         selected(id){
             this.$emit('selected',id)

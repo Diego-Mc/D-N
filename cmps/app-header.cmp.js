@@ -16,8 +16,11 @@ export default {
         <router-link to="/booky">Booky</router-link>
         <router-link to="/about">temp</router-link>
       </nav>
-      <advanced-search v-else/>
-
+      <div v-else>
+      <button>d</button>
+      <advanced-search/>
+      </div >
+    
       <i class="bi bi-grid-fill"></i>
     </header>
   `,

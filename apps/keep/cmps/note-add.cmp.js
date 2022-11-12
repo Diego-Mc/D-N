@@ -8,7 +8,7 @@ import noteMap from './note-map.cmp.js'
 import audioInput from './note-audio.cmp.js'
 
 export default {
-  props: ['editedNoteId', 'notes', 'renderedEditors','clicked'],
+  props: ['editedNoteId', 'notes', 'renderedEditors', 'clicked'],
   emits: ['add-note'],
   template: `
             <div class="add-note-container" @click.stop :class="noteBackgroundColor">
@@ -34,7 +34,6 @@ export default {
                      <audio-input v-if="isShowAudio" @got-audio="addAudioUrl"/>
                     <audio v-if="note.audioUrl" :src="note.audioUrl" controls></audio>
                   <edit-icons :note-id="editedNoteId || note.id"/>
-                  <button @click="onAdd"></button>
                   </div>
                 </div>
                
@@ -47,12 +46,13 @@ export default {
         mediaType: null,
         audioUrl: null,
         isPinned: false,
-        color: null,
+        color: 'white',
         info: {
           txt: null,
           title: null,
           todos: []
         },
+        labels: [],
       },
       // weird name.
       isExpandAddNote: false,
@@ -86,7 +86,7 @@ export default {
         this.changeMediaType(obj.mediaType)
         // eventBus.emit('note-changed', this.note)
         // eventBus.emit(`note-changed-${this.note.id}`, this.note)
-       
+
       })
 
     }
@@ -117,14 +117,16 @@ export default {
         this.$emit('add-note', { ...this.note })
       }
       this.note = {
-        imgUrl: null,
-        color: null,
+        mediaUrl: null,
+        color: 'white',
         isPinned: false,
         info: {
           txt: null,
           title: null,
           todos: [],
-        }
+        },
+        labels: [],
+
       }
       this.setPinClass()
     },
@@ -185,8 +187,8 @@ export default {
     },
     changeMediaType(type) {
       this.note.mediaType = type
-     
-         },
+
+    },
     removeMedia() {
       this.note.mediaType = null
       this.note.mediaUrl = null

@@ -1,7 +1,7 @@
 import { booksService } from '../services/books.service.js'
 import { eventBus } from '../../../../services/event-bus.service.js'
 import bookList from '../cmps/book-list.cmp.js'
-import bookDetails from './book-details.cmp.js'
+// import bookDetails from './book-details.cmp.js'
 import bookFilter from '../cmps/book-filter.cmp.js'
 import bookAdd from '../cmps/book-add.cmp.js'
 
@@ -10,7 +10,7 @@ export default {
         <section v-if="books">
             <book-add @add-google-book="addBook"/>
             <book-filter v-if="!selectedBook" @filtered="setFilter"></book-filter>
-            <book-list v-if="!selectedBook" :books="booksToShow" @selected="selectBook" />
+            <book-list v-if="!selectedBook" :books="this.books" @selected="selectBook" />
             <!-- <book-details v-else :book="selectedBook" @show-books="resetSelectedBook"/> -->
         </section>
     `,
@@ -43,24 +43,26 @@ export default {
       })
     },
   },
+  booksToShow() {
+    const regex = new RegExp(this.filterBy.name, 'i')
+    console.log(this.books)
+    return this.books.filter((book) => {
+      return (
+        regex.test(book.title) &&
+        book.listPrice.amount > this.filterBy.fromPrice &&
+        book.listPrice.amount < this.filterBy.toPrice
+      )
+    })
+  }
+  ,
   computed: {
-    booksToShow() {
-      const regex = new RegExp(this.filterBy.name, 'i')
-      console.log(this.books)
-      return this.books.filter((book) => {
-        return (
-          regex.test(book.title) &&
-          book.listPrice.amount > this.filterBy.fromPrice &&
-          book.listPrice.amount < this.filterBy.toPrice
-        )
-      })
-    },
 
-    components: {
-      bookList,
-      bookDetails,
-      bookFilter,
-      bookAdd,
-    },
+  },
+  components: {
+    bookList,
+    // bookDetails,
+    bookFilter,
+    bookAdd,
   },
 }
+

@@ -7,14 +7,14 @@ import previewIcons from "./preview-icons.cmp.js"
 export default {
     props: ['note'],
     template: `  
-    <div class="note-preview"
+    <div    class="note-preview"
              draggable
              @dragstart="startDrag($event,note)"
              @mouseleave="isShowIcons = false" 
              @drop="onDrop($event)" >
             <div @mouseover="isShowIcons = true" :class="noteBackgroundColor"  style="border-radius:20px;">
                 <i v-if="note.isPinned" class="note-pin bi bi-pin-fill"></i>
-                <component :is="mediaComp" :media="mediaUrl"></component>            
+                <component :is="note.mediaType" :media="note.mediaUrl"></component>            
                 <div class="preview-text">
                     <h3 class="note-title">{{note.info.title}}</h3>
                     <p>{{note.info.txt}}</p>
@@ -40,15 +40,12 @@ export default {
             mediaUrl: null
         }
     }, created() {
-        eventBus.on(`note-changed-${this.note.id}`, (updatedNote) => {
-            this.mediaUrl = updatedNote.mediaUrl
-            this.mediaType = this.note.mediaType
-        })
+        // eventBus.on(`note-changed-${this.note.id}`, (updatedNote) => {
+        //     this.mediaUrl = updatedNote.mediaUrl
+        //     this.mediaType = this.note.mediaType
+        // })
         this.mediaType = this.note.mediaType === 'noteCanvas' ? 'noteImg' : this.note.mediaType
         this.mediaUrl = this.note.mediaUrl
-    },
-    emits: {
-        onDelete: null,
     },
     methods: {
         startDrag(evt, item) {

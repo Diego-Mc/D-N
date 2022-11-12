@@ -21,11 +21,95 @@ export const booksService = {
     getGoogleBook,
     addGoogleBook,
     getPrevNextBookIds,
+    getAdvancedSearchOptions
 
 }
 
-function query() {
-    return storageService.query(BOOKS_KEY)
+
+function query({
+    search = '',
+    readingLength = undefined,
+    recency = undefined,
+    sale = false,
+    categories = [],
+} = {}) {
+    return storageService.query(BOOKS_KEY).then((books) => {
+        console.log(books);
+        return books
+            .filter((b) => {
+                return b.title.toLowerCase().includes(search.toLowerCase()) || b.authors.some(a.toLowerCase().includes(search.toLowerCase()))
+            })
+            .filter((b) => {
+                if (!categories.length) return true
+                if (!b.categories) return false
+                return b.categories.every(c => categories.includes(c))
+            }).filter(b => {
+                if (!readingLength) return true
+                return b.readingLength === readingLength
+            }).filter(b => {
+                if (!sale || b.listPrice.amout < 130) return true
+                else return false
+            })
+            .filter(b => {
+                if(!recency) return true
+                const date = new Date()
+                console.log(parseInt(b.publishedDate.slice(0,4)));
+                const diff = date.getFullYear() - parseInt(b.publishedDate.slice(0,4))
+                if (diff > 10) return  false
+                else return true
+            })
+    })
+}
+
+function getAdvancedSearchOptions() {
+    return {
+        cmps: [
+
+            {
+                type: 'radioCheck',
+                info: {
+                    label: 'On Sale',
+                    opts: [
+                        { txt: 'products on sale', val: true },
+                        { txt: 'all products', val: false },
+                    ],
+                    key: 'sale',
+                },
+            },
+            {
+                type: 'radioCheck',
+                info: {
+                    label: 'Reading Length',
+                    opts: [
+                        { txt: 'short reading', val: 100 },
+                        { txt: 'decent reading', val: 200 },
+                        { txt: 'long reading', val: 500 },
+                    ],
+                    key: 'readingLength',
+                },
+            },
+            {
+                type: 'radioCheck',
+                info: {
+                    label: 'Recency',
+                    opts: [
+                        { txt: 'new', val: false },
+                        { txt: 'old', val: true },
+                    ],
+                    key: 'recency',
+                },
+            },
+            {
+                type: 'checkBox',
+                info: {
+                    label: 'Categories',
+                    opts: ['biography', 'computers', 'electronic', 'trademarks'],
+                    key: 'categories',
+                },
+            },
+
+        ],
+    }
 }
 
 function _createBooks() {
@@ -38,17 +122,25 @@ function _createBooks() {
             authors: book.volumeInfo.authors,
             description: book.volumeInfo.description,
             pageCount: book.volumeInfo.pageCount,
+            readingLength: setReadingLength(book.volumeInfo.pageCount),
             publishedDate: book.volumeInfo.publishedDate,
             thumbnail: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : '../../assets/BooksImages/2.jpg',
             listPrice: {
                 amount: parseInt(Math.random() * 100),
                 currencyCode: "EUR",
             },
+            categories: book.volumeInfo.categories
         }))
+
         utilService.saveToStorage(BOOKS_KEY, books)
     }
-    console.log(books);
     return books
+}
+
+function setReadingLength(count) {
+    if (count > 500) return 'Long Reading'
+    if (count > 200) return 'Decent Reading'
+    if (count > 100) return 'Light Reading'
 }
 
 function get(bookId) {
@@ -104,7 +196,6 @@ function getGoogleBook(searchTxt) {
     return fetch(`https://www.googleapis.com/books/v1/volumes?printType=books&q=${searchTxt}`)
         .then((response) => response.json())
         .then(booksList => {
-
             const books = booksList.items.map(book => ({
                 id: book.id,
                 title: book.volumeInfo.title,
@@ -112,12 +203,15 @@ function getGoogleBook(searchTxt) {
                 authors: book.volumeInfo.authors,
                 description: book.volumeInfo.description,
                 pageCount: book.volumeInfo.pageCount,
+                readingLength: setReadingLength(book.volumeInfo.pageCount),
                 publishedDate: book.volumeInfo.publishedDate,
                 thumbnail: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : '../BooksImages/2.jpg',
                 listPrice: {
                     amount: parseInt(Math.random() * 100),
                     currencyCode: "EUR",
                 },
+                categories: book.volumeInfo.categories
+
             }))
             cache[searchTxt] = books
             _save(CACHE_KEY, cache)

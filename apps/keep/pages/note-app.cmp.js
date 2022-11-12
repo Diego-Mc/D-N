@@ -85,7 +85,9 @@ export default {
             eventBus.emit('app-clicked')
         },
         deleteNote(noteId) {
-            noteService.remove(noteId).then(noteService.query).then(notes => this.notes = notes)
+            noteService.remove(noteId)
+            const idx = this.notes.findIndex(note => note.id === noteId)
+            this.notes.splice(idx, 1)
         },
         onFilter(filters) {
             this.filterBy = filters
@@ -143,7 +145,7 @@ export default {
         },
     },
     watch: {
-     
+
     },
     components: {
         noteAdd,
