@@ -18,9 +18,6 @@ export default {
     , created() {
     },
     methods: {
-        wa(){
-            console.log('wa');
-        },
         screenClicked(){
             this.clicked= true
         }

@@ -1,4 +1,5 @@
 import { eventBus } from '../../../services/event-bus.service.js'
+import userMsg from '../../../cmps/user-msg.cmp.js'
 import noteColors from './note-colors.cmp.js'
 export default {
     props: ['note-id', 'bin'],
@@ -60,6 +61,8 @@ export default {
         },
         onDelete() {
             eventBus.emit('delete-note', this.noteId)
+            eventBus.emit('show-msg', { txt: 'Note Delete' })
+
         },
         getPosition() {
             return new Promise((resolve, reject) => {
@@ -68,5 +71,6 @@ export default {
         },
     }, components: {
         noteColors,
+        userMsg
     }
 }

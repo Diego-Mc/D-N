@@ -1,4 +1,5 @@
 import { eventBus } from '../../../services/event-bus.service.js'
+import { showSuccessMsg } from '../../../services/event-bus.service.js'
 import noteColors from './note-colors.cmp.js'
 import noteTags from './note-tags.cmp.js'
 
@@ -16,6 +17,7 @@ export default {
 
     methods: {
         onDelete() {
+          showSuccessMsg('Note Deleted')
             eventBus.emit('delete-note', this.noteId)
         },onDuplicate(){
             eventBus.emit('on-duplicate', this.noteId)

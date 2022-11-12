@@ -1,6 +1,7 @@
 import editIcons from './edit-icons.cmp.js'
 import { eventBus } from '../../../services/event-bus.service.js'
 
+import userMsg from '../../../cmps/user-msg.cmp.js'
 import noteVideo from '../cmps/note-video.cmp.js'
 import noteImg from '../cmps/note-img.cmp.js'
 import noteCanvas from '../cmps/note-canvas.cmp.js'
@@ -126,13 +127,13 @@ export default {
       eventBus.emit('todo-clicked', { note: this.note, index })
     },
     onAdd() {
-      console.log(this.notes);
       if (this.$route.params.id) {
         this.$router.push('/keepy')
         eventBus.emit('note-changed', this.note)
         eventBus.emit(`note-changed-${this.note.id}`, this.note)
         return
       }
+      eventBus.emit('show-msg', { txt: 'Note Added' })
       this.isShowAudio = false
       this.isExpandAddNote = false
       const info = this.note.info
@@ -204,12 +205,11 @@ export default {
       this.note.mediaType = 'noteVideo'
     },
     embedLink() {
-      const startIdx = this.note.info.txt.indexOf('=') + 1
-      const endIdx = this.note.info.txt.indexOf('&')
-      this.note.mediaUrl = `https://www.youtube.com/embed/${this.note.info.txt.slice(
-        startIdx,
-        endIdx
-      )}`
+      const regex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/
+      // https://www.youtube.com/watch?v=VZZTNtXEqp4&ab_channel=EternalRaijin
+     
+      this.note.mediaUrl =  `https://www.youtube.com/embed/${this.note.info.txt.match(regex)[1]}`
+
     },
     saveCanvas(url) {
       this.note.mediaUrl = url
@@ -252,5 +252,6 @@ export default {
     noteCanvas,
     noteMap,
     audioInput,
+
   },
 }
