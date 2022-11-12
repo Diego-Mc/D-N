@@ -4,14 +4,13 @@ import { eventBus } from '../../../services/event-bus.service.js'
 import noteVideo from '../cmps/note-video.cmp.js'
 import noteImg from '../cmps/note-img.cmp.js'
 import noteCanvas from '../cmps/note-canvas.cmp.js'
-import noteRecord from '../cmps/note-record.cmp.js'
 import noteMap from './note-map.cmp.js'
+import audioInput from './note-audio.cmp.js'
+
 export default {
-  props: ['editedNoteId', 'notes'],
+  props: ['editedNoteId', 'notes', 'renderedEditors'],
   emits: ['add-note'],
   template: `
-                <!-- <note-record @audio-recorded="addAudioUrl"/> -->
-                
             <div class="add-note-container" @click.stop :class="noteBackgroundColor">
                     <div v-if="note.mediaType">
                     <i @click="removeMedia" class='bi bi-trash remove-media-icon'></i>    
@@ -32,8 +31,10 @@ export default {
                             <button v-if="item.txt" @click.stop.prevent="removeTodo(index)">X</button>
                         </li>
                       </ul>
-                    <audio v-if="this.note.audioUrl" :src="this.note.audioUrl" controls></audio>
+                     <audio-input v-if="isShowAudio"  @got-audio="addAudioUrl"/>
+                    <audio v-if="note.audioUrl" :src="note.audioUrl" controls></audio>
                   <edit-icons :note-id="editedNoteId || note.id"/>
+                  <button @click="onAdd"></button>
                   </div>
                 </div>
                
@@ -44,6 +45,7 @@ export default {
       note: {
         mediaUrl: null,
         mediaType: null,
+        audioUrl: null,
         isPinned: false,
         color: null,
         info: {
@@ -55,29 +57,40 @@ export default {
       // weird name.
       isExpandAddNote: false,
       pinClass: null,
-
+      isShowAudio: false,
     }
   },
   created() {
     this.initNote()
-    eventBus.on(`update-note-${this.editedNoteId || ''}`, (obj) => {
-      this.note[obj.prop] = obj.val
-      if (obj.prop === 'mediaUrl') {
-        this.note.mediaType = 'noteImg'
-      }
-      eventBus.emit('note-changed', this.note)
-    })
-    eventBus.on(`list-clicked`, this.onAddTodo)
-    eventBus.on(`canvas-clicked-${this.editedNoteId || ''}`, this.changeMediaType)
-    eventBus.on(`map-icon-clicked-${this.editedNoteId || ''}`, (obj) => {
-      this.note.mediaUrl = { lat: obj.pos.coords.latitude, lng: obj.pos.coords.longitude }
-      this.changeMediaType(obj.mediaType)
-    })
-    eventBus.on(`app-clicked`, this.onAdd)
+    if (!this.renderedEditors) {
+      eventBus.on(`app-clicked`, this.onAdd)
+    }
+    if (!this.renderedEditors || !this.renderedEditors.includes(this.note.id)) {
+      eventBus.emit('new-editor-rendered', this.note.id)
+      eventBus.on(`update-note-${this.editedNoteId || ''}`, (obj) => {
+        this.note[obj.prop] = obj.val
+        if (obj.prop === 'mediaUrl') {
+          this.note.mediaType = 'noteImg'
+        }
+        eventBus.emit('note-changed', this.note)
+
+      })
+      eventBus.on(`list-clicked-${this.editedNoteId || ''}`, this.onAddTodo)
+      eventBus.on(`record-clicked-${this.editedNoteId || ''}`, this.showRecordInputs)
+      eventBus.on(`canvas-clicked-${this.editedNoteId || ''}`, this.changeMediaType)
+      eventBus.on(`map-icon-clicked-${this.editedNoteId || ''}`, (obj) => {
+        this.note.mediaUrl = { lat: obj.pos.coords.latitude, lng: obj.pos.coords.longitude }
+        this.changeMediaType(obj.mediaType)
+      })
+
+    }
+
     this.pinClass = this.note.isPinned ? '-fill' : ''
   },
   methods: {
     addAudioUrl(url) {
+
+
       this.note.audioUrl = url
     },
     expandInputs() {
@@ -87,10 +100,11 @@ export default {
       eventBus.emit('todo-clicked', { note: this.note, index })
     },
     onAdd() {
-
       if (this.$route.params.id) {
-        eventBus.emit('note-changed', this.note)
+
         this.$router.push('/keepy')
+        console.log( this.note);
+        eventBus.emit('note-changed', this.note)
         return
       }
       this.isExpandAddNote = false
@@ -166,9 +180,11 @@ export default {
       this.note.mediaType = type
     },
     removeMedia() {
-      console.log('wa');
       this.note.mediaType = null
       this.note.mediaUrl = null
+    },
+    showRecordInputs() {
+      this.isShowAudio = !this.isShowAudio
     }
 
   }, computed: {
@@ -180,7 +196,6 @@ export default {
     getMediaUrl() {
       return this.note.mediaUrl
     },
-
   },
   watch: {
     'note.info.txt': function () {
@@ -193,7 +208,7 @@ export default {
     noteVideo,
     noteImg,
     noteCanvas,
-    noteRecord,
-    noteMap
+    noteMap,
+    audioInput
   }
 }

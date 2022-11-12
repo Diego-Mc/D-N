@@ -6,6 +6,8 @@
 @import './edit-icons.css';
 @import './note-map.css';
 @import './note-canvas.css';
+@import './audio-input.css';
+@import './preview-icons.css';
 
 .note-pin {
   position: absolute;

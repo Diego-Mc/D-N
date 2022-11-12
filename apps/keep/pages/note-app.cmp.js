@@ -12,39 +12,53 @@ export default {
     template: `
     <main @click="onClick" v-if="notes" class="note-app">
         <div>
-            <note-filter @notes-filtered="onFilter"/>
+            <!-- <note-filter @notes-filtered="onFilter"/> -->
             <note-add @add-note="addNote" :notes="notes"/>
         </div>
         <div v-if="notes"> 
             <note-list  :notes="getNotesByPinned(true)" type="PINNED"  @on-delete="deleteNote"/>
             <note-list :notes="getNotesByPinned(false)"  type="OTHERS"  @on-delete="deleteNote"/>
         </div>
-        <router-view :notes="notes"></router-view>
+        <router-view :notes="notes" :renderedEditors="renderedEditors"></router-view>
     </main>
     `, data() {
         return {
             notes: null,
             pinnedNotes: [],
             unpinnedNotes: null,
-           
             filterBy: {
                 txt: '',
-            }
+            },
+            renderedEditors: [],
         }
     }, created() {
         noteService.query().then(notes => this.notes = notes)
-        eventBus.on('get-notes', obj => ({ notes: this.notes }))
+        eventBus.on('note-dropped', swappedNotes => {
+            const idx1 = this.notes.findIndex(note => note.id === swappedNotes.dragged)
+            const idx2 = this.notes.findIndex(note => note.id === swappedNotes.dropped)
+            if(idx1<0 || idx2 < 0) return
+            var temp = this.notes[idx1];
+            this.notes[idx1] = this.notes[idx2];
+            this.notes[idx2] = temp
+            noteService.saveNotes( this.notes)
+        })
+        eventBus.on('new-editor-rendered', id => this.renderedEditors.push(id))
         eventBus.on('delete-note', noteId => this.deleteNote(noteId))
-        eventBus.on('note-changed', (changedNote) => noteService.save(changedNote))
+        eventBus.on('note-changed', (changedNote) => {
+            const idx = this.notes.findIndex(note => note.id === changedNote.id)
+            if (idx < 0) return
+            this.notes.splice(idx, 1, changedNote)
+            noteService.save(changedNote)
+        })
         eventBus.on('todo-clicked', obj => {
-            
+
             const note = obj.note
             const index = obj.index
-            
+
             note.info.todos[index].isChecked = !note.info.todos[index].isChecked
             noteService.save(note).then(() => {
                 const idx = this.notes.findIndex(note => note.id === note.id)
-                this.notes.splice(idx, note)
+                this.notes.splice(idx, 1, note)
             })
         })
         eventBus.on('todo-removed', obj => {
@@ -53,9 +67,15 @@ export default {
             note.info.todos.splice(index, 1)
             noteService.save(note).then(() => {
                 const idx = this.notes.findIndex(note => note.id === note.id)
-                this.notes.splice(idx, note)
+                this.notes.splice(idx, 1, note)
             })
-        })
+        }),
+            eventBus.on('on-duplicate', noteId => {
+                const idx = this.notes.findIndex(note => note.id === noteId)
+                const clone = JSON.parse(JSON.stringify(this.notes[idx]))
+                noteService.create(clone).then(note => this.notes.push(note))
+
+            })
 
     }, methods: {
         addNote(note) {
@@ -63,7 +83,7 @@ export default {
             noteService.create(note)
         },
         onClick() {
-           eventBus.emit('app-clicked')
+            eventBus.emit('app-clicked')
         },
         deleteNote(noteId) {
             noteService.remove(noteId).then(noteService.query).then(notes => this.notes = notes)
@@ -86,7 +106,6 @@ export default {
             })
         },
         getNotesByPinned(isPinned) {
-            if (!this.notes) return
             let ha = this.notes.filter(note => {
                 return note.isPinned === isPinned
             })
@@ -101,7 +120,7 @@ export default {
                 else return true
             })
         },
-        saveNote(note){
+        saveNote(note) {
             noteService.put(note)
         },
         connectGoogleApi() {
@@ -125,7 +144,9 @@ export default {
         },
     },
     watch: {
-
+        getNotesByPinned(){
+            console.log('wa');
+        }
     },
     components: {
         noteAdd,

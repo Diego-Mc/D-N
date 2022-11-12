@@ -1,24 +1,24 @@
 import noteAdd from "./note-add.cmp.js"
-import { eventBus } from "../../../services/event-bus.service.js"
 export default {
-    props:['notes'],
+    props: ['notes','renderedEditors'],
     template: `  
         <div class="note-editor" @clicked.stop>
-            <note-add :editedNoteId="$route.params.id" :notes="notes"/>
+            <note-add :editedNoteId="$route.params.id" :notes="notes" :renderedEditors="renderedEditors"/>
         </div>
 
         <!-- <router-link to="/keepy">  -->
             <div class="screen"></div>
         <!-- </router-link> -->
        
-    `,data() {
+    `, data() {
         return {
-            note:null,
+            note: null,
         }
     }
-    ,created() {
-        // eventBus.on('screen-click',)
-        let noteId = this.$route.params.id
+    , created() {
+    },
+    methods: {
+
     },
     components: {
         noteAdd

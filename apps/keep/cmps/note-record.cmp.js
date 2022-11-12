@@ -1,15 +1,17 @@
 export default {
     template: `
+        <h4>or record yourself</h4>
+
          <div class="container" @click.stop.prevent>
             <div id="player"></div>
             <div class="display"></div>
             <div class="controllers">
 
             </div>
-                <button v-if="showRecordBtn" @click="record" id="record">start recording</button> 
-                <button v-if="showStopBtn" @click="stopRecording" id="stop">stop</button>
+                <i v-if="showRecordBtn" @click="record" id="record" class="bi bi-record-circle" ></i>
+                <i v-if="showStopBtn" @click="stopRecording" id="stop"  class="bi bi-stop-fill"></i>
                 <!-- <button @click="record" id="record">record again</button>   -->
-        </div>
+             </div>
     `,
     data() {
         return {
@@ -29,7 +31,6 @@ export default {
         this.controllerWrapper = document.querySelector('.controllers')
 
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            console.log('mediaDevices supported..')
 
             navigator.mediaDevices.getUserMedia({
                 audio: true
@@ -44,7 +45,7 @@ export default {
                     const blob = new Blob(this.chunks, { 'type': 'audio/ogg; codecs=opus' })
                     this.chunks = []
                     this.audioURL = window.URL.createObjectURL(blob)
-                    this.$emit('audio-recorded',this.audioURL)
+                    this.$emit('got-audio',this.audioURL)
                     // document.querySelector('audio').src = this.audioURL
 
                 }
@@ -102,7 +103,7 @@ export default {
         addMessage(text) {
             const msg = document.createElement('p')
             msg.textContent = text
-            // this.display.append(msg)
+            this.display.append(msg)
         }
         ,
         addAudio() {
@@ -126,7 +127,6 @@ export default {
                 case 'Record':
                     this.clearDisplay()
                     this.clearControls()
-
                     this.addMessage('Recording...')
                     this.addButton('stop', 'stopRecording()', 'Stop Recording')
                     break

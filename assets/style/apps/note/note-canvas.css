@@ -1,5 +1,7 @@
 .canvas-container {
     position: relative;
+    cursor: url('../../../icons/pencil-fill.svg') 0 16, auto;
+  /* cursor: url('../../../../icons/eraser-fill.svg') 0 16, auto; */
 }
 
 .stroke-color-input {

@@ -4,7 +4,12 @@ export default {
     props: ['notes', 'type'],
     template: `  
         <h6 style="margin-bottom:10px;">{{type}}</h6>
-        <section class="notes-list">
+        <section 
+            class="notes-list"
+            @drop="onDrop($event)"
+            @dragover.prevent
+            @dragenter.prevent
+            >
             <note-preview v-for="note in notes" :note="note" @note-clicked="noteClicked" @on-delete="onDelete"/>
         </section> 
     `, created() {
@@ -15,6 +20,9 @@ export default {
 
     },
     methods: {
+        onDrop(event){
+            
+        },
         noteClicked(noteId) {
             this.$emit('note-clicked', noteId)
         },

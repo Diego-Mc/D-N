@@ -7,4 +7,6 @@
   column-gap: 20px;
   column-count: 3;
   padding-inline: calc((100% - (264px * 3) - 50px) / 2);
+  /* display: grid; */
+  /* grid-template-columns: 1fr 1fr 1fr; */
 }

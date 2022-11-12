@@ -5,7 +5,7 @@ export default {
             <canvas ref="canvas" id="canvas" @mousemove="onMove">
             </canvas>
             <input v-model="strokeColor" class="stroke-color-input" type="color" />
-            
+            <!-- <i class="bi bi-eraser-fill" class="canvas-eraser-icon"></i> -->
         </div>
             
              `

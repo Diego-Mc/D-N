@@ -1,0 +1,12 @@
+
+.preview-icons-container{
+    position: absolute;
+    display: none;
+}
+
+
+.note-preview:hover .preview-icons-container {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}

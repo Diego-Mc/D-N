@@ -7,27 +7,29 @@
   margin-bottom: 20px;
 
 }
-.note-preview ul{
+
+.note-preview ul {
   padding-left: 0;
 }
-.note-preview li{
+
+.note-preview li {
   list-style: none;
 }
 
-.note-preview li input{
+.note-preview li input {
   margin-left: 0;
 }
 
-.note-preview li input:checked + label {
+.note-preview li input:checked+label {
   text-decoration: line-through;
 }
 
-.note-preview img{
-border-radius: 10px 10px 0 0 ;
-max-height: 500px;
+.note-preview img {
+  border-radius: 10px 10px 0 0;
+  max-height: 500px;
 }
 
-.preview-text{
+.preview-text {
   padding: 20px 45px 45px 20px;
 }
 
@@ -38,4 +40,3 @@ max-height: 500px;
 .large {
   height: 310px;
 }
-
