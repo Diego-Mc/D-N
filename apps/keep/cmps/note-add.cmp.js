@@ -19,9 +19,9 @@ export default {
                 <div class="editor-content">
                   <div v-if="isExpandAddNote" >
                       <i  class="note-pin bi" :class="'bi-pin' + pinClass" @click="togglePin"></i>
-                      <textarea v-model="note.info.title" type="textarea" :class="noteBackgroundColor" placeholder="Title" @change="noteChanged"></textarea>
+                      <textarea v-model="note.info.title" type="textarea" :class="noteBackgroundColor" placeholder="Title" @input="noteChanged"></textarea>
                   </div>
-                  <textarea v-model="note.info.txt" @click="expandInputs" type="textarea" :class="noteBackgroundColor" placeholder="Take a note or enter Youtube URL..." @change="noteChanged"></textarea>
+                  <textarea v-model="note.info.txt" @click="expandInputs" type="textarea" :class="noteBackgroundColor" placeholder="Take a note or enter Youtube URL..." @input="noteChanged"></textarea>
                   <div v-if="isExpandAddNote" >
                       <ul>
                         <li v-for="(item,index) in note.info.todos" @click.stop :key="note.id + '-' + index">
@@ -65,6 +65,7 @@ export default {
     if (query.title) {
       this.note.info.title = query.title
       this.note.info.txt = query.txt
+      this.isExpandAddNote = true
     }
     this.initNote()
     if (!this.renderedEditors) {
@@ -127,10 +128,8 @@ export default {
     onAdd() {
       if (this.$route.params.id) {
         this.$router.push('/keepy')
-        console.log(this.note);
         eventBus.emit('note-changed', this.note)
         eventBus.emit(`note-changed-${this.note.id}`, this.note)
-
         return
       }
       this.isShowAudio = false

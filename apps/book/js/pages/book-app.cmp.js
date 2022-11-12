@@ -22,7 +22,6 @@ export default {
   },
   created() {
     this.queryBooks()
-
     eventBus.on('advancedSearch', (criteria) => {
       this.queryBooks(criteria)
     })

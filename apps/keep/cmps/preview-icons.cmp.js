@@ -5,13 +5,12 @@ import noteTags from './note-tags.cmp.js'
 export default {
     props:['note-id'],
     template: `
-        <div class="preview-icons-container" @click.stop.prevent @mouseleave=""> 
-            <router-link :to="'/keepy/' + noteId"><i class="bi bi-pencil-square"></i></router-link>
-            <i @click.prevent="onDelete" class='bi bi-trash'></i>
-            <note-colors :noteId="noteId"/>
-            <!-- <note-tags/> -->
-            <i @click="onDuplicate" class="bi bi-file-plus"></i>
-            <i class="bi bi-envelope-paper"></i>    
+            <i @click.prevent="onDelete" class="preview-trash-icon" class='bi bi-trash' style=""></i>
+                <div class="preview-icons-container" @click.stop.prevent @mouseleave=""> 
+            <!-- <router-link :to="'/keepy/' + noteId"><i class="bi bi-pencil-square"></i></router-link> -->
+            <i @click="onDuplicate" class="bi bi-file-plus" style="
+            position:absolute;
+            right:16px"></i>
         </div>
     `, 
 

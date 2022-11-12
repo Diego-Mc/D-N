@@ -35,13 +35,18 @@ export default {
   },
   created() {
     this.queryNotes()
-
+    // eventBus.on('pin-changed', (noteId) => {
+    //   const idx = this.notes.findIndex((note) => note.id === noteId)
+    //   console.log(idx);
+    //   this.notes[idx].isPinned = !this.notes[idx].isPinned
+    //   noteService.save(noteId)
+    // })
     eventBus.on('onNoteMailed', (id) => {
       let sendedNote = this.notes.find(note => note.id === id)
       this.$router.push({
         path: '/maily/inbox',
         query: {
-          isCompose:true,
+          isCompose: true,
           isNote: true,
           subject: sendedNote.info.title,
           body: sendedNote.info.txt,
@@ -100,7 +105,7 @@ export default {
   },
   methods: {
     queryNotes(criteria) {
-      noteService.query(criteria).then((notes) => (this.notes = notes))
+      noteService.query(criteria).then((notes) => (this.notes =notes))
     },
     addNote(note) {
       this.notes.push(note)
