@@ -90,3 +90,19 @@
 .note-preview .note-title {
   margin-bottom: 14px;
 }
+
+.note-pin-preview:hover{
+  background-color: transparent;
+  box-shadow: 0 0 0;
+}
+
+.preview-trash-icon{
+  position:absolute;
+  left:16px;
+  top:16px;
+  display: none;
+}
+
+.note-preview:hover .preview-trash-icon{
+  display: block;
+}

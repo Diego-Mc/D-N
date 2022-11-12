@@ -22,8 +22,6 @@ export default {
   },
   created() {
     this.queryBooks()
-    booksService
-      .query()
       .then((books) => {
         this.books = books
       })
@@ -33,6 +31,9 @@ export default {
       .then(() => this.checkSelectedBook())
   },
   methods: {
+    queryBooks() {
+      return booksService.query()
+    },
     selectBook(id) {
       this.selectedBook = this.books.find((book) => book.id === id)
     },

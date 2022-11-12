@@ -7,6 +7,7 @@ import previewIcons from './preview-icons.cmp.js'
 export default {
   props: ['note'],
   template: `
+  <router-link :to="'/keepy/'+ note.id" @click.prevent.stop>
     <div
       class="note-preview"
       draggable
@@ -15,7 +16,7 @@ export default {
       :class="noteBackgroundColor"
       @drop="onDrop($event)">
       <div @mouseover="isShowIcons = true" style="border-radius:20px;">
-        <i v-if="mediaType" class="note-pin bi bi-pin-fill"></i>
+      <i  class="note-pin bi note-pin-preview" :class="'bi-pin' + pinClass"  @click.stop.prevent="togglePin"></i>
         <component :is="mediaComp" :media="note.mediaUrl"></component>
         <div class="preview-text">
           <h3 class="note-title">{{note.info.title}}</h3>
@@ -44,22 +45,31 @@ export default {
         </div>
       </div>
     </div>
+    </router-link>
   `,
   data() {
     return {
       isShowIcons: false,
       mediaType: null,
       mediaUrl: null,
+      pinClass: null,
+
     }
   },
   created() {
-   
+    this.initPin()
     this.mediaType = this.note.mediaType === 'noteCanvas' ? 'noteImg' : this.note.mediaType
   },
   emits: {
     onDelete: null,
   },
   methods: {
+    initPin() {
+      this.pinClass = this.note.isPinned ? '-fill' : ''
+    },
+    togglePin() {
+      eventBus.emit(`pin-changed`, this.note.id)
+    },
     startDrag(evt, item) {
       evt.dataTransfer.dropEffect = 'move'
       evt.dataTransfer.effectAllowed = 'move'
@@ -84,8 +94,9 @@ export default {
       else return 'note-white'
     },
     mediaComp() {
-      return this.note.mediaType === 'noteCanvas' ? 'noteImg' :  this.note.mediaType
+      return this.note.mediaType === 'noteCanvas' ? 'noteImg' : this.note.mediaType
     },
+
   },
   watch: {
     mediaUrl: function () { },

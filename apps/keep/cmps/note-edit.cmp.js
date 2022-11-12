@@ -7,8 +7,7 @@ export default {
         </div>
 
         <div class="screen" @click="screenClicked"></div>
-        <!-- <router-link to="/keepy">  -->
-        <!-- </router-link> -->
+
        
     `, data() {
         return {
