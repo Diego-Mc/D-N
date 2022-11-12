@@ -14,45 +14,45 @@ export default {
             <!-- <book-details v-else :book="selectedBook" @show-books="resetSelectedBook"/> -->
         </section>
     `,
-  data() {
-    return {
-      books: null,
-      filterBy: { name: '', fromPrice: 0, toPrice: 1000 },
-      selectedBook: null,
-    }
-  },
-  created() {
-    booksService.query().then((books) => {
-      this.books = books
-    })
-  },
-  methods: {
-    selectBook(id) {
-      this.selectedBook = this.books.find((book) => book.id === id)
+    data() {
+        return {
+            books: null,
+            filterBy: { name: '', fromPrice: 0, toPrice: 1000 },
+            selectedBook: null,
+        }
     },
-    setFilter(filterBy) {
-      this.filterBy = filterBy
+    created() {
+        booksService.query().then((books) => {
+           this.books = books
+        })
     },
-    resetSelectedBook() {
-      this.selectedBook = null
+    methods: {
+        selectBook(id) {
+            this.selectedBook = this.books.find(book => book.id === id)
+        },
+        setFilter(filterBy) {
+            this.filterBy = filterBy
+        },
+        resetSelectedBook() {
+            this.selectedBook = null
+        },
+        addBook(book) {
+            booksService.addGoogleBook(book).then(book => {
+                eventBus.emit('user-msg', { txt: 'book added!', type: 'success' })
+                this.books.push(book)
+            })
+
+        }
     },
-    addBook(book) {
-      booksService.addGoogleBook(book).then((book) => {
-        eventBus.emit('user-msg', { txt: 'book added!', type: 'success' })
-        this.books.push(book)
-      })
-    },
-  },
-  computed: {
-    booksToShow() {
-      const regex = new RegExp(this.filterBy.name, 'i')
-      return this.books.filter((book) => {
-        return (
-          regex.test(book.title) &&
-          book.listPrice.amount > this.filterBy.fromPrice &&
-          book.listPrice.amount < this.filterBy.toPrice
-        )
-      })
+    computed: {
+        booksToShow() {
+
+            const regex = new RegExp(this.filterBy.name, 'i')
+            console.log(this.books);
+            return this.books.filter(book => {
+                return regex.test(book.title) && book.listPrice.amount > this.filterBy.fromPrice && book.listPrice.amount < this.filterBy.toPrice
+            })
+        }
     },
   },
   components: {

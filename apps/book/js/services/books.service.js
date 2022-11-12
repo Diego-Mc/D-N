@@ -82,7 +82,7 @@ function _save(CACHE_KEY, cache) {
 
 function getGoogleBook(searchTxt) {
   if (cache[searchTxt]) return Promise.resolve(cache[searchTxt])
-  else if (!searchTxt) return Promise.resolve(null)
+  else if (!searchTxt) return null
   return fetch(
     `https://www.googleapis.com/books/v1/volumes?printType=books&q=${searchTxt}`
   )
