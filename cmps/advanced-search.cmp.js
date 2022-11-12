@@ -6,6 +6,7 @@ import { emailService } from '../apps/mail/service/email.service.js'
 import { eventBus } from '../services/event-bus.service.js'
 
 export default {
+  props: ['service'],
   template: /* HTML */ `
     <div className="search-bg" v-if="isOpen" @click="closeSearch"></div>
     <form
@@ -41,7 +42,7 @@ export default {
     }
   },
   created() {
-    this.searchOptions = emailService.getAdvancedSearchOptions()
+    this.searchOptions = this.service.getAdvancedSearchOptions()
     this.setCriteria()
   },
   methods: {

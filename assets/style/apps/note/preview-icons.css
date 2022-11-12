@@ -1,12 +1,18 @@
-
-.preview-icons-container{
-    position: absolute;
-    display: none;
+.preview-icons-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  display: none;
+  padding-inline: 45px;
+  font-size: 1rem;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
-
 .note-preview:hover .preview-icons-container {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 20px;
 }

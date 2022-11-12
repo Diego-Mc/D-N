@@ -1,11 +1,11 @@
 import { eventBus } from '../../../services/event-bus.service.js'
 
 export default {
-    props: ['noteId'],
-    template: `
+  props: ['noteId'],
+  template: `
     <div class="change-color-container" @click.prevent >
-    <i class="bi bi-palette" @click="toggleColors"></i> 
-    <div class="colors-container" v-if="isShowColors" >
+    <i class="bi bi-palette" @click="toggleColors"></i>
+    <div class="colors-container" v-if="isShowColors" @mouseleave="isShowColors=false">
         <button @click="colorClicked('white')" class="note-white"></button>
         <button @click="colorClicked('blue')" class="note-blue"></button>
         <button @click="colorClicked('pink')" class="note-pink"></button>
@@ -16,18 +16,22 @@ export default {
         <button @click="colorClicked('green')" class="note-green"></button>
     </div>
 </div>`,
-    data() {
-        return {
-            isShowColors: false,
-        }
+  data() {
+    return {
+      isShowColors: false,
+    }
+  },
+  methods: {
+    colorClicked(color) {
+      const id = this.noteId || ''
+      eventBus.emit(`update-note-${id}`, {
+        prop: 'color',
+        val: color,
+        id: this.noteId,
+      })
     },
-    methods: {
-        colorClicked(color) {
-            const id = this.noteId || ''
-            eventBus.emit(`update-note-${id}`, { prop: 'color', val: color, id: this.noteId })
-        },
-        toggleColors() {
-            this.isShowColors = !this.isShowColors
-        }
+    toggleColors() {
+      this.isShowColors = !this.isShowColors
     },
+  },
 }

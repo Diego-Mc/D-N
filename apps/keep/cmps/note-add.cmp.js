@@ -8,38 +8,74 @@ import noteMap from './note-map.cmp.js'
 import audioInput from './note-audio.cmp.js'
 
 export default {
-  props: ['editedNoteId', 'notes', 'renderedEditors','clicked'],
+  props: ['editedNoteId', 'notes', 'renderedEditors', 'clicked'],
   emits: ['add-note'],
   template: `
-            <div class="add-note-container" @click.stop :class="noteBackgroundColor">
-                    <div v-if="note.mediaType">
-                    <i v-if="!editedNoteId" @click="removeMedia" class='bi bi-trash remove-media-icon'></i>    
-                      <component :is="note.mediaType" :media="note.mediaUrl" @canvas-changed="saveCanvas"/>
-                    </div>
-                <div class="editor-content">
-                  <div v-if="isExpandAddNote" >
-                      <i  class="note-pin bi" :class="'bi-pin' + pinClass" @click="togglePin"></i>
-                      <textarea v-model="note.info.title" type="textarea" :class="noteBackgroundColor" placeholder="Title" ></textarea>
-                  </div>
-                  <textarea v-model="note.info.txt" @click="expandInputs" type="textarea" :class="noteBackgroundColor" placeholder="Take a note or enter Youtube URL..."></textarea>
-                  <div v-if="isExpandAddNote" >
-                      <ul>
-                        <li v-for="(item,index) in note.info.todos" @click.stop :key="note.id + '-' + index">
-                            <input v-if="item.txt" v-model="item.isChecked" type="checkbox" @click="onChecked(index)" :id="note.id + '-' + index"/>
-                            <span v-else>+ </span>
-                            <input v-model="item.txt" @input="onTodoType(item.txt,index)" @keyup.enter="onAddTodo(editedNoteId)" placeholder="List Item...." class="list-input"/>
-                            <button v-if="item.txt" @click.stop.prevent="removeTodo(index)">X</button>
-                        </li>
-                      </ul>
-                     <audio-input v-if="isShowAudio" @got-audio="addAudioUrl"/>
-                    <audio v-if="note.audioUrl" :src="note.audioUrl" controls></audio>
-                  <edit-icons :note-id="editedNoteId || note.id"/>
-                  <button @click="onAdd"></button>
-                  </div>
-                </div>
-               
-            </div>
-    `,
+    <div class="add-note-container" @click.stop :class="noteBackgroundColor">
+      <div v-if="note.mediaType">
+        <i
+          v-if="!editedNoteId"
+          @click="removeMedia"
+          class="bi bi-trash remove-media-icon"></i>
+        <component
+          :is="note.mediaType"
+          :media="note.mediaUrl"
+          @canvas-changed="saveCanvas" />
+      </div>
+      <div class="editor-content">
+        <div v-if="isExpandAddNote">
+          <i
+            class="note-pin bi"
+            :class="'bi-pin' + pinClass"
+            @click="togglePin"></i>
+          <textarea
+          class="note-content-title f-m f-clr-main"
+            v-model="note.info.title"
+            type="textarea"
+            :class="noteBackgroundColor"
+            placeholder="Title"></textarea>
+        </div>
+        <textarea
+          v-model="note.info.txt"
+          class="note-content-text f-m-text f-clr-main"
+          @click="expandInputs"
+          type="textarea"
+          :class="noteBackgroundColor"
+          placeholder="Take a note or enter Youtube URL..."></textarea>
+        <div v-if="isExpandAddNote">
+          <ul>
+            <li
+              v-for="(item,index) in note.info.todos"
+              @click.stop
+              :key="note.id + '-' + index">
+              <input
+                v-if="item.txt"
+                v-model="item.isChecked"
+                type="checkbox"
+                @click="onChecked(index)"
+                :id="note.id + '-' + index" />
+              <span v-else>+ </span>
+              <input
+                v-model="item.txt"
+                @input="onTodoType(item.txt,index)"
+                @keyup.enter="onAddTodo(editedNoteId)"
+                placeholder="List Item...."
+                class="list-input" />
+              <button v-if="item.txt" @click.stop.prevent="removeTodo(index)">
+                X
+              </button>
+            </li>
+          </ul>
+          <audio-input v-if="isShowAudio" @got-audio="addAudioUrl" />
+          <audio v-if="note.audioUrl" :src="note.audioUrl" controls></audio>
+          <section class="editArea">
+            <edit-icons :note-id="editedNoteId || note.id" />
+            <button @click="onAdd">Close</button>
+          </section>
+        </div>
+      </div>
+    </div>
+  `,
   data() {
     return {
       note: {
@@ -51,7 +87,7 @@ export default {
         info: {
           txt: null,
           title: null,
-          todos: []
+          todos: [],
         },
       },
       // weird name.
@@ -74,21 +110,24 @@ export default {
         }
         eventBus.emit('note-changed', this.note)
         eventBus.emit(`note-changed-${this.note.id}`, this.note)
-
       })
       eventBus.on(`list-clicked-${this.editedNoteId || ''}`, this.onAddTodo)
       eventBus.on(`audio-clicked-${this.editedNoteId || ''}`, () => {
         this.showRecordInputs()
       })
-      eventBus.on(`canvas-clicked-${this.editedNoteId || ''}`, this.changeMediaType)
+      eventBus.on(
+        `canvas-clicked-${this.editedNoteId || ''}`,
+        this.changeMediaType
+      )
       eventBus.on(`map-icon-clicked-${this.editedNoteId || ''}`, (obj) => {
-        this.note.mediaUrl = { lat: obj.pos.coords.latitude, lng: obj.pos.coords.longitude }
+        this.note.mediaUrl = {
+          lat: obj.pos.coords.latitude,
+          lng: obj.pos.coords.longitude,
+        }
         this.changeMediaType(obj.mediaType)
         // eventBus.emit('note-changed', this.note)
         // eventBus.emit(`note-changed-${this.note.id}`, this.note)
-       
       })
-
     }
 
     this.pinClass = this.note.isPinned ? '-fill' : ''
@@ -113,7 +152,13 @@ export default {
       }
       this.isExpandAddNote = false
       const info = this.note.info
-      if (info.txt || info.title || info.todos.length || this.note.mediaUrl || this.note.audioUrl) {
+      if (
+        info.txt ||
+        info.title ||
+        info.todos.length ||
+        this.note.mediaUrl ||
+        this.note.audioUrl
+      ) {
         this.$emit('add-note', { ...this.note })
       }
       this.note = {
@@ -124,7 +169,7 @@ export default {
           txt: null,
           title: null,
           todos: [],
-        }
+        },
       }
       this.setPinClass()
     },
@@ -142,7 +187,9 @@ export default {
     },
     initNote() {
       if (!this.editedNoteId) return
-      const currentNote = this.notes.find(note => note.id === this.editedNoteId)
+      const currentNote = this.notes.find(
+        (note) => note.id === this.editedNoteId
+      )
       this.note = currentNote
       this.expandInputs()
     },
@@ -160,7 +207,8 @@ export default {
       }
     },
     onTodoType(txt, index) {
-      if (txt.length === 1 && this.note.info.todos.length - 1 === index) this.note.info.todos.push({ txt: '', checked: false })
+      if (txt.length === 1 && this.note.info.todos.length - 1 === index)
+        this.note.info.todos.push({ txt: '', checked: false })
       if (!txt) this.note.info.todos.splice(index, 1)
     },
     removeTodo(index) {
@@ -174,28 +222,28 @@ export default {
     embedLink() {
       const startIdx = this.note.info.txt.indexOf('=') + 1
       const endIdx = this.note.info.txt.indexOf('&')
-      this.note.mediaUrl = `https://www.youtube.com/embed/${this.note.info.txt.slice(startIdx, endIdx)}`
-
+      this.note.mediaUrl = `https://www.youtube.com/embed/${this.note.info.txt.slice(
+        startIdx,
+        endIdx
+      )}`
     },
     saveCanvas(url) {
       this.note.mediaUrl = url
       // eventBus.emit(`note-changed-${this.note.id}`, this.note)
       // eventBus.emit('note-changed', this.note)
-
     },
     changeMediaType(type) {
       this.note.mediaType = type
-     
-         },
+    },
     removeMedia() {
       this.note.mediaType = null
       this.note.mediaUrl = null
     },
     showRecordInputs() {
       this.isShowAudio = !this.isShowAudio
-    }
-
-  }, computed: {
+    },
+  },
+  computed: {
     noteBackgroundColor() {
       let noteBackgroundColor = this.note.color
       if (noteBackgroundColor) return `note-${noteBackgroundColor}`
@@ -207,10 +255,10 @@ export default {
   },
   watch: {
     'note.info.txt': function () {
-      const regex = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
-      if (regex.test(this.note.info.txt)) this.uploadVideo();
+      const regex =
+        /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
+      if (regex.test(this.note.info.txt)) this.uploadVideo()
     },
-
   },
   components: {
     editIcons,
@@ -218,6 +266,6 @@ export default {
     noteImg,
     noteCanvas,
     noteMap,
-    audioInput
-  }
+    audioInput,
+  },
 }

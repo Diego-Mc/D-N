@@ -1,95 +1,106 @@
-.add-note-section{
-    display: grid;
-    grid-template-columns: 1fr 100px;
-    justify-items: right;
+.add-note-section {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  justify-items: right;
 }
 
-.change-editor{
-    width: 100px;
-    height: 100px;
-    background-color: #fff;
+.change-editor {
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
 }
 
 .add-note-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 349px;
-    margin-inline: auto;
-    margin-bottom: 56px;
-    border: none;
-    border-radius: 20px;
-    box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px, rgb(60 64 67 / 15%) 0px 2px 6px 2px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  margin-inline: auto;
+  margin-bottom: 40px;
+  /* border: 2px solid var(--clr-main-lightest); */
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: box-shadow 0.2s;
+}
+
+.add-note-container:has(.note-content-title) {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .add-note-container textarea:focus-visible {
-    outline: none;
+  outline: none;
 }
 
 .add-note-container textarea {
-    font-family: Mulish-Regular;
-    border: none;
-    outline: none;
-    resize: none;
-    width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  width: 100%;
 }
 
 /* textarea:last-of-type {
     padding: 0;
 } */
 
-.add-note-container ul{
-    margin: 0 0 10px 0;
-    padding: 0;
+.add-note-container ul {
+  margin: 0 0 10px 0;
+  padding: 0;
 }
 
-.add-note-container ul button,.preview-text ul button{
-    background-color: transparent;
-    color: red;
+.add-note-container ul button {
+  background-color: transparent;
+  color: red;
 }
 
- .add-note-container ul li input{
-    /* width: 80%; */
-    background-color: transparent;
-    border: none;
-    
-} 
-.add-note-container ul li input:focus-visible{
-    outline-style: none;
+.add-note-container ul li input {
+  /* width: 80%; */
+  background-color: transparent;
+  border: none;
 }
-.add-note-container li{
-   list-style: none;
+.add-note-container ul li input:focus-visible {
+  outline-style: none;
 }
-
-.add-note-container img{
-    border-radius: 20px 20px 0 0 ;
+.add-note-container li {
+  list-style: none;
 }
 
-.editor-content{
-    padding-block: 5px;
-    padding-left: 10px;
-    padding-right: 30px;
-
+.add-note-container img {
+  border-radius: 20px 20px 0 0;
 }
 
-.upload-img-container{
-    position: relative;
+.editor-content {
+  padding: 15px 25px;
+}
+
+.note-content-title {
+  height: 2rem;
+}
+
+.add-note-container .editArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.upload-img-container {
+  position: relative;
 }
 
 .upload-img-input {
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    border: none;
-    opacity: 0;
-    position: absolute;
-    z-index: 10;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  border: none;
+  opacity: 0;
+  position: absolute;
+  z-index: 10;
 }
 
-.remove-media-icon{
-    position: absolute;
-    top: 15px;
-    left: 15px;
+.remove-media-icon {
+  position: absolute;
+  top: 15px;
+  left: 15px;
 }

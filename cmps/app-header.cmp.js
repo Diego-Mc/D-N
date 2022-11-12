@@ -2,6 +2,12 @@ import { utilService } from '../services/util.service.js'
 import advancedSearch from '../cmps/advanced-search.cmp.js'
 import { eventBus } from '../services/event-bus.service.js'
 
+import { emailService } from '../apps/mail/service/email.service.js'
+import { booksService } from '../apps/book/js/services/books.service.js'
+import { noteService } from '../apps/keep/services/note.service.js'
+booksService
+noteService
+
 export default {
   props: [],
   template: `
@@ -16,7 +22,7 @@ export default {
         <router-link to="/booky">Booky</router-link>
         <router-link to="/about">temp</router-link>
       </nav>
-      <advanced-search v-else/>
+      <advanced-search :service="services[appName]" v-else/>
 
       <i class="bi bi-grid-fill"></i>
     </header>
@@ -24,6 +30,11 @@ export default {
   data() {
     return {
       appName: 'D&N',
+      services: {
+        maily: emailService,
+        keepy: noteService,
+        booky: booksService,
+      },
     }
   },
   methods: {},

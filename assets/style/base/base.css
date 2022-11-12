@@ -44,9 +44,9 @@ i.selected {
   min-height: 100vh;
 }
 
-#app:has(.email-main) {
+#app {
   max-height: 100vh;
-  max-width: 1340px;
+  max-width: 1350px;
   margin-inline: auto;
 }
 

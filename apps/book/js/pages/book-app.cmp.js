@@ -55,12 +55,11 @@ export default {
         )
       })
     },
-
-    components: {
-      bookList,
-      bookDetails,
-      bookFilter,
-      bookAdd,
-    },
+  },
+  components: {
+    bookList,
+    bookDetails,
+    bookFilter,
+    bookAdd,
   },
 }

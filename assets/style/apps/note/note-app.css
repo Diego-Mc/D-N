@@ -15,12 +15,19 @@
   top: 15px;
 }
 
-.note-pin{
-    position: absolute;
-    right: 15px;
-    top: 15px;
+.note-pin {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  font-size: 1rem;
 }
 
-audio{
-    max-width: 100%;
+.note-types-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+audio {
+  max-width: 100%;
 }
