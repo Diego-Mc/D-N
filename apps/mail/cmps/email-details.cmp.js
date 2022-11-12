@@ -40,10 +40,14 @@ export default {
       </section>-->
 
       <footer>
-        <p class="signature f-s f-clr-light">
-          {{email.signature || email.from.name}}
+      <span class="signature-wrapper">
+
+      <p class="signature f-s f-clr-light">
+        {{email.signature || email.from.name}}
         </p>
         <small class="email-time f-s f-clr-light">{{sentAt}}</small>
+      </span>
+      <small class="keepy-cta" @click="sendToKeepy">Send to Keepy</small>
       </footer>
     </section>
   `,
@@ -54,6 +58,16 @@ export default {
   },
   created() {},
   methods: {
+    sendToKeepy() {
+      this.$router.push({
+        path: '/keepy',
+        query: {
+          isEmail: true,
+          title: this.email.subject,
+          txt: this.email.body,
+        },
+      })
+    },
     doReply() {
       this.$router.push({ query: { replyId: this.email.id, isCompose: true } })
     },

@@ -51,14 +51,16 @@ export default {
       replyId: null,
       forwardId: null,
       isExpended: false,
+      isNote: false,
     }
   },
   created() {
-    this.composeForm = null
-    this.draft = null
-    this.autoSaveInterval = 0
-    this.replyId = null
-    this.forwardId = null
+    // this.composeForm = null
+    // this.draft = null
+    // this.autoSaveInterval = 0
+    // this.replyId = null
+    // this.forwardId = null
+    // this.isNote = false
     this.initializeDraft()
   },
   unmounted() {
@@ -68,10 +70,9 @@ export default {
   methods: {
     initializeDraft() {
       const query = this.$route.query
-      // const obj = { isNote="true", subject: '', body: '' }
-      // {isEmail="true", title: '', text: ''}
       if (query.replyId) this.replyId = query.replyId
       if (query.forwardId) this.forwardId = query.forwardId
+      if (query.isNote) this.isNote = query.isNote
 
       this.setDraft()
         .then(() => {
@@ -94,6 +95,12 @@ export default {
                 if (!replies.includes(this.replyId)) replies.push(this.replyId)
               } else this.draft.replies = [this.replyId]
             })
+        })
+        .then(() => {
+          if (!this.isNote) return Promise.resolve()
+          this.draft.body = query.body
+          this.draft.subject = query.subject
+          return Promise.resolve()
         })
         .then(() => {
           return Promise.resolve(
