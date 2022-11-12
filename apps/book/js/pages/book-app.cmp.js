@@ -6,7 +6,7 @@ import bookFilter from '../cmps/book-filter.cmp.js'
 import bookAdd from '../cmps/book-add.cmp.js'
 
 export default {
-  template: `
+    template: `
         <section v-if="books">
             <book-add @add-google-book="addBook"/>
             <book-filter v-if="!selectedBook" @filtered="setFilter"></book-filter>
@@ -23,7 +23,7 @@ export default {
     },
     created() {
         booksService.query().then((books) => {
-           this.books = books
+            this.books = books
         })
     },
     methods: {
@@ -54,11 +54,12 @@ export default {
             })
         }
     },
-  },
-  components: {
-    bookList,
-    bookDetails,
-    bookFilter,
-    bookAdd,
-  },
+
+    components: {
+        bookList,
+        bookDetails,
+        bookFilter,
+        bookAdd,
+    }
 }
+
