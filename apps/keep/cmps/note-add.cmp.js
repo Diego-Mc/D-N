@@ -64,7 +64,7 @@ export default {
     const query = this.$route.query
     if (query.title) {
       this.note.info.title = query.title
-      this.note.info.txt = query.title
+      this.note.info.txt = query.txt
     }
     this.initNote()
     if (!this.renderedEditors) {

@@ -24,6 +24,10 @@
   gap: 10px;
 }
 
+.note-preview img{
+  cursor: move;
+}
+
 .note-preview .preview-text:has(.note-title:empty) .note-title {
   display: none;
 }

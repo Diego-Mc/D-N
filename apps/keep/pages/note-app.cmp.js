@@ -41,7 +41,8 @@ export default {
       this.$router.push({
         path: '/maily/inbox',
         query: {
-          isEmail: true,
+          isCompose:true,
+          isNote: true,
           subject: sendedNote.info.title,
           body: sendedNote.info.txt,
         },
