@@ -14,6 +14,10 @@
   color: var(--clr-main-lighter);
 }
 
+.email-main .close-btn:hover {
+  color: var(--clr-main);
+}
+
 .email-compose .trash-btn:hover::before {
   content: '\F5DD';
 }

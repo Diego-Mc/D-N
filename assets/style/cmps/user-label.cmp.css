@@ -1,0 +1,10 @@
+.user-label {
+  background-color: var(--clr-main);
+  color: white;
+  height: fit-content;
+  font-size: 1rem;
+  padding: 2px 5px;
+  border-radius: 4px;
+  text-transform: lowercase;
+  font-family: Quicksand;
+}

@@ -5,7 +5,7 @@ export default {
   template: /* HTML */ `
     <section v-if="emails" class="email-list round">
       <email-preview
-        @emailSelected="emailSelected"
+        @emailSelected="doEmailSelect"
         :class="selectedClass(email)"
         v-for="email in emails"
         :key="email.id"
@@ -14,7 +14,7 @@ export default {
   `,
   created() {},
   methods: {
-    emailSelected(email) {
+    doEmailSelect(email) {
       this.$emit('emailSelected', email)
     },
     selectedClass(email) {

@@ -14,12 +14,12 @@ import { userModal } from '../../../cmps/user-modal.cmp.js'
 export default {
   template: /* HTML */ `
     <main class="email-main">
-      <email-folder-list />
+      <email-folder-list :unreadLabels="unreadLabels" />
       <email-list
         @star="starEmail"
         @trash="removeEmail"
         v-if="emails"
-        @emailSelected="emailSelected"
+        @emailSelected="doEmailSelect"
         :selectedEmail="selectedEmail"
         :emails="emails" />
       <email-compose @closeCompose="composeClose" v-if="isCompose" />
@@ -48,6 +48,7 @@ export default {
         lables: [], // has any of the labels
         searchAreas: [],
       },
+      unreadLabels: null,
     }
   },
   created() {
@@ -74,11 +75,16 @@ export default {
         this.criteria.state = this.folderName
       }
     },
+    getUnreadLabels() {
+      return emailService
+        .getUnreadCounts()
+        .then((counts) => (this.unreadLabels = counts))
+    },
     updateCriteria(criteria) {
       criteria.state = this.criteria.state
       this.criteria = criteria
     },
-    emailSelected(email) {
+    doEmailSelect(email) {
       this.composeClose()
       this.selectedEmail = email
     },
@@ -88,6 +94,7 @@ export default {
     },
     getEmailsToShow(criteria = this.criteria) {
       console.log(criteria, this.folderName)
+      this.getUnreadLabels()
       return emailService
         .query(criteria)
         .then((emails) => (this.emails = emails))

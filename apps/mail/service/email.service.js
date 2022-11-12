@@ -22,6 +22,7 @@ export const emailService = {
   sendEmail,
   checkValidity,
   getAdvancedSearchOptions,
+  getUnreadCounts,
 }
 
 function query({
@@ -36,8 +37,8 @@ function query({
   return storageService.query(EMAIL_KEY).then((emails) => {
     return emails
       .filter((e) => {
-        if (isRemoved) return !!e.removedAt
-        return !!!e.removedAt && e.state === state
+        if (isRemoved) return utilService.isValidTimestamp(e.removedAt)
+        return !utilService.isValidTimestamp(e.removedAt) && e.state === state
       })
       .filter((e) => {
         if (searchAreas.length === 0) {
@@ -47,7 +48,6 @@ function query({
             e.signature.includes(search)
           )
         }
-        console.log(e, searchAreas)
         return searchAreas.some((area) => e[area].includes(search))
       })
       .filter((e) => {
@@ -76,6 +76,21 @@ function save(email) {
   } else {
     return storageService.post(EMAIL_KEY, email)
   }
+}
+
+function getUnreadCounts() {
+  return storageService.query(EMAIL_KEY).then((emails) => {
+    return emails
+      .filter((e) => !e.isRead)
+      .reduce(
+        (acc, e) => {
+          if (utilService.isValidTimestamp(e.removedAt)) acc.trash += 1
+          else acc[e.state] += 1
+          return acc
+        },
+        { inbox: 0, sent: 0, draft: 0, trash: 0 }
+      )
+  })
 }
 
 function getEmptyEmail(subject = '', body = '') {

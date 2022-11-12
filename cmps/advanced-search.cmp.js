@@ -1,9 +1,9 @@
 import radioBtn from '../cmps/radio-btn.cmp.js'
 import checkBox from '../cmps/check-box.cmp.js'
 import radioCheck from '../cmps/radio-check.cmp.js'
+
 import { emailService } from '../apps/mail/service/email.service.js'
 import { eventBus } from '../services/event-bus.service.js'
-import { utilService } from '../services/util.service.js'
 
 export default {
   template: /* HTML */ `

@@ -1,0 +1,25 @@
+.label-picker {
+  position: absolute;
+  z-index: 50;
+  background-color: var(--clr-modal-bg);
+  padding: 10px;
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-radius: 0.4rem;
+  bottom: 0;
+  right: 0;
+  transform: translateY(100%);
+  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+  cursor: default;
+}
+
+.label-picker .user-label {
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.label-picker .user-label:hover {
+  background-color: var(--clr-main-dark);
+}

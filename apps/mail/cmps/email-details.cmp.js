@@ -7,7 +7,6 @@ export default {
     <section v-if="email" class="email-details selected round" :class="{expended: isExpended}">
     <i v-if="isExpended" class="expend-icon bi bi-arrow-bar-right" @click="isExpended = !isExpended" title="shrink"></i>
     <i v-else class="expend-icon bi bi-arrow-bar-left" @click="isExpended = !isExpended" title="expend"></i>
-<i class="back-icon bi bi-arrow-left" title="Back to list" @click="backToList"></i>
 <i @click="backToList" class="close-btn f-m bi bi-x-lg" title="Close"></i>
       <header>
         <div class="user-data">

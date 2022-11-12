@@ -3,29 +3,34 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-  cursor: pointer;
+  overflow: visible;
+}
+
+.email-folder-list article:has(.selected) .user-label {
+  background-color: var(--clr-main-dark);
 }
 
 .email-folder-list article:has(.selected) {
   color: var(--clr-main-dark);
-}
-
-.email-folder-list article:has(.selected) {
-  border-left-color: var(--clr-main-dark);
+  border-left-color: var(--clr-main);
 }
 
 .email-folder-list article {
   border-left: 2px solid transparent;
   display: flex;
+  align-items: center;
+  padding-left: 8px;
+  gap: 8px;
+  cursor: pointer;
+  background-color: transparent;
 }
 
 .email-folder-list article:hover:not(:has(.selected)) {
-  border-left-color: var(--clr-main);
+  border-left-color: var(--clr-main-light);
 }
 
-.email-folder-list article i {
-  margin-left: 10px;
-  flex: 1;
+.email-folder-list article > * {
+  pointer-events: none;
 }
 
 .compose-btn {

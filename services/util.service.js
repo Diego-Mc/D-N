@@ -5,6 +5,7 @@ export const utilService = {
   toCapitalCase,
   toTimeStr,
   isEmptyObj,
+  isValidTimestamp,
 }
 
 function saveToStorage(key, value) {
@@ -57,4 +58,8 @@ function toTimeStr(previous) {
 
 function isEmptyObj(obj) {
   return Object.keys(obj).length === 0
+}
+
+function isValidTimestamp(timestamp) {
+  return new Date(timestamp).getTime() > 0
 }

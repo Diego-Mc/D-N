@@ -12,3 +12,7 @@
   font-family: Mulish-Black;
   src: url('../../fonts/Mulish-Black.ttf');
 }
+@font-face {
+  font-family: Quicksand;
+  src: url('../../fonts/Quicksand-Bold.ttf');
+}

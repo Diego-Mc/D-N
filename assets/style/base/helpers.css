@@ -16,9 +16,8 @@
 }
 
 /* NOTES */
-.note-white{
+.note-white {
   background-color: #fff;
-  
 }
 
 .note-blue {
@@ -94,6 +93,12 @@
   font-weight: unset;
   font-family: Mulish-Bold;
   font-size: 1.5rem;
+}
+
+.f-label {
+  font-weight: unset;
+  font-family: Quicksand;
+  font-size: 1rem;
 }
 
 .f-m-title {

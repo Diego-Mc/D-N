@@ -1,3 +1,5 @@
+import labelPicker from '../../../cmps/label-picker.cmp.js'
+
 import { eventBus } from '../../../services/event-bus.service.js'
 import { utilService } from '../../../services/util.service.js'
 
@@ -7,8 +9,13 @@ export default {
     <article
       @click="emailSelect"
       :class="{reply: isReply, unread: !email.isRead}"
+      @mouseleave="isLabelPicking = false"
       class="email-preview">
-      <i v-if="email.isStarred" class="starState bi bi-star-fill"></i>
+      <i
+        @click.stop="doStar"
+        :class="toggleClass(email.isStarred,'bi bi-star')"
+        class="starState"
+        :title="email.isStarred ? 'Unstar': 'Star'"></i>
       <img class="email-img" :src="email.imgUrl" />
       <small class="email-recipient f-s f-clr-light">{{recipient}}</small>
       <h3 class="email-subject f-d f-clr-light">{{email.subject}}</h3>
@@ -25,14 +32,16 @@ export default {
             :title="email.removedAt ? 'Fully remove': 'Move to trash'"></i>
           <i
             v-if="!email.removedAt"
-            @click.stop="doStar"
-            :class="toggleClass(email.isStarred,'bi bi-star')"
-            :title="email.isStarred ? 'Unstar': 'Star'"></i>
+            @click.stop="doLabel"
+            class="bi bi-bookmark"
+            title="Add labels">
+          </i>
           <i
             v-else
-            @click.stop="doRestore"
+            @click.stop="doRestore()"
             class="bi bi-arrow-counterclockwise"
             title="Restore"></i>
+          <label-picker v-if="isLabelPicking" :labels="labels" />
         </section>
       </section>
       <small class="email-time f-s f-clr-light">{{timeStr}}</small>
@@ -41,6 +50,8 @@ export default {
   data() {
     return {
       isReply: false,
+      isLabelPicking: false,
+      labels: this.email.labels,
     }
   },
   created() {
@@ -75,6 +86,9 @@ export default {
     toggleClass(bool, classStr) {
       return classStr + (bool ? '-fill' : '')
     },
+    doLabel() {
+      this.isLabelPicking = !this.isLabelPicking
+    },
   },
   computed: {
     folderName() {
@@ -98,6 +112,9 @@ export default {
       },
       deep: true,
     },
+  },
+  components: {
+    labelPicker,
   },
 }
 

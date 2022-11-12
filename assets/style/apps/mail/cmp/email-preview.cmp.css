@@ -22,6 +22,14 @@
   transform: translateY(-50%);
 }
 
+.email-preview .starState.bi-star {
+  opacity: 0;
+}
+
+.email-preview:hover .starState.bi-star {
+  opacity: 1;
+}
+
 .email-preview:last-child {
   border-bottom-left-radius: 1.25rem;
   border-bottom-right-radius: 1.25rem;

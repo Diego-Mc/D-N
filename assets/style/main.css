@@ -14,6 +14,8 @@
 @import 'cmps/user-msg.css';
 @import 'cmps/user-modal.css';
 @import 'cmps/icon.cmp.css';
+@import 'cmps/user-label.cmp.css';
+@import 'cmps/label-picker.cmp.css';
 @import 'cmps/advanced-search.cmp.css';
 
 /* Apps */
