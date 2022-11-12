@@ -23,7 +23,6 @@ export default {
         <router-link to="/about">temp</router-link>
       </nav>
       <advanced-search :service="services[appName]" v-else/>
-
       <i class="bi bi-grid-fill"></i>
     </header>
   `,

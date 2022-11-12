@@ -1,7 +1,7 @@
 import { eventBus } from '../../../services/event-bus.service.js'
 import noteColors from './note-colors.cmp.js'
 export default {
-    props: ['note-id','bin'],
+    props: ['note-id', 'bin'],
     template: `
         <div class="note-icons-container" > 
             <i @click="onDelete" class='bi bi-trash'></i>
@@ -10,33 +10,32 @@ export default {
                 <i class="bi bi-image"></i>
             </div> 
             <note-colors :note-id="noteId"/>
-            <i class="bi bi-envelope"></i>
+            <i @click="noteToMail" class="bi bi-envelope"></i>
             <i @click="listClicked" class="bi bi-list-task"></i>
             <i v-if="!noteId" @click="canvasClicked" class="bi bi-pencil"></i>
             <i v-if="!noteId" @click="mapIconClicked" class="bi bi-geo-alt"></i>
-            <!-- <i class="bi bi-three-dots-vertical"></i> -->
             <i @click="audioClicked" class="bi bi-volume-up"></i>
         </div>
-    `, 
+    `,
     created() {
     },
     methods: {
-       
-        listClicked(){
+
+        listClicked() {
             const id = this.noteId || ''
             eventBus.emit(`list-clicked-${id}`, this.noteId)
         },
-       canvasClicked(){
+        canvasClicked() {
             const id = this.noteId || ''
             eventBus.emit(`canvas-clicked-${id}`, 'noteCanvas')
         },
-        mapIconClicked(){
+        mapIconClicked() {
             this.getPosition()
-                .then((pos)=>{
+                .then((pos) => {
                     const id = this.noteId || ''
-                    eventBus.emit(`map-icon-clicked-${id}`, {mediaType:'noteMap',pos:pos})
+                    eventBus.emit(`map-icon-clicked-${id}`, { mediaType: 'noteMap', pos: pos })
                 })
-            
+
         },
         audioClicked() {
             const id = this.noteId || ''
@@ -56,6 +55,10 @@ export default {
                 })
             };
         },
+        noteToMail() {
+            this.$route.push({ isComposed: true, noteId: this.noteId })
+            eventBus.emit('note-to-mail')
+        },
         onDelete() {
             eventBus.emit('delete-note', this.noteId)
         },
@@ -64,7 +67,7 @@ export default {
                 navigator.geolocation.getCurrentPosition(resolve, reject)
             })
         },
-    },components:{
+    }, components: {
         noteColors,
     }
 }

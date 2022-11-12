@@ -23,30 +23,31 @@ function query({
   isPinned = undefined,
 } = {}) {
   return storageService.query(NOTE_KEY).then((notes) => {
- 
     return notes
       .filter((n) => {
         if (search) {
-          return n.info.title.includes(search) || n.info.txt.includes(search)
+          search = search.toLowerCase()
+          return n.info.title.toLowerCase().includes(search) || n.info.txt.toLowerCase().includes(search)
         } else return true
       })
       .filter((n) => {
         if (!noteType.length) return true
-        return n.noteType.every((type) => noteType.includes(type))
+        return n.mediaType === noteType
       })
       .filter((n) => {
         if (!color) return true
         return n.color === color
       })
-      .filter((n) => {
-        if (!n.labels.length) {
-          if (labels.length) return false
-          else return true
-        }
-        return n.labels.every((l) => labels.includes(l))
-      })
+      // .filter((n) => {
+      //   if (!n.labels.length) {
+      //     if (labels.length) return false
+      //     else return true
+      //   }
+      //   return n.labels.every((l) => labels.includes(l))
+      // })
       .filter((n) => {
         if (isPinned === undefined) return true
+        console.log(n.isPinned === isPinned);
         return n.isPinned === isPinned
       })
   })
@@ -98,6 +99,7 @@ function _createNotes() {
         info: {
           url: 'http://some-img/me',
           title: 'Bobi and Me',
+          txt:'',
         },
         style: {
           backgroundColor: '#00d',
@@ -111,6 +113,7 @@ function _createNotes() {
         info: {
           label: 'Get my stuff together',
           title: 'hi!',
+          txt:'',
           todos: [
             { txt: 'wawa', doneAt: null },
             { txt: 'Coding power', doneAt: 187111111 },
@@ -124,6 +127,7 @@ function _createNotes() {
         isPinned: false,
         info: {
           title: 'Bobi and Me 2',
+          txt:'',
           label: 'Get my stuff together',
           todos: [
             { txt: 'Driving liscence', doneAt: null },
@@ -172,20 +176,31 @@ function getAdvancedSearchOptions() {
           key: 'isPinned',
         },
       },
-
       {
-        type: 'checkBox',
+        type: 'radioCheck',
         info: {
           label: 'labels',
-          opts: ['love', 'work', 'school', 'project'],
+          opts: [
+            { txt: 'work', val: 'work' },
+            { txt: 'school', val: 'school' },
+            { txt: 'audio', val: 'audio' },
+            { txt: 'canvas', val: 'canvas' },
+            { txt: 'video', val: 'video' },
+          ],
           key: 'labels',
         },
       },
       {
-        type: 'checkBox',
+        type: 'radioCheck',
         info: {
           label: 'note type',
-          opts: ['image', 'map', 'audio', 'canvas', 'video'],
+          opts: [
+            { txt: 'image', val: 'noteImg' },
+            { txt: 'map', val: 'noteMap' },
+            { txt: 'audio', val: 'noteAudio' },
+            { txt: 'canvas', val: 'noteCanvas' },
+            { txt: 'video', val: 'noteVideo' },
+          ],
           key: 'noteType',
         },
       },
@@ -194,13 +209,13 @@ function getAdvancedSearchOptions() {
         info: {
           label: 'color',
           opts: [
-            { txt: 'blue', val: '#4a6788' },
-            { txt: 'pink', val: '#834a88' },
-            { txt: 'red', val: '#ffced7' },
-            { txt: 'purple', val: '#c9c5ff' },
-            { txt: 'yellow', val: '#effec3' },
-            { txt: 'turquoise', val: '#9ef8e7' },
-            { txt: 'green', val: '#b4ffbf' },
+            { txt: 'blue', val: 'blue' },
+            { txt: 'pink', val: 'pink' },
+            { txt: 'red', val: 'red' },
+            { txt: 'purple', val: 'purple' },
+            { txt: 'yellow', val: 'yellow' },
+            // { txt: 'turquoise', val: 'turquoise' },
+            // { txt: 'green', val: 'green' },
           ],
           key: 'color',
         },

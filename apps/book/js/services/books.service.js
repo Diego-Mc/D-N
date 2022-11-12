@@ -34,30 +34,31 @@ function query({
     categories = [],
 } = {}) {
     return storageService.query(BOOKS_KEY).then((books) => {
-        console.log(books);
         return books
             .filter((b) => {
-                return b.title.toLowerCase().includes(search.toLowerCase()) || b.authors.some(a.toLowerCase().includes(search.toLowerCase()))
+                return b.title.toLowerCase().includes(search.toLowerCase()) || b.authors.some((a) => a.toLowerCase().includes(search.toLowerCase()))
             })
-            .filter((b) => {
-                if (!categories.length) return true
-                if (!b.categories) return false
-                return b.categories.every(c => categories.includes(c))
-            }).filter(b => {
-                if (!readingLength) return true
-                return b.readingLength === readingLength
-            }).filter(b => {
-                if (!sale || b.listPrice.amout < 130) return true
-                else return false
-            })
+            // .filter((b) => {
+            //     if (!categories.length) return true
+            //     if (!b.categories) return false
+            //     return b.categories.every(c => categories.includes(c))
+            // })
             .filter(b => {
-                if(!recency) return true
-                const date = new Date()
-                console.log(parseInt(b.publishedDate.slice(0,4)));
-                const diff = date.getFullYear() - parseInt(b.publishedDate.slice(0,4))
-                if (diff > 10) return  false
-                else return true
+                if (!readingLength) return true
+                return b.readingLength === setReadingLength(readingLength)
             })
+        .filter(b => {
+            if (!sale || b.listPrice.amout < 130) return true
+            else return false
+        })
+        .filter(b => {
+            if (!recency) return true
+            const date = new Date()
+            console.log(parseInt(b.publishedDate.slice(0, 4)));
+            const diff = date.getFullYear() - parseInt(b.publishedDate.slice(0, 4))
+            if (diff > 10) return false
+            else return true
+        })
     })
 }
 
@@ -101,12 +102,14 @@ function getAdvancedSearchOptions() {
             },
             {
                 type: 'checkBox',
+
                 info: {
                     label: 'Categories',
                     opts: ['biography', 'computers', 'electronic', 'trademarks'],
                     key: 'categories',
                 },
             },
+
 
         ],
     }

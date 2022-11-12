@@ -14,14 +14,14 @@ export default {
             <div class="add-note-container" @click.stop :class="noteBackgroundColor">
                     <div v-if="note.mediaType">
                     <i v-if="!editedNoteId" @click="removeMedia" class='bi bi-trash remove-media-icon'></i>
-                      <component :is="note.mediaType" :media="note.mediaUrl" @canvas-changed="saveCanvas"/>
+                      <component :is="note.mediaType" :noteId="editedNoteId" :media="note.mediaUrl" @canvas-changed="saveCanvas" @emit-add="saveCanvasPerm"/>
                     </div>
                 <div class="editor-content">
                   <div v-if="isExpandAddNote" >
                       <i  class="note-pin bi" :class="'bi-pin' + pinClass" @click="togglePin"></i>
-                      <textarea v-model="note.info.title" type="textarea" :class="noteBackgroundColor" placeholder="Title" ></textarea>
+                      <textarea v-model="note.info.title" type="textarea" :class="noteBackgroundColor" placeholder="Title" @change="noteChanged"></textarea>
                   </div>
-                  <textarea v-model="note.info.txt" @click="expandInputs" type="textarea" :class="noteBackgroundColor" placeholder="Take a note or enter Youtube URL..."></textarea>
+                  <textarea v-model="note.info.txt" @click="expandInputs" type="textarea" :class="noteBackgroundColor" placeholder="Take a note or enter Youtube URL..." @change="noteChanged"></textarea>
                   <div v-if="isExpandAddNote" >
                       <ul>
                         <li v-for="(item,index) in note.info.todos" @click.stop :key="note.id + '-' + index">
@@ -34,7 +34,6 @@ export default {
                      <audio-input v-if="isShowAudio" @got-audio="addAudioUrl"/>
                     <audio v-if="note.audioUrl" :src="note.audioUrl" controls></audio>
                   <edit-icons :note-id="editedNoteId || note.id"/>
-                  <button @click="onAdd"></button>
                   </div>
                 </div>
 
@@ -49,8 +48,8 @@ export default {
         isPinned: false,
         color: 'white',
         info: {
-          txt: null,
-          title: null,
+          txt: '',
+          title: '',
           todos: [],
         },
         labels: [],
@@ -62,6 +61,12 @@ export default {
     }
   },
   created() {
+    eventBus.on('mailed-note', () => {
+      this.info.title = this.$route.title
+      this.info.txt = this.$route.title
+      this.addNote
+    })
+
     this.initNote()
     if (!this.renderedEditors) {
       eventBus.on(`app-clicked`, this.onAdd)
@@ -98,6 +103,15 @@ export default {
     this.pinClass = this.note.isPinned ? '-fill' : ''
   },
   methods: {
+    noteChanged(){
+      if(this.editedNoteId){
+        eventBus.emit('note-changed', this.note)
+      }
+    },
+    saveCanvasPerm() {
+      eventBus.emit('note-changed', this.note)
+
+    },
     addAudioUrl(url) {
       this.note.audioUrl = url
     },
@@ -110,11 +124,13 @@ export default {
     onAdd() {
       if (this.$route.params.id) {
         this.$router.push('/keepy')
+        console.log(this.note);
         eventBus.emit('note-changed', this.note)
         eventBus.emit(`note-changed-${this.note.id}`, this.note)
 
         return
       }
+      this.isShowAudio = false
       this.isExpandAddNote = false
       const info = this.note.info
       if (
@@ -131,8 +147,8 @@ export default {
         color: 'white',
         isPinned: false,
         info: {
-          txt: null,
-          title: null,
+          txt: '',
+          title: '',
           todos: [],
         },
       }
@@ -194,6 +210,7 @@ export default {
     },
     saveCanvas(url) {
       this.note.mediaUrl = url
+      console.log(url);
       // eventBus.emit(`note-changed-${this.note.id}`, this.note)
       // eventBus.emit('note-changed', this.note)
     },

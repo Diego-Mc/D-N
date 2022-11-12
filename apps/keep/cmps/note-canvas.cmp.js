@@ -1,12 +1,13 @@
 export default {
-  props: ['media'],
+  props: ['media','noteId'],
   template: `
         <div class="canvas-container">
             <canvas ref="canvas" id="canvas" @mousemove="onMove">
             </canvas>
             <input v-model="strokeColor" class="stroke-color-input" type="color" />
-            <!-- <i class="bi bi-eraser-fill" class="canvas-eraser-icon"></i> -->
+            <button v-if="noteId" @click="emitAdd">save</button>
         </div>
+
 
              `,
   data() {
@@ -32,6 +33,9 @@ export default {
     }
   },
   methods: {
+    emitAdd(){
+      this.$emit('emit-add')
+    },
     showColorPicker() {
       this.$refs['stroke-color-input'].click()
     },
