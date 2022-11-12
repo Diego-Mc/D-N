@@ -14,10 +14,12 @@ export default {
       @dragstart="startDrag($event,note)"
       @mouseleave="isShowIcons = false"
       :class="noteBackgroundColor"
-      @drop="onDrop($event)">
+      @drop="onDrop($event)"
+      >
+      
+      <component :is="mediaComp" :media="note.mediaUrl"></component>
       <div @mouseover="isShowIcons = true" style="border-radius:20px;">
       <i  class="note-pin bi note-pin-preview" :class="'bi-pin' + pinClass"  @click.stop.prevent="togglePin"></i>
-        <component :is="mediaComp" :media="note.mediaUrl"></component>
         <div class="preview-text">
           <h3 class="note-title">{{note.info.title}}</h3>
           <p class="f-m-text note-text">{{note.info.txt}}</p>
@@ -25,12 +27,13 @@ export default {
             <li
               v-for="(item,index) in note.info.todos"
               :key="note.id + '-' + index">
-              <div v-if="item.txt">
+              <div v-if="item.txt"  >
                 <input
                   type="checkbox"
                   v-model="item.isChecked"
                   :id="note.id + '-' + index"
-                  @click="onCheck(index)" />
+                  @click.stop="onCheck(index)"
+                  />
                 <label :for="note.id + '-' + index">{{item.txt}}</label>
                 <button v-if="item.txt" @click="onRemoveTodo(index)">X</button>
                 <br />

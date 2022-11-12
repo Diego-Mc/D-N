@@ -126,6 +126,7 @@ export default {
       eventBus.emit('todo-clicked', { note: this.note, index })
     },
     onAdd() {
+      console.log(this.notes);
       if (this.$route.params.id) {
         this.$router.push('/keepy')
         eventBus.emit('note-changed', this.note)
