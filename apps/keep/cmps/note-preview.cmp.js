@@ -15,8 +15,8 @@ export default {
       :class="noteBackgroundColor"
       @drop="onDrop($event)">
       <div @mouseover="isShowIcons = true" style="border-radius:20px;">
-        <i v-if="note.isPinned" class="note-pin bi bi-pin-fill"></i>
-        <component :is="note.mediaType" :media="note.mediaUrl"></component>
+        <i v-if="mediaType" class="note-pin bi bi-pin-fill"></i>
+        <component :is="mediaComp" :media="note.mediaUrl"></component>
         <div class="preview-text">
           <h3 class="note-title">{{note.info.title}}</h3>
           <p class="f-m-text note-text">{{note.info.txt}}</p>
@@ -53,13 +53,8 @@ export default {
     }
   },
   created() {
-    eventBus.on(`note-changed-${this.note.id}`, (updatedNote) => {
-      this.mediaUrl = updatedNote.mediaUrl
-      this.mediaType = this.note.mediaType
-    })
-    this.mediaType =
-      this.note.mediaType === 'noteCanvas' ? 'noteImg' : this.note.mediaType
-    this.mediaUrl = this.note.mediaUrl
+   
+    this.mediaType = this.note.mediaType === 'noteCanvas' ? 'noteImg' : this.note.mediaType
   },
   emits: {
     onDelete: null,
@@ -89,11 +84,11 @@ export default {
       else return 'note-white'
     },
     mediaComp() {
-      return this.mediaType
+      return this.note.mediaType === 'noteCanvas' ? 'noteImg' :  this.note.mediaType
     },
   },
   watch: {
-    mediaUrl: function () {},
+    mediaUrl: function () { },
   },
   components: {
     previewIcons,

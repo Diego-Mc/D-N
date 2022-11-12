@@ -21,14 +21,21 @@ export default {
     }
   },
   created() {
+    this.queryBooks()
     booksService
       .query()
       .then((books) => {
         this.books = books
       })
+    eventBus.on('advancedSearch', (criteria) => {
+      this.queryBooks(criteria)
+    })
       .then(() => this.checkSelectedBook())
   },
   methods: {
+    selectBook(id) {
+      this.selectedBook = this.books.find((book) => book.id === id)
+    },
     setFilter(filterBy) {
       this.filterBy = filterBy
     },

@@ -35,6 +35,18 @@ export default {
   },
   created() {
     this.queryNotes()
+
+    eventBus.on('onNoteMailed', (id) => {
+      let sendedNote = this.notes.find(note => note.id === id)
+      this.$router.push({
+        path: '/maily/inbox',
+        query: {
+          isEmail: true,
+          subject: sendedNote.info.title,
+          body: sendedNote.info.txt,
+        },
+      })
+    })
     eventBus.on('note-dropped', (swappedNotes) => {
       const idx1 = this.notes.findIndex(
         (note) => note.id === swappedNotes.dragged
