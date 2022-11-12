@@ -12,7 +12,7 @@ export const noteService = {
   create,
   saveNotes,
   getNextNoteId,
-  getAdvancedSearchOptions
+  getAdvancedSearchOptions,
 }
 
 function query({
@@ -21,7 +21,6 @@ function query({
   labels = [],
   noteType = [],
   isPinned = undefined,
-
 } = {}) {
   return storageService.query(NOTE_KEY).then((notes) => {
     // noteType.map(type =>{
@@ -39,7 +38,7 @@ function query({
       })
       .filter((n) => {
         if (!noteType.length) return true
-        return n.noteType.every(type => noteType.includes(type))
+        return n.noteType.every((type) => noteType.includes(type))
       })
       .filter((n) => {
         if (!color) return true
@@ -50,7 +49,7 @@ function query({
           if (labels.length) return false
           else return true
         }
-        return n.labels.every(l => labels.includes(l))
+        return n.labels.every((l) => labels.includes(l))
       })
       .filter((n) => {
         if (isPinned === undefined) return true
@@ -82,95 +81,83 @@ function getEmptyNote(vendor = '', maxSpeed = 0) {
   return { id: '', vendor, maxSpeed }
 }
 
-
 function getNextNoteId(noteId) {
-  return storageService.query(NOTE_KEY)
-    .then(notes => {
-      var idx = notes.findIndex(note => note.id === noteId)
-      if (idx === notes.length - 1) idx = -1
-      return notes[idx + 1].id
-    })
+  return storageService.query(NOTE_KEY).then((notes) => {
+    var idx = notes.findIndex((note) => note.id === noteId)
+    if (idx === notes.length - 1) idx = -1
+    return notes[idx + 1].id
+  })
 }
 
 function saveNotes(notes) {
   utilService.saveToStorage(NOTE_KEY, notes)
-
 }
 
 function _createNotes() {
   let notes = utilService.loadFromStorage(NOTE_KEY)
   if (!notes || !notes.length) {
-    notes =
-      [
-
-        {
-          id: 'n102',
-          type: 'note-img',
-          isPinned: true,
-          info: {
-            url: 'http://some-img/me',
-            title: 'Bobi and Me',
-          },
-          style: {
-            backgroundColor: '#00d',
-          },
-          labels: []
+    notes = [
+      {
+        id: 'n102',
+        type: 'note-img',
+        isPinned: true,
+        info: {
+          url: 'http://some-img/me',
+          title: 'Bobi and Me',
         },
-        {
-          id: 'n103',
-          type: 'note-todos',
-          isPinned: true,
-          info: {
-            label: 'Get my stuff together',
-            title: 'hi!',
-            todos: [
-              { txt: 'wawa', doneAt: null },
-              { txt: 'Coding power', doneAt: 187111111 },
-            ],
-          },
-          labels: []
-
+        style: {
+          backgroundColor: '#00d',
         },
-        {
-          id: 'n104',
-          type: 'note-todos unpinned',
-          isPinned: false,
-          info: {
-            title: 'Bobi and Me 2',
-            label: 'Get my stuff together',
-            todos: [
-              { txt: 'Driving liscence', doneAt: null },
-              { txt: 'Coding power', doneAt: 187111111 },
-            ],
-          },
-          labels: []
+        labels: [],
+      },
+      {
+        id: 'n103',
+        type: 'note-todos',
+        isPinned: true,
+        info: {
+          label: 'Get my stuff together',
+          title: 'hi!',
+          todos: [
+            { txt: 'wawa', doneAt: null },
+            { txt: 'Coding power', doneAt: 187111111 },
+          ],
         },
-        {
-          id: 'n105',
-          type: 'note-todos unpinned',
-          isPinned: true,
-          info: {
-            title: 'Bobi and Me 2',
-            label: 'Get my stuff together',
-            txt: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam perspiciatis autem repellendus id libero, pariatur modi nobis eveniet voluptate mollit',
-            todos: [
-              { txt: 'Driving liscence', doneAt: null },
-              { txt: 'Coding power', doneAt: 187111111 },
-            ],
-
-          },
-          labels: []
-
+        labels: [],
+      },
+      {
+        id: 'n104',
+        type: 'note-todos unpinned',
+        isPinned: false,
+        info: {
+          title: 'Bobi and Me 2',
+          label: 'Get my stuff together',
+          todos: [
+            { txt: 'Driving liscence', doneAt: null },
+            { txt: 'Coding power', doneAt: 187111111 },
+          ],
         },
-
-
-
-      ]
+        labels: [],
+      },
+      {
+        id: 'n105',
+        type: 'note-todos unpinned',
+        isPinned: true,
+        info: {
+          title: 'Bobi and Me 2',
+          label: 'Get my stuff together',
+          txt: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam perspiciatis autem repellendus id libero, pariatur modi nobis eveniet voluptate mollit',
+          todos: [
+            { txt: 'Driving liscence', doneAt: null },
+            { txt: 'Coding power', doneAt: 187111111 },
+          ],
+        },
+        labels: [],
+      },
+    ]
     utilService.saveToStorage(NOTE_KEY, notes)
   }
   return notes
 }
-
 
 function getAdvancedSearchOptions() {
   return {
@@ -180,7 +167,6 @@ function getAdvancedSearchOptions() {
     // mediaType = [],
     // isPinned = undefined,
     cmps: [
-     
       {
         type: 'radioCheck',
         info: {
@@ -192,7 +178,7 @@ function getAdvancedSearchOptions() {
           key: 'isPinned',
         },
       },
-      
+
       {
         type: 'checkBox',
         info: {
@@ -229,10 +215,8 @@ function getAdvancedSearchOptions() {
   }
 }
 
-
 function _createNote(vendor, maxSpeed = 250) {
   const note = getEmptyNote(vendor, maxSpeed)
   note.id = utilService.makeId()
   return note
 }
-

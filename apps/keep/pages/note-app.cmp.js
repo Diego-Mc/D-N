@@ -34,7 +34,7 @@ export default {
     }
   },
   created() {
-    noteService.query().then((notes) => (this.notes = notes))
+    this.queryNotes()
     eventBus.on('note-dropped', (swappedNotes) => {
       const idx1 = this.notes.findIndex(
         (note) => note.id === swappedNotes.dragged
@@ -75,14 +75,20 @@ export default {
         const idx = this.notes.findIndex((note) => note.id === changedNote.id)
         this.notes.splice(idx, 1, changedNote)
       })
-    }),
-      eventBus.on('on-duplicate', (noteId) => {
-        const idx = this.notes.findIndex((note) => note.id === noteId)
-        const clone = JSON.parse(JSON.stringify(this.notes[idx]))
-        noteService.create(clone).then((note) => this.notes.push(note))
-      })
+    })
+    eventBus.on('on-duplicate', (noteId) => {
+      const idx = this.notes.findIndex((note) => note.id === noteId)
+      const clone = JSON.parse(JSON.stringify(this.notes[idx]))
+      noteService.create(clone).then((note) => this.notes.push(note))
+    })
+    eventBus.on('advancedSearch', (criteria) => {
+      this.queryNotes(criteria)
+    })
   },
   methods: {
+    queryNotes(criteria) {
+      noteService.query(criteria).then((notes) => (this.notes = notes))
+    },
     addNote(note) {
       this.notes.push(note)
       noteService.create(note)
@@ -149,13 +155,13 @@ export default {
     getNotes() {
       return this.notes
     },
-    watch: {},
-    components: {
-      noteAdd,
-      noteEdit,
-      noteFilter,
-      noteList,
-      addSection,
-    },
+  },
+  watch: {},
+  components: {
+    noteAdd,
+    noteEdit,
+    noteFilter,
+    noteList,
+    addSection,
   },
 }

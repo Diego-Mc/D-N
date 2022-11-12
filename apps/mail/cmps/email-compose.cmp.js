@@ -68,7 +68,8 @@ export default {
   methods: {
     initializeDraft() {
       const query = this.$route.query
-      console.log('DSFDSGD', query)
+      // const obj = { isNote="true", subject: '', body: '' }
+      // {isEmail="true", title: '', text: ''}
       if (query.replyId) this.replyId = query.replyId
       if (query.forwardId) this.forwardId = query.forwardId
 
