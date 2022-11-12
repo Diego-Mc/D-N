@@ -36,11 +36,11 @@ export default {
         eventBus.on('note-dropped', swappedNotes => {
             const idx1 = this.notes.findIndex(note => note.id === swappedNotes.dragged)
             const idx2 = this.notes.findIndex(note => note.id === swappedNotes.dropped)
-            if(idx1<0 || idx2 < 0) return
+            if (idx1 < 0 || idx2 < 0) return
             var temp = this.notes[idx1];
             this.notes[idx1] = this.notes[idx2];
             this.notes[idx2] = temp
-            noteService.saveNotes( this.notes)
+            noteService.saveNotes(this.notes)
         })
         eventBus.on('new-editor-rendered', id => this.renderedEditors.push(id))
         eventBus.on('delete-note', noteId => this.deleteNote(noteId))
@@ -51,23 +51,22 @@ export default {
             noteService.save(changedNote)
         })
         eventBus.on('todo-clicked', obj => {
-
-            const note = obj.note
+            const changedNote = obj.note
             const index = obj.index
 
-            note.info.todos[index].isChecked = !note.info.todos[index].isChecked
-            noteService.save(note).then(() => {
-                const idx = this.notes.findIndex(note => note.id === note.id)
-                this.notes.splice(idx, 1, note)
+            changedNote.info.todos[index].isChecked = !changedNote.info.todos[index].isChecked
+            noteService.save(changedNote).then(() => {
+                const idx = this.notes.findIndex(note => note.id === changedNote.id)
+                this.notes.splice(idx, 1, changedNote)
             })
         })
         eventBus.on('todo-removed', obj => {
-            const note = obj.note
+            const changedNote = obj.note
             const index = obj.index
-            note.info.todos.splice(index, 1)
-            noteService.save(note).then(() => {
-                const idx = this.notes.findIndex(note => note.id === note.id)
-                this.notes.splice(idx, 1, note)
+            changedNote.info.todos.splice(index, 1)
+            noteService.save(changedNote).then(() => {
+                const idx = this.notes.findIndex(note => note.id === changedNote.id)
+                this.notes.splice(idx, 1, changedNote)
             })
         }),
             eventBus.on('on-duplicate', noteId => {
@@ -144,9 +143,7 @@ export default {
         },
     },
     watch: {
-        getNotesByPinned(){
-            console.log('wa');
-        }
+     
     },
     components: {
         noteAdd,

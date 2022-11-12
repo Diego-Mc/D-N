@@ -14,7 +14,7 @@ export default {
              @drop="onDrop($event)" >
             <div @mouseover="isShowIcons = true" :class="noteBackgroundColor"  style="border-radius:20px;">
                 <i v-if="note.isPinned" class="note-pin bi bi-pin-fill"></i>
-                <component :is="mediaComp" :media="note.mediaUrl"></component>            
+                <component :is="mediaComp" :media="mediaUrl"></component>            
                 <div class="preview-text">
                     <h3 class="note-title">{{note.info.title}}</h3>
                     <p>{{note.info.txt}}</p>
@@ -37,9 +37,15 @@ export default {
         return {
             isShowIcons: false,
             mediaType: null,
+            mediaUrl: null
         }
     }, created() {
+        eventBus.on(`note-changed-${this.note.id}`, (updatedNote) => {
+            this.mediaUrl = updatedNote.mediaUrl
+            this.mediaType = this.note.mediaType
+        })
         this.mediaType = this.note.mediaType === 'noteCanvas' ? 'noteImg' : this.note.mediaType
+        this.mediaUrl = this.note.mediaUrl
     },
     emits: {
         onDelete: null,
@@ -52,10 +58,10 @@ export default {
         },
 
         onCheck(index) {
-            eventBus.emit('todo-clicked', { note: this.note, index })
+            eventBus.emit(`todo-clicked`, { note: this.note, index })
         },
         onRemoveTodo(index) {
-            eventBus.emit('todo-removed', { note: this.note, index })
+            eventBus.emit(`todo-removed`, { note: this.note, index })
         },
         onDrop(evt) {
             const itemID = evt.dataTransfer.getData('itemID')
@@ -69,6 +75,11 @@ export default {
         },
         mediaComp() {
             return this.mediaType
+        },
+
+
+    }, watch: {
+        'mediaUrl': function () {
         }
     },
     components: {

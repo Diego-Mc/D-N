@@ -15,7 +15,7 @@ export default {
             <i @click="canvasClicked" class="bi bi-pencil"></i>
             <i @click="mapIconClicked" class="bi bi-geo-alt"></i>
             <i class="bi bi-three-dots-vertical"></i>
-            <i @click="recordClicked" class="bi bi-volume-up"></i>
+            <i @click="audioClicked" class="bi bi-volume-up"></i>
         </div>
     `, 
     methods: {
@@ -36,8 +36,9 @@ export default {
                 })
             
         },
-        recordClicked() {
-            eventBus.emit(`record-clicked`, this.noteId)
+        audioClicked() {
+            const id = this.noteId || ''
+            eventBus.emit(`audio-clicked-${id}`, this.noteId)
         },
 
         uploadImage(e) {

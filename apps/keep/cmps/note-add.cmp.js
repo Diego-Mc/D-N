@@ -8,7 +8,7 @@ import noteMap from './note-map.cmp.js'
 import audioInput from './note-audio.cmp.js'
 
 export default {
-  props: ['editedNoteId', 'notes', 'renderedEditors'],
+  props: ['editedNoteId', 'notes', 'renderedEditors','clicked'],
   emits: ['add-note'],
   template: `
             <div class="add-note-container" @click.stop :class="noteBackgroundColor">
@@ -31,7 +31,7 @@ export default {
                             <button v-if="item.txt" @click.stop.prevent="removeTodo(index)">X</button>
                         </li>
                       </ul>
-                     <audio-input v-if="isShowAudio"  @got-audio="addAudioUrl"/>
+                     <audio-input v-if="isShowAudio" @got-audio="addAudioUrl"/>
                     <audio v-if="note.audioUrl" :src="note.audioUrl" controls></audio>
                   <edit-icons :note-id="editedNoteId || note.id"/>
                   <button @click="onAdd"></button>
@@ -73,14 +73,20 @@ export default {
           this.note.mediaType = 'noteImg'
         }
         eventBus.emit('note-changed', this.note)
+        eventBus.emit(`note-changed-${this.note.id}`, this.note)
 
       })
       eventBus.on(`list-clicked-${this.editedNoteId || ''}`, this.onAddTodo)
-      eventBus.on(`record-clicked-${this.editedNoteId || ''}`, this.showRecordInputs)
+      eventBus.on(`audio-clicked-${this.editedNoteId || ''}`, () => {
+        this.showRecordInputs()
+      })
       eventBus.on(`canvas-clicked-${this.editedNoteId || ''}`, this.changeMediaType)
       eventBus.on(`map-icon-clicked-${this.editedNoteId || ''}`, (obj) => {
         this.note.mediaUrl = { lat: obj.pos.coords.latitude, lng: obj.pos.coords.longitude }
         this.changeMediaType(obj.mediaType)
+        // eventBus.emit('note-changed', this.note)
+        // eventBus.emit(`note-changed-${this.note.id}`, this.note)
+       
       })
 
     }
@@ -89,8 +95,6 @@ export default {
   },
   methods: {
     addAudioUrl(url) {
-
-
       this.note.audioUrl = url
     },
     expandInputs() {
@@ -101,15 +105,15 @@ export default {
     },
     onAdd() {
       if (this.$route.params.id) {
-
         this.$router.push('/keepy')
-        console.log( this.note);
         eventBus.emit('note-changed', this.note)
+        eventBus.emit(`note-changed-${this.note.id}`, this.note)
+
         return
       }
       this.isExpandAddNote = false
       const info = this.note.info
-      if (info.txt || info.title || info.todos.length || this.note.mediaUrl) {
+      if (info.txt || info.title || info.todos.length || this.note.mediaUrl || this.note.audioUrl) {
         this.$emit('add-note', { ...this.note })
       }
       this.note = {
@@ -175,10 +179,14 @@ export default {
     },
     saveCanvas(url) {
       this.note.mediaUrl = url
+      // eventBus.emit(`note-changed-${this.note.id}`, this.note)
+      // eventBus.emit('note-changed', this.note)
+
     },
     changeMediaType(type) {
       this.note.mediaType = type
-    },
+     
+         },
     removeMedia() {
       this.note.mediaType = null
       this.note.mediaUrl = null
@@ -201,7 +209,8 @@ export default {
     'note.info.txt': function () {
       const regex = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
       if (regex.test(this.note.info.txt)) this.uploadVideo();
-    }
+    },
+
   },
   components: {
     editIcons,
