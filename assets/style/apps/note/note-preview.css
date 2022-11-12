@@ -4,7 +4,7 @@
   border-radius: 20px;
   position: relative;
   break-inside: avoid;
-  padding: 40px 45px 56px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;

@@ -4,6 +4,12 @@
   justify-items: right;
 }
 
+.add-note-container img {
+  max-height: 300px;
+  width: 100%;
+}
+
+
 .change-editor {
   width: 100px;
   height: 100px;

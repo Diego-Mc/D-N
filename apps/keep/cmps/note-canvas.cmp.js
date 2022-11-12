@@ -2,7 +2,7 @@ export default {
   props: ['media','noteId'],
   template: `
         <div class="canvas-container">
-            <canvas ref="canvas" id="canvas" @mousemove="onMove" width="300" height="300">
+            <canvas ref="canvas" id="canvas" @mousemove="onMove" width="500" height="300">
             </canvas>
             <input v-model="strokeColor" class="stroke-color-input" type="color" />
             <button v-if="noteId" @click="emitAdd">save</button>
