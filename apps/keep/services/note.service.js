@@ -11,11 +11,52 @@ export const noteService = {
   save,
   create,
   saveNotes,
-  getNextNoteId
+  getNextNoteId,
+  getAdvancedSearchOptions
 }
 
-function query() {
-  return storageService.query(NOTE_KEY)
+function query({
+  search = '',
+  color = '',
+  labels = [],
+  noteType = [],
+  isPinned = undefined,
+
+} = {}) {
+  return storageService.query(NOTE_KEY).then((notes) => {
+    // noteType.map(type =>{
+    //   if(type === 'image') return 'noteImg'
+    //   if(type === 'map') return 'noteMap'
+    //   if(type === 'audio') return 'noteAudio'
+    //   if(type === 'canvas') return 'noteCanvas'
+    //   if(type === 'video') return 'noteVideo'
+    // })
+    return notes
+      .filter((n) => {
+        if (search) {
+          return n.info.title.includes(search) || n.info.txt.includes(search)
+        } else return true
+      })
+      .filter((n) => {
+        if (!noteType.length) return true
+        return n.noteType.every(type => noteType.includes(type))
+      })
+      .filter((n) => {
+        if (!color) return true
+        return n.color === color
+      })
+      .filter((n) => {
+        if (!n.labels.length) {
+          if (labels.length) return false
+          else return true
+        }
+        return n.labels.every(l => labels.includes(l))
+      })
+      .filter((n) => {
+        if (isPinned === undefined) return true
+        return n.isPinned === isPinned
+      })
+  })
 }
 
 function get(noteId) {
@@ -73,6 +114,7 @@ function _createNotes() {
           style: {
             backgroundColor: '#00d',
           },
+          labels: []
         },
         {
           id: 'n103',
@@ -86,6 +128,8 @@ function _createNotes() {
               { txt: 'Coding power', doneAt: 187111111 },
             ],
           },
+          labels: []
+
         },
         {
           id: 'n104',
@@ -99,6 +143,7 @@ function _createNotes() {
               { txt: 'Coding power', doneAt: 187111111 },
             ],
           },
+          labels: []
         },
         {
           id: 'n105',
@@ -112,7 +157,10 @@ function _createNotes() {
               { txt: 'Driving liscence', doneAt: null },
               { txt: 'Coding power', doneAt: 187111111 },
             ],
+
           },
+          labels: []
+
         },
 
 
@@ -122,6 +170,65 @@ function _createNotes() {
   }
   return notes
 }
+
+
+function getAdvancedSearchOptions() {
+  return {
+    // search = '',
+    // color = '',
+    // labels = [],
+    // mediaType = [],
+    // isPinned = undefined,
+    cmps: [
+     
+      {
+        type: 'radioCheck',
+        info: {
+          label: 'Is Pinned',
+          opts: [
+            { txt: 'pinned', val: true },
+            { txt: 'unPinned', val: false },
+          ],
+          key: 'isPinned',
+        },
+      },
+      
+      {
+        type: 'checkBox',
+        info: {
+          label: 'labels',
+          opts: ['love', 'work', 'school', 'project'],
+          key: 'labels',
+        },
+      },
+      {
+        type: 'checkBox',
+        info: {
+          label: 'note type',
+          opts: ['image', 'map', 'audio', 'canvas', 'video'],
+          key: 'noteType',
+        },
+      },
+      {
+        type: 'radioCheck',
+        info: {
+          label: 'color',
+          opts: [
+            { txt: 'blue', val: '#4a6788' },
+            { txt: 'pink', val: '#834a88' },
+            { txt: 'red', val: '#ffced7' },
+            { txt: 'purple', val: '#c9c5ff' },
+            { txt: 'yellow', val: '#effec3' },
+            { txt: 'turquoise', val: '#9ef8e7' },
+            { txt: 'green', val: '#b4ffbf' },
+          ],
+          key: 'color',
+        },
+      },
+    ],
+  }
+}
+
 
 function _createNote(vendor, maxSpeed = 250) {
   const note = getEmptyNote(vendor, maxSpeed)

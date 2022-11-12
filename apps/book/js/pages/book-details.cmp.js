@@ -16,7 +16,7 @@ export default {
                 <h3>{{book.title}}</h3>
                 <h4>By {{book.authors[0]}}</h4>
                 <div class="book-tags flex" style="gap:10px;font-style:italic;color: rgba(20,20,20,.65);">
-                    <p>{{ readingLength }}</p>
+                    <p>{{ book.readingLength }}</p>
                     <p>{{ recency }}</p>
                 </div>
                 <div class="flex" style="gap:10px">
@@ -64,9 +64,7 @@ export default {
     },
     computed: {
         readingLength() {
-            if (this.book.pageCount > 500) return 'Long reading'
-            if (this.book.pageCount > 200) return 'Decent Reading'
-            if (this.book.pageCount > 100) return 'Light Reading'
+          
         }, recency() {
             const date = new Date()
             const diff = date.getFullYear() - this.book.publishedDate

@@ -11,71 +11,35 @@ export default {
   props: ['editedNoteId', 'notes', 'renderedEditors', 'clicked'],
   emits: ['add-note'],
   template: `
-    <div class="add-note-container" @click.stop :class="noteBackgroundColor">
-      <div v-if="note.mediaType">
-        <i
-          v-if="!editedNoteId"
-          @click="removeMedia"
-          class="bi bi-trash remove-media-icon"></i>
-        <component
-          :is="note.mediaType"
-          :media="note.mediaUrl"
-          @canvas-changed="saveCanvas" />
-      </div>
-      <div class="editor-content">
-        <div v-if="isExpandAddNote">
-          <i
-            class="note-pin bi"
-            :class="'bi-pin' + pinClass"
-            @click="togglePin"></i>
-          <textarea
-          class="note-content-title f-m f-clr-main"
-            v-model="note.info.title"
-            type="textarea"
-            :class="noteBackgroundColor"
-            placeholder="Title"></textarea>
-        </div>
-        <textarea
-          v-model="note.info.txt"
-          class="note-content-text f-m-text f-clr-main"
-          @click="expandInputs"
-          type="textarea"
-          :class="noteBackgroundColor"
-          placeholder="Take a note or enter Youtube URL..."></textarea>
-        <div v-if="isExpandAddNote">
-          <ul>
-            <li
-              v-for="(item,index) in note.info.todos"
-              @click.stop
-              :key="note.id + '-' + index">
-              <input
-                v-if="item.txt"
-                v-model="item.isChecked"
-                type="checkbox"
-                @click="onChecked(index)"
-                :id="note.id + '-' + index" />
-              <span v-else>+ </span>
-              <input
-                v-model="item.txt"
-                @input="onTodoType(item.txt,index)"
-                @keyup.enter="onAddTodo(editedNoteId)"
-                placeholder="List Item...."
-                class="list-input" />
-              <button v-if="item.txt" @click.stop.prevent="removeTodo(index)">
-                X
-              </button>
-            </li>
-          </ul>
-          <audio-input v-if="isShowAudio" @got-audio="addAudioUrl" />
-          <audio v-if="note.audioUrl" :src="note.audioUrl" controls></audio>
-          <section class="editArea">
-            <edit-icons :note-id="editedNoteId || note.id" />
-            <button @click="onAdd">Close</button>
-          </section>
-        </div>
-      </div>
-    </div>
-  `,
+            <div class="add-note-container" @click.stop :class="noteBackgroundColor">
+                    <div v-if="note.mediaType">
+                    <i v-if="!editedNoteId" @click="removeMedia" class='bi bi-trash remove-media-icon'></i>
+                      <component :is="note.mediaType" :media="note.mediaUrl" @canvas-changed="saveCanvas"/>
+                    </div>
+                <div class="editor-content">
+                  <div v-if="isExpandAddNote" >
+                      <i  class="note-pin bi" :class="'bi-pin' + pinClass" @click="togglePin"></i>
+                      <textarea v-model="note.info.title" type="textarea" :class="noteBackgroundColor" placeholder="Title" ></textarea>
+                  </div>
+                  <textarea v-model="note.info.txt" @click="expandInputs" type="textarea" :class="noteBackgroundColor" placeholder="Take a note or enter Youtube URL..."></textarea>
+                  <div v-if="isExpandAddNote" >
+                      <ul>
+                        <li v-for="(item,index) in note.info.todos" @click.stop :key="note.id + '-' + index">
+                            <input v-if="item.txt" v-model="item.isChecked" type="checkbox" @click="onChecked(index)" :id="note.id + '-' + index"/>
+                            <span v-else>+ </span>
+                            <input v-model="item.txt" @input="onTodoType(item.txt,index)" @keyup.enter="onAddTodo(editedNoteId)" placeholder="List Item...." class="list-input"/>
+                            <button v-if="item.txt" @click.stop.prevent="removeTodo(index)">X</button>
+                        </li>
+                      </ul>
+                     <audio-input v-if="isShowAudio" @got-audio="addAudioUrl"/>
+                    <audio v-if="note.audioUrl" :src="note.audioUrl" controls></audio>
+                  <edit-icons :note-id="editedNoteId || note.id"/>
+                  <button @click="onAdd"></button>
+                  </div>
+                </div>
+
+            </div>
+    `,
   data() {
     return {
       note: {
@@ -83,12 +47,13 @@ export default {
         mediaType: null,
         audioUrl: null,
         isPinned: false,
-        color: null,
+        color: 'white',
         info: {
           txt: null,
           title: null,
           todos: [],
         },
+        labels: [],
       },
       // weird name.
       isExpandAddNote: false,
@@ -162,8 +127,8 @@ export default {
         this.$emit('add-note', { ...this.note })
       }
       this.note = {
-        imgUrl: null,
-        color: null,
+        mediaUrl: null,
+        color: 'white',
         isPinned: false,
         info: {
           txt: null,
