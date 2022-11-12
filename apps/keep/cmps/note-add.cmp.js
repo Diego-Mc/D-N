@@ -15,7 +15,9 @@ export default {
             <div class="add-note-container" @click.stop :class="noteBackgroundColor">
                     <div v-if="note.mediaType">
                     <i v-if="!editedNoteId" @click="removeMedia" class='bi bi-trash remove-media-icon'></i>
-                      <component :is="note.mediaType" :noteId="editedNoteId" :media="note.mediaUrl" @canvas-changed="saveCanvas" @emit-add="saveCanvasPerm"/>
+                     <iframe v-show="note.mediaType === 'noteVideo'" :src="note.mediaUrl" frameborder="0" width="500" height="200"></iframe>
+
+                      <component v-if="note.mediaType !== 'noteVideo'" :is="note.mediaType" :noteId="editedNoteId" :media="note.mediaUrl" @canvas-changed="saveCanvas" @emit-add="saveCanvasPerm"/>
                     </div>
                 <div class="editor-content">
                   <div v-if="isExpandAddNote" >
@@ -207,8 +209,8 @@ export default {
     embedLink() {
       const regex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/
       // https://www.youtube.com/watch?v=VZZTNtXEqp4&ab_channel=EternalRaijin
-     
-      this.note.mediaUrl =  `https://www.youtube.com/embed/${this.note.info.txt.match(regex)[1]}`
+
+      this.note.mediaUrl = `https://www.youtube.com/embed/${this.note.info.txt.match(regex)[1]}`
 
     },
     saveCanvas(url) {

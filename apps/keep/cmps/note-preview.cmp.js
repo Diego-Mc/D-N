@@ -7,7 +7,7 @@ import previewIcons from './preview-icons.cmp.js'
 export default {
   props: ['note'],
   template: `
-  <router-link :to="'/keepy/'+ note.id" @click.prevent.stop>
+
     <div
       class="note-preview"
       draggable
@@ -15,11 +15,12 @@ export default {
       @mouseleave="isShowIcons = false"
       :class="noteBackgroundColor"
       @drop="onDrop($event)"
+      @click="toEditor"
       >
-      
-      <component :is="mediaComp" :media="note.mediaUrl"></component>
+      <iframe v-show="note.mediaType === 'noteVideo'" :src="note.mediaUrl" frameborder="0" width="200" height="200"></iframe>
+      <component v-if="note.mediaType !== 'noteVideo'" :is="mediaComp" :media="note.mediaUrl"></component>
       <div @mouseover="isShowIcons = true" style="border-radius:20px;">
-      <i  class="note-pin bi note-pin-preview" :class="'bi-pin' + pinClass"  @click.stop.prevent="togglePin"></i>
+      <i  class="note-pin bi note-pin-preview" :class="'bi-pin' + pinClass"  @click.stop="togglePin"></i>
         <div class="preview-text">
           <h3 class="note-title">{{note.info.title}}</h3>
           <p class="f-m-text note-text">{{note.info.txt}}</p>
@@ -48,7 +49,7 @@ export default {
         </div>
       </div>
     </div>
-    </router-link>
+
   `,
   data() {
     return {
@@ -77,6 +78,9 @@ export default {
       evt.dataTransfer.dropEffect = 'move'
       evt.dataTransfer.effectAllowed = 'move'
       evt.dataTransfer.setData('itemID', item.id)
+    },
+    toEditor() {
+      this.$router.push('/keepy/' + this.note.id)
     },
 
     onCheck(index) {

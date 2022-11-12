@@ -35,12 +35,11 @@ export default {
   },
   created() {
     this.queryNotes()
-    // eventBus.on('pin-changed', (noteId) => {
-    //   const idx = this.notes.findIndex((note) => note.id === noteId)
-    //   console.log(idx);
-    //   this.notes[idx].isPinned = !this.notes[idx].isPinned
-    //   noteService.save(noteId)
-    // })
+    eventBus.on('pin-changed', (noteId) => {
+      const idx = this.notes.findIndex((note) => note.id === noteId)
+      this.notes[idx].isPinned = !this.notes[idx].isPinned
+      noteService.save( this.notes[idx])
+    })
     eventBus.on('onNoteMailed', (id) => {
       let sendedNote = this.notes.find(note => note.id === id)
       this.$router.push({
