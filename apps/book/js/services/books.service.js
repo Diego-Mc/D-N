@@ -175,7 +175,7 @@ function _createBooks() {
       publishedDate: book.volumeInfo.publishedDate,
       thumbnail: book.volumeInfo.imageLinks
         ? book.volumeInfo.imageLinks.thumbnail
-        : 'assets/img/assets/img/not-available-book.jpeg',
+        : 'assets/img/not-available-book.jpeg',
       listPrice: {
         amount: parseInt(Math.random() * 100),
         currencyCode: 'EUR',
