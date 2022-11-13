@@ -228,8 +228,6 @@ export default {
     },
     saveCanvas(url) {
       this.note.mediaUrl = url
-      // eventBus.emit(`note-changed-${this.note.id}`, this.note)
-      // eventBus.emit('note-changed', this.note)
     },
     changeMediaType(type) {
       this.note.mediaType = type
@@ -241,6 +239,8 @@ export default {
     showRecordInputs() {
       this.isShowAudio = !this.isShowAudio
     },
+  },unmounted() {
+      eventBus.emit('note-changed', this.note)
   },
   computed: {
     noteBackgroundColor() {
