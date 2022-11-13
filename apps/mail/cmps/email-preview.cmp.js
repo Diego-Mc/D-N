@@ -64,12 +64,10 @@ export default {
       isReply: false,
       isLabelPicking: false,
       labels: [
-        { txt: 'heelo' },
-        { txt: 'relationship' },
+        { txt: 'important' },
+        { txt: 'fun' },
         { txt: 'work' },
-        { txt: 'love' },
-        { txt: 'park' },
-        { txt: 'school' },
+        { txt: 'subscriptions' },
       ],
     }
   },
