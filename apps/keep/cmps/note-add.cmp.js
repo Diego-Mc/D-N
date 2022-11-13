@@ -1,18 +1,25 @@
 import editIcons from './edit-icons.cmp.js'
 import { eventBus } from '../../../services/event-bus.service.js'
-
+import { showSuccessMsg } from '../../../services/event-bus.service.js'
 import userMsg from '../../../cmps/user-msg.cmp.js'
 import noteVideo from '../cmps/note-video.cmp.js'
 import noteImg from '../cmps/note-img.cmp.js'
 import noteCanvas from '../cmps/note-canvas.cmp.js'
 import noteMap from './note-map.cmp.js'
 import audioInput from './note-audio.cmp.js'
+import labelPicker from '../../../cmps/label-picker.cmp.js'
 
 export default {
   props: ['editedNoteId', 'notes', 'renderedEditors', 'clicked'],
   emits: ['add-note'],
   template: `
             <div class="add-note-container" @click.stop :class="noteBackgroundColor">
+              
+              <!-- <div class="labelpickersad" v-if="isShowLabels">
+                <label-picker 
+                :labels="[{txt:'personal'},{txt:'work'},{txt:'inspiration'}]" 
+                :entityLabels="note.labels" @updateLabels="updateLabel"/>
+                </div> -->
                     <div v-if="note.mediaType">
                     <i v-if="!editedNoteId" @click="removeMedia" class='bi bi-trash remove-media-icon'></i>
                      <iframe v-show="note.mediaType === 'noteVideo'" :src="note.mediaUrl" frameborder="0" width="500" height="200"></iframe>
@@ -61,6 +68,7 @@ export default {
       isExpandAddNote: false,
       pinClass: null,
       isShowAudio: false,
+      isShowLabels: false
     }
   },
   created() {
@@ -75,6 +83,7 @@ export default {
       eventBus.on(`app-clicked`, this.onAdd)
     }
     if (!this.renderedEditors || !this.renderedEditors.includes(this.note.id)) {
+      eventBus.on('labelsIconClicked',()=>this.isShowLabels = !this.isShowLabels)
       eventBus.emit('new-editor-rendered', this.note.id)
       eventBus.on(`update-note-${this.editedNoteId || ''}`, (obj) => {
         this.note[obj.prop] = obj.val
@@ -106,6 +115,9 @@ export default {
     this.pinClass = this.note.isPinned ? '-fill' : ''
   },
   methods: {
+    updateLabel(ans){
+      console.log(ans);
+    },
     noteToMail() {
       const query = this.$route.query
       this.$router.push({ query: { isCompose: true, isNote: true, title: 'Hello', body: 'hey' } })
@@ -116,6 +128,7 @@ export default {
       }
     },
     saveCanvasPerm() {
+      showSuccessMsg('Drawing Saved')
       eventBus.emit('note-changed', this.note)
 
     },
@@ -130,14 +143,13 @@ export default {
     },
     onAdd() {
       if (this.$route.params.id) {
-        this.$router.push('/keepy')
         eventBus.emit('note-changed', this.note)
         eventBus.emit(`note-changed-${this.note.id}`, this.note)
         return
       }
-      eventBus.emit('show-msg', { txt: 'Note Added' })
       this.isShowAudio = false
       this.isExpandAddNote = false
+      this.isShowLabels = false
       const info = this.note.info
       if (
         info.txt ||
@@ -146,6 +158,7 @@ export default {
         this.note.mediaUrl ||
         this.note.audioUrl
       ) {
+        eventBus.emit('show-msg', { txt: 'Note Added' })
         this.$emit('add-note', { ...this.note })
       }
       this.note = {
@@ -215,7 +228,6 @@ export default {
     },
     saveCanvas(url) {
       this.note.mediaUrl = url
-      console.log(url);
       // eventBus.emit(`note-changed-${this.note.id}`, this.note)
       // eventBus.emit('note-changed', this.note)
     },
@@ -254,6 +266,7 @@ export default {
     noteCanvas,
     noteMap,
     audioInput,
+    labelPicker
 
   },
 }

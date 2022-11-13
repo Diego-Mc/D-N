@@ -10,6 +10,10 @@
   border-bottom-right-radius: 20px;
 }
 
+.note-preview{
+  cursor: pointer;
+}
+
 .note-preview:hover .preview-icons-container {
   display: flex;
   justify-content: space-around;

@@ -1,8 +1,11 @@
 export default {
     props: ['media'],
     template: `
-            <div id="map" :ref="id" style="width:100%;height:200px">
+    <div @click.prevent.stop>
+    <div id="map" :ref="id" style="width:100%;height:200px">
             </div>
+    </div>
+            
     `,
     data() {
         return {

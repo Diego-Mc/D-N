@@ -31,3 +31,8 @@
 audio {
   max-width: 100%;
 }
+
+.note-app .label-picker{
+  right: auto;
+  left: 0;
+}

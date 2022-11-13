@@ -19,7 +19,7 @@ export default {
     }
   },
   created() {
-    console.log(this.entityLabels)
+    console.log(this.entityLabels);
   },
   methods: {
     addAns(labelText) {

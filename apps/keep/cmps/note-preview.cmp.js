@@ -20,7 +20,7 @@ export default {
       <iframe v-show="note.mediaType === 'noteVideo'" :src="note.mediaUrl" frameborder="0" width="200" height="200"></iframe>
       <component v-if="note.mediaType !== 'noteVideo'" :is="mediaComp" :media="note.mediaUrl"></component>
       <div @mouseover="isShowIcons = true" style="border-radius:20px;">
-      <i  class="note-pin bi note-pin-preview" :class="'bi-pin' + pinClass"  @click.stop="togglePin"></i>
+      <i  class="note-pin bi note-pin-preview" :class="'bi-pin' + pinClass"  @click.stop="togglePin" title="pin note"></i>
         <div class="preview-text">
           <h3 class="note-title">{{note.info.title}}</h3>
           <p class="f-m-text note-text">{{note.info.txt}}</p>
@@ -36,7 +36,7 @@ export default {
                   @click.stop="onCheck(index)"
                   />
                 <label :for="note.id + '-' + index">{{item.txt}}</label>
-                <button v-if="item.txt" @click="onRemoveTodo(index)">X</button>
+                <button v-if="item.txt" @click="onRemoveTodo(index)" title="Remove Todo">X</button>
                 <br />
               </div>
             </li>
@@ -45,7 +45,7 @@ export default {
             v-if="this.note.audioUrl"
             :src="this.note.audioUrl"
             controls></audio>
-          <preview-icons :note-id="note.id" :bin="true" />
+          <preview-icons :note-id="note.id" />
         </div>
       </div>
     </div>

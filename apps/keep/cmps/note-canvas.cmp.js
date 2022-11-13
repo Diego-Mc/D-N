@@ -1,5 +1,5 @@
 export default {
-  props: ['media','noteId'],
+  props: ['media', 'noteId'],
   template: `
         <div class="canvas-container">
             <canvas ref="canvas" id="canvas" @mousemove="onMove" width="500" height="300">
@@ -33,7 +33,8 @@ export default {
     }
   },
   methods: {
-    emitAdd(){
+    emitAdd() {
+
       this.$emit('emit-add')
     },
     showColorPicker() {
@@ -44,7 +45,6 @@ export default {
       this.ctx.moveTo(x, y)
       this.ctx.lineTo(xEnd, yEnd)
       this.ctx.strokeStyle = this.strokeColor
-      console.log(this.strokeColor)
       this.ctx.stroke()
       this.ctx.closePath()
     },
@@ -70,7 +70,6 @@ export default {
     },
 
     addMouseListeners() {
-      // this.canvas.addEventListener('mousemove', this.onMove)
       this.canvas.addEventListener('mousedown', this.onDown)
       this.canvas.addEventListener('mouseup', this.onUp)
     },

@@ -5,7 +5,7 @@ export default {
         <div class="note-editor" @clicked.stop>
             <note-add :editedNoteId="$route.params.id" :notes="notes" :clicked="clicked" :renderedEditors="renderedEditors"/>
         </div>
-
+        
         <div class="screen" @click="screenClicked"></div>
 
        
@@ -19,7 +19,7 @@ export default {
     },
     methods: {
         screenClicked(){
-            this.clicked= true
+            this.$router.push('/keepy')
         }
     },
     components: {
