@@ -5,6 +5,7 @@ import { eventBus } from '../services/event-bus.service.js'
 import { emailService } from '../apps/mail/service/email.service.js'
 import { booksService } from '../apps/book/js/services/books.service.js'
 import { noteService } from '../apps/keep/services/note.service.js'
+import navMenu from './nav-menu.cmp.js'
 booksService
 noteService
 
@@ -20,11 +21,11 @@ export default {
         <router-link to="/maily">Maily</router-link>
         <router-link to="/keepy">Keepy</router-link>
         <router-link to="/booky">Booky</router-link>
-        <router-link to="/about">temp</router-link>
+        <!-- <router-link to="/about">temp</router-link> -->
       </nav>
       <advanced-search :service="services[appName]" :emitName="appName + '-advancedSearch'" v-else/>
 
-      <i class="bi bi-grid-fill"></i>
+      <nav-menu v-if="appName !== 'D&N'" />
     </header>
   `,
   data() {
@@ -47,5 +48,6 @@ export default {
   },
   components: {
     advancedSearch,
+    navMenu,
   },
 }

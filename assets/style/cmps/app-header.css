@@ -24,6 +24,38 @@
   width: 40%;
 }
 
+.app-header .nav-icon {
+  position: relative;
+}
+.app-header .nav-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  gap: 0;
+  right: 0;
+  top: 100%;
+  z-index: 100;
+  background-color: var(--clr-main-light);
+  padding: 10px;
+  border-radius: 10px;
+  border-top-right-radius: 0;
+  user-select: none;
+  cursor: default;
+}
+
+.app-header .nav-menu button {
+  background-color: var(--clr-main-light);
+
+  width: 100%;
+  color: var(--clr-main);
+  color: #eee;
+  padding-block: 10px;
+}
+
+.app-header .nav-menu button:hover {
+  color: white;
+}
+
 @media (max-width: 720px) {
   .app-header {
     background-color: var(--clr3);

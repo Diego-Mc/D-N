@@ -2,8 +2,7 @@ export default {
   props: ['txt'],
   template: `
         <p class="long-text">{{ showDesc }}
-
-            <p class="long-text-btn" @click="changeDesc">{{ btnTxt }}</p>
+            <p v-if="isLong" class="long-text-btn" @click="changeDesc">{{ btnTxt }}</p>
         </p>
     `,
   data() {
@@ -19,13 +18,18 @@ export default {
   computed: {
     showDesc() {
       if (this.isMore) {
-        return this.txt + '.'
+        return this.txt
       }
-      let dots = this.txt.length < 100 ? '.' : '...'
-      return this.txt.slice(0, 100) + dots
+      return this.txt.slice(0, 100) + '...'
     },
     btnTxt() {
       return this.isMore ? 'Less' : 'More'
     },
+    isLong() {
+      return this.txt.length > 100
+    },
+  },
+  created() {
+    console.log(this.txt)
   },
 }

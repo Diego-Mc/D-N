@@ -2,6 +2,7 @@
   .notes-list {
     width: 100%;
     column-width: 264px;
+    column-count: 1;
     column-gap: 20px;
     padding-inline: calc((100% - 264px - 20px) / 2);
   }
@@ -9,16 +10,18 @@
 @media screen and (min-width: 662px) {
   .notes-list {
     padding-inline: calc((100% - 540px - 20px) / 2);
+    column-count: 2;
   }
 }
 @media screen and (min-width: 1005px) {
   .notes-list {
     padding-inline: calc((100% - 800px - 40px) / 2);
-    
+    column-count: 3;
   }
 }
 @media screen and (min-width: 1345px) {
   .notes-list {
     padding-inline: calc((100% - 1070px - 60px) / 2);
+    column-count: 4;
   }
 }

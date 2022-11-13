@@ -16,6 +16,8 @@
 @import 'cmps/icon.cmp.css';
 @import 'cmps/user-label.cmp.css';
 @import 'cmps/label-picker.cmp.css';
+@import 'cmps/star-picker.cmp.css';
+@import 'cmps/star-rating.cmp.css';
 @import 'cmps/advanced-search.cmp.css';
 
 /* Apps */
@@ -38,4 +40,5 @@
 @import 'apps/books/cmp/book-preview.cmp.css';
 @import 'apps/books/cmp/book-details.cmp.css';
 @import 'apps/books/cmp/book-reviews.cmp.css';
+@import 'apps/books/cmp/book-review-details.cmp.css';
 @import 'apps/books/cmp/book-review-add.cmp.css';

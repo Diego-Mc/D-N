@@ -1,0 +1,96 @@
+.review-details {
+  background-color: var(--clr-modal-bg);
+  padding: 45px 60px;
+  overflow: scroll;
+  position: relative;
+}
+
+.review-preview:first-of-type {
+  border-top-left-radius: 1.25rem;
+  border-top-right-radius: 1.25rem;
+}
+
+.review-preview:last-of-type {
+  border-bottom-left-radius: 1.25rem;
+  border-bottom-right-radius: 1.25rem;
+}
+
+.review-preview:not(.selected) {
+  opacity: 0.8;
+}
+.review-preview:hover {
+  opacity: 1;
+}
+
+.review-list .preview {
+  height: 100%;
+  width: 100%;
+}
+
+.review-details.preview {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.review-details.preview,
+.review-list .preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+.review-details.preview p,
+.review-list .preview p {
+  color: var(--clr-main-light);
+  font-family: Mulish-Regular;
+}
+.review-details.preview button {
+  background-color: var(--clr-main-lighter);
+  border-radius: 2rem;
+  font-size: 12px;
+}
+.review-details.preview button:hover {
+  background-color: var(--clr-main-light);
+}
+
+.review-preview .trash-icon {
+  color: var(--clr-main-light);
+  position: absolute;
+  font-size: 0.8rem;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
+.review-preview:hover .trash-icon {
+  opacity: 1;
+}
+.review-preview .trash-icon:hover {
+  color: var(--clr-main);
+}
+
+.review-details .rating {
+  margin-bottom: 8px;
+  user-select: none;
+}
+.review-details .rating * {
+  cursor: default;
+}
+.review-details .book-title {
+  margin-bottom: 28px;
+  display: block;
+  user-select: none;
+}
+.review-details .review-title {
+  margin-bottom: 22px;
+}
+.review-details .review-txt {
+  white-space: pre-line;
+  margin-bottom: 32px;
+}
+.review-details .review-date,
+.review-details .reviewer {
+  display: block;
+  user-select: none;
+}

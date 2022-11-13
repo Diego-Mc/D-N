@@ -1,4 +1,5 @@
 import labelPicker from '../../../cmps/label-picker.cmp.js'
+import userLabel from '../../../cmps/user-label.cmp.js'
 
 import { eventBus } from '../../../services/event-bus.service.js'
 import { utilService } from '../../../services/util.service.js'
@@ -44,9 +45,16 @@ export default {
           <label-picker
             @updateLabels="updateLabels"
             v-if="isLabelPicking"
-            :emailLabels="email.labels"
+            :entityLabels="email.labels"
             :labels="labels" />
         </section>
+      </section>
+      <section class="labels">
+        <user-label
+          v-if="email.labels.length"
+          v-for="label in email.labels"
+          :key="label"
+          :label="label" />
       </section>
       <small class="email-time f-s f-clr-light">{{timeStr}}</small>
     </article>
@@ -129,6 +137,7 @@ export default {
   },
   components: {
     labelPicker,
+    userLabel,
   },
 }
 

@@ -75,11 +75,12 @@ function getComposeSurvey(
     title: 'New Review',
     cmps: [
       {
-        type: 'textBox',
+        type: 'starPicker',
         info: {
           label: 'rating',
           val: rating,
           key: 'rating',
+          limit: 5,
         },
       },
       {
@@ -95,7 +96,7 @@ function getComposeSurvey(
         info: {
           label: 'text',
           val: text,
-          key: 'text',
+          key: 'reviewTxt',
         },
       },
       {
@@ -103,7 +104,7 @@ function getComposeSurvey(
         info: {
           label: 'name',
           val: name,
-          key: 'name',
+          key: 'reviewer',
         },
       },
     ],

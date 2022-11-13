@@ -10,18 +10,23 @@ import {
   showSuccessMsg,
 } from '../../../services/event-bus.service.js'
 import { userModal } from '../../../cmps/user-modal.cmp.js'
+import { utilService } from '../../../services/util.service.js'
 
 export default {
   template: /* HTML */ `
     <main class="email-main">
-      <email-folder-list :unreadLabels="unreadLabels" />
+      <email-folder-list :unreadLabels="getFolderCounts" />
       <email-list
         @star="starEmail"
         @trash="removeEmail"
-        v-if="emails"
+        v-if="emails && getEmailsToShow.length"
         @emailSelected="doEmailSelect"
         :selectedEmail="selectedEmail"
-        :emails="emails" />
+        :emails="getEmailsToShow" />
+      <section v-else class="email-list preview selected round">
+        <h1>{{headerPreview}}</h1>
+        <p>{{paragraphPreview}}</p>
+      </section>
       <email-compose @closeCompose="composeClose" v-if="isCompose" />
       <email-details
         @star="starEmail"
@@ -40,22 +45,21 @@ export default {
       selectedEmail: null,
       isCompose: false,
       criteria: {
-        state: '',
         search: '', // no need to support complex text search
         isRead: undefined, // (optional property, if missing: show all)
         isStarred: undefined, // (optional property, if missing: show all)
-        isRemoved: false,
         lables: [], // has any of the labels
         searchAreas: [],
       },
       unreadLabels: null,
+      currentFolder: '',
     }
   },
   created() {
     if (!this.folderName) this.$router.push('/maily/inbox')
 
-    this.setCriteriaState()
-    this.getEmailsToShow().then(() => this.setIsCompose())
+    this.setFolder()
+    this.updateEmails().then(() => this.setIsCompose())
 
     eventBus.on('starEmail', this.starEmail)
     eventBus.on('removeEmail', this.removeEmail)
@@ -64,32 +68,28 @@ export default {
     eventBus.on('unselectEmail', this.unselectEmail)
     eventBus.on('updateLabels', this.updateLabels)
     eventBus.on('maily-advancedSearch', (criteria) => {
-      this.updateCriteria(criteria)
-      this.getEmailsToShow()
+      this.selectedEmail = null
+      this.isCompose = false
+      this.criteria = criteria
+      this.updateEmails()
     })
   },
   methods: {
-    setCriteriaState() {
-      if (this.folderName === 'trash') this.criteria.isRemoved = true
-      else {
-        this.criteria.isRemoved = false
-        this.criteria.state = this.folderName
-      }
+    setFolder() {
+      this.currentFolder = this.folderName
     },
-    getUnreadLabels() {
-      return emailService
-        .getUnreadCounts()
-        .then((counts) => (this.unreadLabels = counts))
-    },
-    updateCriteria(criteria) {
-      criteria.state = this.criteria.state
-      this.criteria = criteria
-    },
+    // getUnreadLabels() {
+    //   return emailService
+    //     .getUnreadCounts()
+    //     .then((counts) => (this.unreadLabels = counts))
+    // },
+    // updateCriteria(criteria) {
+    //   criteria.state = this.criteria.state
+    //   this.criteria = criteria
+    // },
     updateLabels(email, labels) {
       email.labels = labels
-      emailService.save(email).then(() => {
-        console.log('saved!', email.labels)
-      })
+      emailService.save(email).then(() => this.updateEmails())
     },
     doEmailSelect(email) {
       this.composeClose()
@@ -98,10 +98,12 @@ export default {
     composeClose() {
       this.$router.push({ query: {} })
       this.isCompose = false
+      this.selectedEmail = null
+      this.updateEmails()
     },
-    getEmailsToShow(criteria = this.criteria) {
+    updateEmails(criteria = this.criteria) {
       console.log(criteria, this.folderName)
-      this.getUnreadLabels()
+
       return emailService
         .query(criteria)
         .then((emails) => (this.emails = emails))
@@ -112,7 +114,7 @@ export default {
     },
     starEmail(email) {
       email.isStarred = !email.isStarred
-      emailService.save(email)
+      emailService.save(email).then(() => this.updateEmails())
     },
     removeEmail(email) {
       const updateSelectedRemovedUser = () => {
@@ -132,7 +134,7 @@ export default {
         userModal.showModal(modalOpts).then((ans) => {
           if (!ans) return
           emailService.remove(email.id).then(() => {
-            this.getEmailsToShow().then(() => {
+            this.updateEmails().then(() => {
               updateSelectedRemovedUser()
               showSuccessMsg('Your email was successfully removed.')
             })
@@ -141,7 +143,7 @@ export default {
       } else {
         const e = { ...email, removedAt: Date.now() }
         emailService.save(e).then(() => {
-          this.getEmailsToShow().then(() => {
+          this.updateEmails().then(() => {
             updateSelectedRemovedUser()
             showSuccessMsg('Your email was moved to the trash folder.')
           })
@@ -151,12 +153,12 @@ export default {
     restoreEmail(email) {
       const e = { ...email, removedAt: undefined }
       emailService.save(e).then(() => {
-        this.getEmailsToShow()
+        this.updateEmails()
       })
     },
     markAsRead(email, force) {
       email.isRead = force ?? !email.isRead
-      emailService.save(email)
+      emailService.save(email).then(() => this.updateEmails())
     },
     unselectEmail() {
       this.selectedEmail = null
@@ -167,11 +169,57 @@ export default {
       const route = this.$route.matched[1]
       return route?.name
     },
+    getEmailsToShow() {
+      return this.emails?.filter((e) => {
+        if (this.currentFolder === 'trash')
+          return utilService.isValidTimestamp(e.removedAt)
+        return (
+          !utilService.isValidTimestamp(e.removedAt) &&
+          e.state === this.currentFolder
+        )
+      })
+    },
+    getFolderCounts() {
+      return this.emails
+        ?.filter((e) => !e.isRead)
+        .reduce(
+          (acc, e) => {
+            if (utilService.isValidTimestamp(e.removedAt)) acc.trash += 1
+            else acc[e.state] += 1
+            return acc
+          },
+          { inbox: 0, sent: 0, draft: 0, trash: 0 }
+        )
+    },
+    headerPreview() {
+      switch (this.folderName) {
+        case 'inbox':
+          return 'Inbox is empty'
+        case 'sent':
+          return 'Send emails for free'
+        case 'draft':
+          return 'No drafts'
+        case 'trash':
+          return 'Your trash is empty'
+      }
+    },
+    paragraphPreview() {
+      switch (this.folderName) {
+        case 'inbox':
+          return 'Send emails to get connected'
+        case 'sent':
+          return 'Click the compose button and start typing'
+        case 'draft':
+          return 'Drafts are auto-saved while composing'
+        case 'trash':
+          return 'Good job! very clean'
+      }
+    },
   },
   watch: {
     folderName() {
-      this.setCriteriaState()
-      this.getEmailsToShow()
+      this.setFolder()
+      this.updateEmails()
     },
     '$route.query': {
       handler() {

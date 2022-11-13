@@ -1,0 +1,12 @@
+.star-picker {
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+
+.star-picker .stars {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.88rem;
+}

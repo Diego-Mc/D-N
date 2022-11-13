@@ -5,7 +5,8 @@
   grid-template-areas:
     'img recipient time'
     'img subject subject'
-    'body body body';
+    'body body body'
+    'label label label';
   column-gap: 0.88rem;
   cursor: pointer;
   position: relative;
@@ -70,6 +71,18 @@
   display: flex;
   flex: 0;
   max-width: 0;
+}
+.email-preview .labels {
+  grid-area: label;
+  margin-bottom: -14px;
+  margin-top: 4px;
+  display: flex;
+  gap: 2px;
+}
+.email-preview .labels * {
+  font-size: 10px;
+  letter-spacing: 0.2px;
+  background-color: var(--clr-main-light);
 }
 
 .email-preview .email-body p {

@@ -22,29 +22,22 @@ export const emailService = {
   sendEmail,
   checkValidity,
   getAdvancedSearchOptions,
-  getUnreadCounts,
 }
 
 function query({
-  state = '',
   search = '',
   isRead = undefined,
   isStarred = undefined,
-  isRemoved = undefined,
   labels = [],
   searchAreas = [],
 } = {}) {
   return storageService.query(EMAIL_KEY).then((emails) => {
     return emails
       .filter((e) => {
-        if (isRemoved) return utilService.isValidTimestamp(e.removedAt)
-        return !utilService.isValidTimestamp(e.removedAt) && e.state === state
-      })
-      .filter((e) => {
         if (searchAreas.length === 0) {
           return (
-            e.subject.includes(search) &&
-            e.body.includes(search) &&
+            e.subject.includes(search) ||
+            e.body.includes(search) ||
             e.signature.includes(search)
           )
         }
@@ -57,7 +50,8 @@ function query({
         return isRead === undefined ? 'true' : e.isRead === isRead
       })
       .filter((e) => {
-        return e.labels.every((label) => labels.includes(label))
+        if (labels.length === 0) return true
+        return e.labels.some((label) => labels.includes(label))
       })
   })
 }
@@ -78,20 +72,20 @@ function save(email) {
   }
 }
 
-function getUnreadCounts() {
-  return storageService.query(EMAIL_KEY).then((emails) => {
-    return emails
-      .filter((e) => !e.isRead)
-      .reduce(
-        (acc, e) => {
-          if (utilService.isValidTimestamp(e.removedAt)) acc.trash += 1
-          else acc[e.state] += 1
-          return acc
-        },
-        { inbox: 0, sent: 0, draft: 0, trash: 0 }
-      )
-  })
-}
+// function getUnreadCounts() {
+//   return storageService.query(EMAIL_KEY).then((emails) => {
+//     return emails
+//       .filter((e) => !e.isRead)
+//       .reduce(
+//         (acc, e) => {
+//           if (utilService.isValidTimestamp(e.removedAt)) acc.trash += 1
+//           else acc[e.state] += 1
+//           return acc
+//         },
+//         { inbox: 0, sent: 0, draft: 0, trash: 0 }
+//       )
+//   })
+// }
 
 function getEmptyEmail(subject = '', body = '') {
   return {
@@ -244,71 +238,101 @@ function _createEmails() {
         id: '123',
         state: 'inbox',
         subject: 'Watch hundreds of movies, shows and documentaries today.',
-        body: '"Thanks for considering Netflix. \n\nStart watching, pause, then pick up right where you left off on the same device or another device that connects to Netflix. \n\nNetflix is commercial-free — always."',
+        body: 'Thanks for considering Netflix. \n\nStart watching, pause, then pick up right where you left off on the same device or another device that connects to Netflix. \n\nNetflix is commercial-free — always.',
         imgUrl: 'assets/img/netflix-logo.jpeg',
         isRead: false,
         isStarred: true,
-        sentAt: 1667328712,
+        sentAt: 1667792843000,
         from: { email: 'netflix@gmail.com', name: 'Netflix' },
         to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
-        labels: [],
+        labels: ['subscriptions', 'fun'],
         signature: 'Netflix',
       },
       {
         id: '456',
-        state: 'inbox',
+        state: 'sent',
         subject: 'How are you?',
         body: 'Please reply. \n\nI got an email from Netflix, can we watch together?',
         imgUrl: 'assets/img/random.jpeg',
         isRead: false,
         isStarred: false,
-        sentAt: 1668192712,
-        from: { email: 'shlomit@gmail.com', name: 'Shlomit' },
-        to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
-        labels: [],
-        signature: 'Puki',
+        sentAt: 1668224843000,
+        from: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
+        to: { email: 'shlomit@gmail.com', name: 'Shlomit' },
+        labels: ['fun'],
+        signature: 'Diego Mc',
       },
       {
         id: '789',
         state: 'sent',
         subject: 'URGENT! reply ASAP',
-        body: 'Puki I need your help!!',
+        body: 'Are you the real morgan freeman?',
         imgUrl: 'assets/img/morgan.jpeg',
         isRead: false,
         isStarred: false,
-        sentAt: 1667933512,
+        sentAt: 1667533643000,
         from: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
-        to: { email: 'puki@gmail.com', name: 'Puki Ben David' },
-        labels: [],
-        signature: 'Diego',
+        to: { email: 'morgan@gmail.com', name: 'Morgan Freeman' },
+        labels: ['important'],
+        signature: 'Diego Mc',
       },
       {
         id: '258',
-        state: 'sent',
-        subject: 'A old email',
-        body: 'This is a new email that was sent for you to read. lorem lorem!!',
-        imgUrl: 'assets/img/diego.jpeg',
+        state: 'draft',
+        subject: 'I got to make some demo data!',
+        body: "I hope I'll have enough time to sen...",
+        imgUrl: 'assets/img/diego.jpg',
         isRead: false,
         isStarred: false,
-        sentAt: Date.now(),
+        sentAt: 1666579643000,
         from: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
         to: { email: 'puki@gmail.com', name: 'Puki Ben David' },
-        labels: [],
-        signature: 'Diego',
+        labels: ['work'],
+        signature: 'Diego Mc',
       },
       {
         id: '147',
-        state: 'sent',
-        subject: 'An email',
-        body: 'This is a something.',
-        imgUrl: 'assets/img/diego.jpeg',
+        state: 'inbox',
+        subject: 'Important email',
+        body: 'This email is very important! please restore it!',
+        imgUrl: 'assets/img/user2.jpg',
+        isRead: false,
+        isStarred: true,
+        sentAt: 1666493243000,
+        removedAt: 1666514843000,
+        from: { email: 'tim@gmail.com', name: 'Tim Apple' },
+        to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
+        labels: ['important'],
+        signature: 'Tim Apple',
+      },
+      {
+        id: '147',
+        state: 'inbox',
+        subject: 'Important email',
+        body: 'This email is not important at all! Remove it completely!\n\n\n\n\n\nIf you dare...',
+        imgUrl: 'assets/img/user3.jpeg',
         isRead: false,
         isStarred: false,
-        sentAt: Date.now(),
-        from: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
-        to: { email: 'puki@gmail.com', name: 'Puki Ben David' },
+        sentAt: 1666082843000,
+        removedAt: 1660812443000,
+        from: { email: 'julia@gmail.com', name: 'Julia Wan' },
+        to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
         labels: [],
-        signature: 'Diego',
+        signature: 'Julia Wan',
+      },
+      {
+        id: '123877',
+        state: 'inbox',
+        subject: 'Listen to all of the songs. ever.',
+        body: 'Spotify is the best as you know. \nContinue listening to millions of songs for free. \n\nWe are happy to be of service',
+        imgUrl: 'assets/img/spotify.png',
+        isRead: false,
+        isStarred: true,
+        sentAt: 1660207643000,
+        from: { email: 'spotify@gmail.com', name: 'Spotify' },
+        to: { email: 'projkd1@gmail.com', name: 'Diego Mc' },
+        labels: ['subscriptions', 'fun'],
+        signature: 'Spotify',
       },
     ]
     utilService.saveToStorage(EMAIL_KEY, emails)
