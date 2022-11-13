@@ -18,7 +18,7 @@ export default {
           <h1 class="logo-text logo">{{appName}}</h1>
       </span>
       <nav v-if="appName === 'D&N'">
-        <router-link to="/maily">Maily</router-link>
+        <router-link to="/maily/inbox">Maily</router-link>
         <router-link to="/keepy">Keepy</router-link>
         <router-link to="/booky">Booky</router-link>
         <!-- <router-link to="/about">temp</router-link> -->
