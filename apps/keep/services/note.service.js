@@ -297,20 +297,6 @@ function getAdvancedSearchOptions() {
       {
         type: 'radioCheck',
         info: {
-          label: 'labels',
-          opts: [
-            { txt: 'work', val: 'work' },
-            { txt: 'school', val: 'school' },
-            { txt: 'audio', val: 'audio' },
-            { txt: 'canvas', val: 'canvas' },
-            { txt: 'video', val: 'video' },
-          ],
-          key: 'labels',
-        },
-      },
-      {
-        type: 'radioCheck',
-        info: {
           label: 'note type',
           opts: [
             { txt: 'image', val: 'noteImg' },
