@@ -6,6 +6,7 @@
 @import 'base/base.css';
 @import 'base/helpers.css';
 @import 'base/layout.css';
+@import 'base/scroll-bar.css';
 
 /* General Components */
 @import 'cmps/home-page.css';

@@ -22,7 +22,7 @@ export default {
   },
   created() {
     this.queryBooks()
-    eventBus.on('advancedSearch', (criteria) => {
+    eventBus.on('booky-advancedSearch', (criteria) => {
       this.queryBooks(criteria)
     })
   },
