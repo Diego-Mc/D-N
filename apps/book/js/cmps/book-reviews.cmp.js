@@ -9,7 +9,7 @@ export default {
   props: ['book', 'selectedReview'],
   template: `
         <section class="review-list" v-if="book">
-          <div v-if="!book.reviews.length" class="preview">
+          <div v-if="!book.reviews?.length" class="preview">
             <h1>No reviews</h1>
             <p>Support our app by adding one!</p>
           </div>

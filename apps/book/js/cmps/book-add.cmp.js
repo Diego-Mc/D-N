@@ -2,28 +2,28 @@ import { booksService } from '../services/books.service.js'
 
 export default {
   template: `
-    <div class="book-add-container">
-        <div class="flex flex-d-column align-center">
-            <label>Search Book</label>
-            <div>
-                <input v-model="searchTxt" @input="showResults" @change="hideResults" type="search"/>
-                <button @click="showResults">show results</button>
-            </div>
-        </div>
-        <ul v-if="isShowResults">
-            <li class="flex" v-for="(res, index) in results" :key="index">
-                <span>{{res.title}}</span>
-                <button @click.prevent.stop="add(res)">+</button>
-            </li>
-        </ul>
+    <div class="book-add">
+      <label
+        >Search Book
+        <input
+          v-model="searchTxt"
+          @input="showResults"
+          @change="hideResults"
+          type="search" />
+      </label>
+      <ul v-if="searchTxt" class="">
+        <li class="flex" v-for="(res, index) in results" :key="index">
+          <span>{{res.title}}</span>
+          <button @click.prevent.stop="add(res)">+</button>
+        </li>
+      </ul>
     </div>
-    `,
+  `,
 
   data() {
     return {
       results: [],
       searchTxt: null,
-      isShowResults: false,
     }
   },
   methods: {
@@ -32,13 +32,9 @@ export default {
       booksService
         .getGoogleBook(modifiedSearchTxt)
         .then((books) => (this.results = books))
-      this.isShowResults = true
     },
     add(book) {
       this.$emit('add-google-book', book)
-    },
-    hideResults() {
-      // this.isShowResults = false
     },
   },
 }

@@ -166,21 +166,21 @@ function _createBooks() {
   if (!books || !books.length) {
     books = booksList.items.map((book) => ({
       id: book.id,
-      title: book.volumeInfo.title,
-      subtitle: book.volumeInfo.subtitle,
-      authors: book.volumeInfo.authors,
-      description: book.volumeInfo.description,
-      pageCount: book.volumeInfo.pageCount,
-      readingLength: setReadingLength(book.volumeInfo.pageCount),
-      publishedDate: book.volumeInfo.publishedDate,
+      title: book.volumeInfo.title || '',
+      subtitle: book.volumeInfo.subtitle || '',
+      authors: book.volumeInfo.authors || [],
+      description: book.volumeInfo.description || '',
+      pageCount: book.volumeInfo.pageCount || 0,
+      readingLength: setReadingLength(book.volumeInfo.pageCount || 0),
+      publishedDate: book.volumeInfo.publishedDate || '0000-00-00',
       thumbnail: book.volumeInfo.imageLinks
         ? book.volumeInfo.imageLinks.thumbnail
         : 'assets/img/not-available-book.jpeg',
       listPrice: {
-        amount: parseInt(Math.random() * 100),
+        amount: parseInt(Math.random() * 400),
         currencyCode: 'EUR',
       },
-      categories: book.volumeInfo.categories,
+      categories: book.volumeInfo.categories || [],
     }))
 
     utilService.saveToStorage(BOOKS_KEY, books)
