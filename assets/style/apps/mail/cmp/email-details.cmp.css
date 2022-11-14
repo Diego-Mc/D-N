@@ -39,7 +39,8 @@
 
 .email-details .email-content {
   flex: 2;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .email-details .email-content h2 {

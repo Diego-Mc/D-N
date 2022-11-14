@@ -4,5 +4,6 @@
   grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
   grid-auto-rows: 250px;
   justify-items: center;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }

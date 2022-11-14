@@ -21,11 +21,6 @@
 @import 'cmps/star-rating.cmp.css';
 @import 'cmps/advanced-search.cmp.css';
 
-/* Apps */
-@import 'apps/mail/email-app.css';
-@import 'apps/note/note-app.css';
-@import 'apps/books/books-app.css';
-
 /* MAILY */
 @import 'apps/mail/cmp/email-preview.cmp.css';
 @import 'apps/mail/cmp/email-details.cmp.css';
@@ -43,3 +38,8 @@
 @import 'apps/books/cmp/book-reviews.cmp.css';
 @import 'apps/books/cmp/book-review-details.cmp.css';
 @import 'apps/books/cmp/book-review-add.cmp.css';
+
+/* Apps */
+@import 'apps/mail/email-app.css';
+@import 'apps/note/note-app.css';
+@import 'apps/books/books-app.css';
